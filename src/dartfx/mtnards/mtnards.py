@@ -3,7 +3,6 @@ import os
 import requests
 import time
 
-
 class MtnaRdsResource():
     uri: str
     id: str
@@ -14,6 +13,7 @@ class MtnaRdsResource():
         self.uri =None
         self.id = None
         self.name = None
+        self.description = None
 
 class MtnaRdsServer(MtnaRdsResource):
     host: str
@@ -107,8 +107,8 @@ class MtnaRdsServer(MtnaRdsResource):
         else:
             logging.error(f"Could not create catalog: {response.status_code}")
     
-    def delete_catalog(self, uri):
-        response = self.api_request(f"management/catalog/{uri}", method="DELETE")
+    def delete_catalog(self, id):
+        response = self.api_request(f"management/catalog/{id}", method="DELETE")
         if response.status_code == 200:
             process_id = response.json()
             return process_id
@@ -123,13 +123,23 @@ class MtnaRdsServer(MtnaRdsResource):
         else:
             logging.error(f"Could not delete data product: {result.status_code}")
 
+
+
     def get_catalog_by_uri(self, uri):
         return self.catalogs[uri]
 
-    def get_catalog_by_id(self, uri):
+    def get_catalog_by_id(self, id):
         for catalog in self.catalogs.values():
-            if catalog.id == uri:
+            if catalog.id == id:
                 return catalog
+
+    def get_ddi_codebook(self, catalog_id, product_id, include_variables=True, include_statistics=False):
+        path = f"catalog/{catalog_id}/{product_id}/ddi-codebook?includeVariables={include_variables}&includeStatistics={include_statistics}"
+        response = self.api_request(path)
+        if response.status_code == 200:
+            return response.content
+        else:
+            logging.error(f"Could not retrieve DDI-Codebook: {response.status_code} {path}")
 
     def get_import_configuration(self, catalog_uri, product_uri, file_info):
         path = f"management/catalog/{catalog_uri}/product/{product_uri}/import/configure"
@@ -259,9 +269,6 @@ class MtnaRdsCatalog(MtnaRdsResource):
             text += f"#data_products: {len(self._data_products)}\n"
         return text
 
-    def get_import_configuration(self, product_uri, file_info):
-        return self.server.get_import_configuration(self.uri, product_uri, file_info)
-
     def get_data_product_by_uri(self, uri):
         return self._data_products[uri]
     
@@ -269,7 +276,13 @@ class MtnaRdsCatalog(MtnaRdsResource):
         for product in self._data_products.values():
             if product.id == uri:
                 return product
-    
+
+    def get_ddi_codebook(self, product_id, include_variables=True, include_statistics=True):
+        return self.server.get_ddi_codebook(self.id, product_id, include_variables, include_statistics)
+
+    def get_import_configuration(self, product_uri, file_info):
+        return self.server.get_import_configuration(self.uri, product_uri, file_info)
+   
     def from_json(self, data) -> None:
         self.uri = data['uri']
         self.id = data['id']
@@ -375,11 +388,14 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     def delete(self):
         return self.catalog.delete_data_product(self.uri)
 
+    def get_ddi_codebook(self, include_variables=True, include_statistics=True):
+        return self.catalog.get_ddi_codebook(self.id, include_variables, include_statistics)
+
     def get_import_configuration(self, file_info):
         return self.catalog.get_import_configuration(self.uri, file_info)
     
     def get_postman_collection(self):
-        return self.catalog.server.get_postman_collection(self.catalog.id, self.id)
+        return self.catalog.get_postman_collection(self.id)
     
 class MtnaRdsProcess():
     completed: int
