@@ -49,10 +49,10 @@
     "description": "This study is part of a time\\-series collection of national surveys fielded continuously since 1952\\. The election studies are designed to present data on Americans' social backgrounds, enduring political predispositions, social and political values, perceptions and evaluations of groups and candidates, opinions on questions of public policy, and participation in political life.",
     "conformsTo": "http://mlcommons.org/croissant/1.0",
     "citeAs": "<p>Campbell, Angus, and Kahn, Robert L. ANES 1948 Time Series Study. Ann Arbor, MI: Inter-university Consortium for Political and Social Research [distributor], 2015-11-10. https://doi.org/10.3886/ICPSR07218.v4</p>",
-    "dateModified": "2025-04-06 22:44:21.160000+00:00",
+    "dateModified": "2025-04-08 17:35:15.530000+00:00",
     "isLiveDataset": true,
     "url": "https://rds.highvaluedata.net/rds/explorer/explore/us_anes/anes1948",
-    "version": "8.0.0",
+    "version": "11.0.0",
     "distribution": [
         {
             "@type": "cr:FileObject",
@@ -142,7 +142,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480003_codes"
                         }
                     },
                     "source": {
@@ -162,7 +162,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480004_codes"
                         }
                     },
                     "source": {
@@ -182,7 +182,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480005_codes"
                         }
                     },
                     "source": {
@@ -202,7 +202,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480006_codes"
                         }
                     },
                     "source": {
@@ -222,7 +222,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480007_codes"
                         }
                     },
                     "source": {
@@ -242,7 +242,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480008_codes"
                         }
                     },
                     "source": {
@@ -262,7 +262,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480009_codes"
                         }
                     },
                     "source": {
@@ -282,7 +282,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480010_codes"
                         }
                     },
                     "source": {
@@ -302,7 +302,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480011_codes"
                         }
                     },
                     "source": {
@@ -322,7 +322,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480012_codes"
                         }
                     },
                     "source": {
@@ -342,7 +342,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480013_codes"
                         }
                     },
                     "source": {
@@ -362,7 +362,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480014a_codes"
                         }
                     },
                     "source": {
@@ -382,7 +382,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480014b_codes"
                         }
                     },
                     "source": {
@@ -402,7 +402,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480015a_codes"
                         }
                     },
                     "source": {
@@ -422,7 +422,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480015b_codes"
                         }
                     },
                     "source": {
@@ -442,7 +442,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480016a_codes"
                         }
                     },
                     "source": {
@@ -462,7 +462,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480016b_codes"
                         }
                     },
                     "source": {
@@ -482,7 +482,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480017a_codes"
                         }
                     },
                     "source": {
@@ -502,7 +502,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480017b_codes"
                         }
                     },
                     "source": {
@@ -522,7 +522,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480018_codes"
                         }
                     },
                     "source": {
@@ -542,7 +542,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480019_codes"
                         }
                     },
                     "source": {
@@ -562,7 +562,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480020_codes"
                         }
                     },
                     "source": {
@@ -582,7 +582,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480021a_codes"
                         }
                     },
                     "source": {
@@ -602,7 +602,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480021b_codes"
                         }
                     },
                     "source": {
@@ -622,7 +622,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480022a_codes"
                         }
                     },
                     "source": {
@@ -642,7 +642,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480022b_codes"
                         }
                     },
                     "source": {
@@ -662,7 +662,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480023_codes"
                         }
                     },
                     "source": {
@@ -682,7 +682,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480024_codes"
                         }
                     },
                     "source": {
@@ -702,7 +702,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480025a_codes"
                         }
                     },
                     "source": {
@@ -722,7 +722,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480025b_codes"
                         }
                     },
                     "source": {
@@ -742,7 +742,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480026_codes"
                         }
                     },
                     "source": {
@@ -762,7 +762,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480027_codes"
                         }
                     },
                     "source": {
@@ -782,7 +782,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480028_codes"
                         }
                     },
                     "source": {
@@ -802,7 +802,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480029_codes"
                         }
                     },
                     "source": {
@@ -822,7 +822,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480030_codes"
                         }
                     },
                     "source": {
@@ -842,7 +842,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480031a_codes"
                         }
                     },
                     "source": {
@@ -862,7 +862,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480031b_codes"
                         }
                     },
                     "source": {
@@ -882,7 +882,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480031c_codes"
                         }
                     },
                     "source": {
@@ -902,7 +902,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480032a_codes"
                         }
                     },
                     "source": {
@@ -922,7 +922,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480032b_codes"
                         }
                     },
                     "source": {
@@ -942,7 +942,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480032c_codes"
                         }
                     },
                     "source": {
@@ -962,7 +962,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480033a_codes"
                         }
                     },
                     "source": {
@@ -982,7 +982,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480033b_codes"
                         }
                     },
                     "source": {
@@ -1002,7 +1002,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480034a_codes"
                         }
                     },
                     "source": {
@@ -1022,7 +1022,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480034b_codes"
                         }
                     },
                     "source": {
@@ -1042,7 +1042,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480035a_codes"
                         }
                     },
                     "source": {
@@ -1062,7 +1062,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480035b_codes"
                         }
                     },
                     "source": {
@@ -1082,7 +1082,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480036a_codes"
                         }
                     },
                     "source": {
@@ -1102,7 +1102,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480036b_codes"
                         }
                     },
                     "source": {
@@ -1122,7 +1122,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480037_codes"
                         }
                     },
                     "source": {
@@ -1142,7 +1142,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480038_codes"
                         }
                     },
                     "source": {
@@ -1162,7 +1162,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480039_codes"
                         }
                     },
                     "source": {
@@ -1182,7 +1182,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480040_codes"
                         }
                     },
                     "source": {
@@ -1202,7 +1202,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480041_codes"
                         }
                     },
                     "source": {
@@ -1222,7 +1222,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480042_codes"
                         }
                     },
                     "source": {
@@ -1242,7 +1242,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480043_codes"
                         }
                     },
                     "source": {
@@ -1262,7 +1262,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480044_codes"
                         }
                     },
                     "source": {
@@ -1282,7 +1282,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480045_codes"
                         }
                     },
                     "source": {
@@ -1302,7 +1302,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480046_codes"
                         }
                     },
                     "source": {
@@ -1322,7 +1322,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480047_codes"
                         }
                     },
                     "source": {
@@ -1342,7 +1342,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480048_codes"
                         }
                     },
                     "source": {
@@ -1362,7 +1362,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480049_codes"
                         }
                     },
                     "source": {
@@ -1382,7 +1382,7 @@
                     "dataType": "sc:Float",
                     "references": {
                         "fileObject": {
-                            "@id": "{classification.id}_codes"
+                            "@id": "V480050_codes"
                         }
                     },
                     "source": {

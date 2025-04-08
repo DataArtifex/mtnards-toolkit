@@ -481,7 +481,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
                 # add reference to classification enum
                 if variable.classification_id:
                     field.references = mlc.Source(      
-                        file_object="{classification.id}_codes"
+                        file_object=f"{variable.classification_id}_codes"
                     )
             fields.append(field)
         record_set = mlc.RecordSet(id=self.id, fields=fields) 
