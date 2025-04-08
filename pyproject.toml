@@ -22,7 +22,11 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+  "markdownify>=0.13.0",
+  "mlcroissant>=1.0.16",
+  "pydart>=2.0.0"
+]
 
 [project.urls]
 Documentation = "https://github.com/DataArtifex/mtnards-toolkit#readme"
@@ -45,7 +49,8 @@ path = "src/dartfx/mtnards/__about__.py"
 [tool.hatch.envs.default]
 dependencies = [
   "coverage[toml]>=6.5",
-  "pytest",
+  "pytest>=8",
+  "pytest-dependency>=0.6.0"
 ]
 [tool.hatch.envs.default.scripts]
 test = "pytest {args:tests}"
@@ -87,3 +92,10 @@ exclude_lines = [
   "if __name__ == .__main__.:",
   "if TYPE_CHECKING:",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
