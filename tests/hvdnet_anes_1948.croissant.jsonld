@@ -60,13 +60,6 @@
             "name": "ANES 1948 Time Series Study.csv",
             "contentUrl": "https://rds.highvaluedata.net/rds/api/packageus_anes/anes1948.csv",
             "encodingFormat": "text/csv"
-        },
-        {
-            "@type": "cr:FileObject",
-            "@id": "anes1948.parquet",
-            "name": "ANES 1948 Time Series Study.parquet",
-            "contentUrl": "https://rds.highvaluedata.net/rds/api/packageus_anes/anes1948.parquet",
-            "encodingFormat": "application/x-parquet"
         }
     ],
     "recordSet": [
@@ -141,9 +134,7 @@
                     "description": "POP CLASSIFICATION",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480003_codes"
-                        }
+                        "@id": "V480003_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -161,9 +152,7 @@
                     "description": "CODER",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480004_codes"
-                        }
+                        "@id": "V480004_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -181,9 +170,7 @@
                     "description": "NUMBER OF CALLS TO R",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480005_codes"
-                        }
+                        "@id": "V480005_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -201,9 +188,7 @@
                     "description": "R REMEMBER PREVIOUS INT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480006_codes"
-                        }
+                        "@id": "V480006_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -221,9 +206,7 @@
                     "description": "INTR INTERVIEW THIS R",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480007_codes"
-                        }
+                        "@id": "V480007_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -241,9 +224,7 @@
                     "description": "PRVS PRE-ELCTN R REINT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480008_codes"
-                        }
+                        "@id": "V480008_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -261,9 +242,7 @@
                     "description": "R INT IN PRE/POSTELCTN",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480009_codes"
-                        }
+                        "@id": "V480009_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -281,9 +260,7 @@
                     "description": "RENT CNTRL KEPT/DROPPED",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480010_codes"
-                        }
+                        "@id": "V480010_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -301,9 +278,7 @@
                     "description": "GOVT CONTROL PRICES",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480011_codes"
-                        }
+                        "@id": "V480011_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -321,9 +296,7 @@
                     "description": "WHAT TO DO W TFT-HT ACT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480012_codes"
-                        }
+                        "@id": "V480012_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -341,9 +314,7 @@
                     "description": "PRESLELCTN OTCM SURPRISE",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480013_codes"
-                        }
+                        "@id": "V480013_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -361,9 +332,7 @@
                     "description": "WHY PPL VTD FOR TRUMAN 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480014a_codes"
-                        }
+                        "@id": "V480014a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -381,9 +350,7 @@
                     "description": "WHY PPL VTD FOR TRUMAN 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480014b_codes"
-                        }
+                        "@id": "V480014b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -401,9 +368,7 @@
                     "description": "WHY PPL VTD AGNST TRUMAN 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480015a_codes"
-                        }
+                        "@id": "V480015a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -421,9 +386,7 @@
                     "description": "WHY PPL VTD AGNST TRUMAN 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480015b_codes"
-                        }
+                        "@id": "V480015b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -441,9 +404,7 @@
                     "description": "WHY PPL VTD FOR DEWEY 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480016a_codes"
-                        }
+                        "@id": "V480016a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -461,9 +422,7 @@
                     "description": "WHY PPL VTD FOR DEWEY 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480016b_codes"
-                        }
+                        "@id": "V480016b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -481,9 +440,7 @@
                     "description": "WHY PPL VTD AGNST DEWEY 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480017a_codes"
-                        }
+                        "@id": "V480017a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -501,9 +458,7 @@
                     "description": "WHY PPL VTD AGNST DEWEY 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480017b_codes"
-                        }
+                        "@id": "V480017b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -521,9 +476,7 @@
                     "description": "DID R VOTE/FOR WHOM",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480018_codes"
-                        }
+                        "@id": "V480018_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -541,9 +494,7 @@
                     "description": "WN DECIDE FOR WHOM TO VT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480019_codes"
-                        }
+                        "@id": "V480019_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -561,9 +512,7 @@
                     "description": "CNSD VT FOR SOMEONE ELSE",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480020_codes"
-                        }
+                        "@id": "V480020_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -581,9 +530,7 @@
                     "description": "XWHY DID NOT VT FOR HIM 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480021a_codes"
-                        }
+                        "@id": "V480021a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -601,9 +548,7 @@
                     "description": "XWHY DID NOT VT FOR HIM 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480021b_codes"
-                        }
+                        "@id": "V480021b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -621,9 +566,7 @@
                     "description": "WHY VT THE WAY YOU DID 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480022a_codes"
-                        }
+                        "@id": "V480022a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -641,9 +584,7 @@
                     "description": "WHY VT THE WAY YOU DID 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480022b_codes"
-                        }
+                        "@id": "V480022b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -661,9 +602,7 @@
                     "description": "VOTED STRAIGHT TICKET",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480023_codes"
-                        }
+                        "@id": "V480023_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -681,9 +620,7 @@
                     "description": "R NOT VT-IF VT,FOR WHOM",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480024_codes"
-                        }
+                        "@id": "V480024_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -701,9 +638,7 @@
                     "description": "R NOT VT-WHY DID NOT VT 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480025a_codes"
-                        }
+                        "@id": "V480025a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -721,9 +656,7 @@
                     "description": "R NOT VT-WHY DID NOT VT 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480025b_codes"
-                        }
+                        "@id": "V480025b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -741,9 +674,7 @@
                     "description": "R NOT VT-WAS R REG TO VT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480026_codes"
-                        }
+                        "@id": "V480026_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -761,9 +692,7 @@
                     "description": "VTD IN PRVS PRESL ELCTN",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480027_codes"
-                        }
+                        "@id": "V480027_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -781,9 +710,7 @@
                     "description": "VTD FOR WHOM IN 1944",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480028_codes"
-                        }
+                        "@id": "V480028_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -801,9 +728,7 @@
                     "description": "OCCUPATION OF HEAD",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480029_codes"
-                        }
+                        "@id": "V480029_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -821,9 +746,7 @@
                     "description": "HEAD BELONG TO LBR UN",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480030_codes"
-                        }
+                        "@id": "V480030_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -841,9 +764,7 @@
                     "description": "GRPS IDENTIFIED W TRUMAN 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480031a_codes"
-                        }
+                        "@id": "V480031a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -861,9 +782,7 @@
                     "description": "GRPS IDENTIFIED W TRUMAN 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480031b_codes"
-                        }
+                        "@id": "V480031b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -881,9 +800,7 @@
                     "description": "GRPS IDENTIFIED W TRUMAN 3",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480031c_codes"
-                        }
+                        "@id": "V480031c_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -901,9 +818,7 @@
                     "description": "GRPS IDENTIFIED W DEWEY 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480032a_codes"
-                        }
+                        "@id": "V480032a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -921,9 +836,7 @@
                     "description": "GRPS IDENTIFIED W DEWEY 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480032b_codes"
-                        }
+                        "@id": "V480032b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -941,9 +854,7 @@
                     "description": "GRPS IDENTIFIED W DEWEY 3",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480032c_codes"
-                        }
+                        "@id": "V480032c_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -961,9 +872,7 @@
                     "description": "ISSUES CONNECTED W TRMN 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480033a_codes"
-                        }
+                        "@id": "V480033a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -981,9 +890,7 @@
                     "description": "ISSUES CONNECTED W TRMN 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480033b_codes"
-                        }
+                        "@id": "V480033b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1001,9 +908,7 @@
                     "description": "ISSUES CONNECTED W DEWEY 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480034a_codes"
-                        }
+                        "@id": "V480034a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1021,9 +926,7 @@
                     "description": "ISSUES CONNECTED W DEWEY 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480034b_codes"
-                        }
+                        "@id": "V480034b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1041,9 +944,7 @@
                     "description": "PERSONAL ATTRIBUTE TRMN 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480035a_codes"
-                        }
+                        "@id": "V480035a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1061,9 +962,7 @@
                     "description": "PERSONAL ATTRIBUTE TRMN 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480035b_codes"
-                        }
+                        "@id": "V480035b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1081,9 +980,7 @@
                     "description": "PERSONAL ATTRIBUTE DEWEY 1",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480036a_codes"
-                        }
+                        "@id": "V480036a_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1101,9 +998,7 @@
                     "description": "PERSONAL ATTRIBUTE DEWEY 2",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480036b_codes"
-                        }
+                        "@id": "V480036b_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1121,9 +1016,7 @@
                     "description": "CMPN INCIDENTS MENTIONED",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480037_codes"
-                        }
+                        "@id": "V480037_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1141,9 +1034,7 @@
                     "description": "41-PRESLELCTN PLAN TO VT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480038_codes"
-                        }
+                        "@id": "V480038_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1161,9 +1052,7 @@
                     "description": "41-PLAN TO VT REP/DEM",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480039_codes"
-                        }
+                        "@id": "V480039_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1181,9 +1070,7 @@
                     "description": "41-USA'S CNCRN W OTHERS",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480040_codes"
-                        }
+                        "@id": "V480040_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1201,9 +1088,7 @@
                     "description": "41-SATISD USA TWRD RUSS",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480041_codes"
-                        }
+                        "@id": "V480041_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1221,9 +1106,7 @@
                     "description": "41-INFORMATION LEVEL",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480042_codes"
-                        }
+                        "@id": "V480042_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1241,9 +1124,7 @@
                     "description": "41-USA GV IN,AGRT RUSS",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480043_codes"
-                        }
+                        "@id": "V480043_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1261,9 +1142,7 @@
                     "description": "41-USA-RUSS AGRT VIA U.N",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480044_codes"
-                        }
+                        "@id": "V480044_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1281,9 +1160,7 @@
                     "description": "SEX OF RESPONDENT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480045_codes"
-                        }
+                        "@id": "V480045_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1301,9 +1178,7 @@
                     "description": "RACE OF RESPONDENT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480046_codes"
-                        }
+                        "@id": "V480046_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1321,9 +1196,7 @@
                     "description": "AGE OF RESPONDENT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480047_codes"
-                        }
+                        "@id": "V480047_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1341,9 +1214,7 @@
                     "description": "EDUCATION OF RESPONDENT",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480048_codes"
-                        }
+                        "@id": "V480048_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1361,9 +1232,7 @@
                     "description": "TOTAL 1948 INCOME",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480049_codes"
-                        }
+                        "@id": "V480049_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1381,9 +1250,7 @@
                     "description": "RELIGIOUS PREFERENCE",
                     "dataType": "sc:Float",
                     "references": {
-                        "fileObject": {
-                            "@id": "V480050_codes"
-                        }
+                        "@id": "V480050_codes/value"
                     },
                     "source": {
                         "fileObject": {
@@ -1404,13 +1271,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480003_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480003_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -1436,13 +1304,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480004_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480004_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -1498,13 +1367,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480005_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480005_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1516,13 +1386,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480006_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480006_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -1548,13 +1419,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480007_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480007_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -1602,13 +1474,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480008_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480008_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1620,13 +1493,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480009_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480009_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -1682,13 +1556,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480010_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480010_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1722,13 +1597,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480011_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480011_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1762,13 +1638,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480012_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480012_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1802,13 +1679,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480013_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480013_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1842,13 +1720,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480014a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480014a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1882,13 +1761,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480014b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480014b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1922,13 +1802,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480015a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480015a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -1962,13 +1843,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480015b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480015b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2002,13 +1884,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480016a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480016a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2042,13 +1925,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480016b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480016b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2082,13 +1966,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480017a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480017a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2122,13 +2007,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480017b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480017b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2162,13 +2048,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480018_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480018_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2202,13 +2089,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480019_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480019_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2242,13 +2130,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480020_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480020_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2282,13 +2171,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480021a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480021a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2322,13 +2212,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480021b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480021b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2362,13 +2253,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480022a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480022a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2402,13 +2294,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480022b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480022b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2442,13 +2335,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480023_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480023_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2482,13 +2376,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480024_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480024_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2522,13 +2417,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480025a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480025a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2562,13 +2458,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480025b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480025b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2580,13 +2477,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480026_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480026_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -2642,13 +2540,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480027_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480027_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2682,13 +2581,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480028_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480028_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2722,13 +2622,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480029_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480029_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2740,13 +2641,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480030_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480030_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -2798,13 +2700,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480031a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480031a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2838,13 +2741,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480031b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480031b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2878,13 +2782,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480031c_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480031c_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2918,13 +2823,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480032a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480032a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2958,13 +2864,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480032b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480032b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -2998,13 +2905,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480032c_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480032c_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3038,13 +2946,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480033a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480033a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3078,13 +2987,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480033b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480033b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3118,13 +3028,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480034a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480034a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3158,13 +3069,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480034b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480034b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3198,13 +3110,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480035a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480035a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3238,13 +3151,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480035b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480035b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3278,13 +3192,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480036a_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480036a_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3318,13 +3233,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480036b_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480036b_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3358,13 +3274,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480037_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480037_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3376,13 +3293,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480038_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480038_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -3438,13 +3356,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480039_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480039_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3478,13 +3397,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480040_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480040_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3518,13 +3438,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480041_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480041_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3536,13 +3457,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480042_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480042_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -3598,13 +3520,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480043_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480043_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3638,13 +3561,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480044_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480044_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3656,13 +3580,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480045_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480045_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -3688,13 +3613,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480046_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480046_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -3746,13 +3672,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480047_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480047_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3764,13 +3691,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480048_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480048_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ],
             "data": [
@@ -3822,13 +3750,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480049_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480049_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         },
@@ -3862,13 +3791,14 @@
                 {
                     "@type": "cr:Field",
                     "@id": "V480050_codes/value",
-                    "description": "Value"
+                    "name": "value",
+                    "description": "The code value"
                 },
                 {
                     "@type": "cr:Field",
                     "@id": "V480050_codes/label",
                     "name": "label",
-                    "description": "Label"
+                    "description": "The code label"
                 }
             ]
         }

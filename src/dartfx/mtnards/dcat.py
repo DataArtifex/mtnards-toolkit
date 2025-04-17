@@ -96,7 +96,7 @@ class DcatGenerator:
             dcat_dataset.add_description(rds_data_product.description)
         explorer_url = f"{self.server.host}/explorer/explore/{rds_data_product._catalog.id}/{rds_data_product.id}"
         dcat_dataset.add_landing_page(explorer_url)
-        dcat_dataset.add_modified_date(rds_data_product._last_update)
+        dcat_dataset.add_modified_date(rds_data_product.last_update)
         dcat_dataset.add_publisher(f"{rds_data_product._catalog._server.host}")
         return dcat_dataset
     

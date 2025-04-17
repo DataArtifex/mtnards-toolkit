@@ -3,9 +3,11 @@ from typing import Optional, Union
 import mlcroissant as mlc
 from markdownify import markdownify as md
 import os
-from pydantic import AliasChoices, BaseModel, Field, PrivateAttr, computed_field, model_validator, root_validator
+from pydantic import AliasChoices, BaseModel, Field, PrivateAttr, computed_field, model_validator
+import re
 import requests
 import time
+
 
 class MtnaRdsResource(BaseModel):
     uri: str
@@ -14,6 +16,10 @@ class MtnaRdsResource(BaseModel):
     description: str | None = None
     reference: bool | None = None
     revision_number: int | None = Field(alias="revisionNumber", default=None)
+
+    def __hash__(self):
+        """Make the object hashable by using the uri so it can be used in sets"""
+        return hash(self.uri)
 
 class MtnaRdsServerInfo(BaseModel):
     name: str
@@ -29,6 +35,15 @@ class MtnaRdsServer(BaseModel):
     _catalogs: dict[str,"MtnaRdsCatalog"] = None
     _info: MtnaRdsServerInfo | None = None
 
+
+    @model_validator(mode="before")
+    @classmethod
+    def ensure_https_host(cls, values):
+        host = values.get("host")
+        if not re.match(r"^https?://", host):
+            values["host"] = f"https://{host}"
+        return values
+    
     @computed_field
     @property
     def api_endpoint(self) -> str:
@@ -378,7 +393,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     @computed_field
     @property
     def csv_download_url(self) -> str:
-        return f"{self._catalog._server.api_url}/package{self._catalog.id}/{self.id}.csv"
+        return f"{self._catalog._server.api_url}/package/{self._catalog.id}/{self.id}.csv"
 
 
     @computed_field
@@ -389,7 +404,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     @computed_field
     @property
     def parquet_download_url(self) -> str:
-        return f"{self._catalog._server.api_url}/package{self._catalog.id}/{self.id}.parquet"
+        return f"{self._catalog._server.api_url}/package/{self._catalog.id}/{self.id}.parquet"
 
     @computed_field
     @property
@@ -435,7 +450,6 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         metadata = mlc.Metadata(ctx=context, 
             id=self.id,
             name=self.name,
-            description=md(self.description),
             cite_as = self.citation,
             date_modified = self.last_update,
 #            date_published = self.publication_date,
@@ -445,6 +459,8 @@ class MtnaRdsDataProduct(MtnaRdsResource):
             url=self.explorer_url,
             version = int(self.revision_number)
         )
+        if self.description:
+            metadata.description = md(self.description)
         # distribution
         distribution = []
         # csv distribution
@@ -457,15 +473,15 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         )
         distribution.append(csv_file)
         # parquet distribution
-        metadata.distribution = distribution
-        content_url = self.parquet_download_url
-        parquet_file = mlc.FileObject(ctx=context, 
-            id=self.id+'.parquet',
-            name=self.name+'.parquet',
-            content_url=content_url,
-            encoding_formats=[mlc.EncodingFormat.PARQUET]
-        )
-        distribution.append(parquet_file)
+        #metadata.distribution = distribution
+        #content_url = self.parquet_download_url
+        #parquet_file = mlc.FileObject(ctx=context, 
+        #    id=self.id+'.parquet',
+        #    name=self.name+'.parquet',
+        #    content_url=content_url,
+        #    encoding_formats=[mlc.EncodingFormat.PARQUET]
+        #)
+        #distribution.append(parquet_file)
         metadata.distribution = distribution
         # fields and record set
         fields = []
@@ -480,8 +496,8 @@ class MtnaRdsDataProduct(MtnaRdsResource):
             if include_codes:
                 # add reference to classification enum
                 if variable.classification_id:
-                    field.references = mlc.Source(      
-                        file_object=f"{variable.classification_id}_codes"
+                    field.references = mlc.Source(
+                        id=f"{variable.classification_id}_codes/value"
                     )
             fields.append(field)
         record_set = mlc.RecordSet(id=self.id, fields=fields) 
@@ -495,8 +511,8 @@ class MtnaRdsDataProduct(MtnaRdsResource):
                 value_field_id = f"{classification_id}/value"
                 label_field_id = f"{classification_id}/label"
                 fields = [
-                    mlc.Field(ctx=context, id=value_field_id, description="Value"),
-                    mlc.Field(ctx=context, id=label_field_id, name="label", description="Label"),
+                    mlc.Field(ctx=context, id=value_field_id, name="value", description="The code value"),
+                    mlc.Field(ctx=context, id=label_field_id, name="label", description="The code label"),
                 ]
                 # codes
                 classification_records = []
