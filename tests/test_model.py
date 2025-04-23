@@ -1,7 +1,21 @@
-
+import logging
+import sys
 import pytest
-from dartfx.mtnards import MtnaRdsServer, MtnaRdsCatalog , MtnaRdsVariable
+from dartfx.mtnards import MtnaRdsServer, MtnaRdsCatalog
 import json
+
+from dartfx.mtnards.mtnards import MtnaRdsClassification, MtnaRdsVariable
+
+
+# Set up logging
+logging.basicConfig(  # noqa: F821
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    stream=sys.stderr
+)
+logger = logging.getLogger(__name__)
+sys.stderr.flush()
+
 
 #
 # SERVER
@@ -48,6 +62,24 @@ def test_hvdnet_anes_catalog(hvdnet_server):
     assert catalog
     assert len(catalog.data_products) == 1
     print(catalog)
+
+
+
+#
+# DATA PRODUCT
+# 
+
+def test_hvdnet_anes1948_metadata(hvdnet_server):
+    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    data_product = catalog.get_data_product_by_id("anes1948")
+    assert data_product
+    data_product.load_metadata()
+    assert data_product._variables
+    assert data_product._classifications
+    for variable in data_product._variables.values():
+        assert isinstance(variable, MtnaRdsVariable)
+    for classification in data_product._classifications.values():
+        assert classification._codes
 
 #
 # VARIABLES

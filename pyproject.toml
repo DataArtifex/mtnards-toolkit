@@ -24,8 +24,9 @@ classifiers = [
 ]
 dependencies = [
   "markdownify>=0.13.0",
+  "mcp[cli]>=1.6.0",
   "mlcroissant>=1.0.16",
-  "pydart>=2.0.0"
+  "pydantic>=2.0.0",
 ]
 
 [project.urls]
@@ -33,6 +34,13 @@ Documentation = "https://github.com/DataArtifex/mtnards-toolkit#readme"
 Issues = "https://github.com/DataArtifex/mtnards-toolkit/issues"
 Source = "https://github.com/DataArtifex/mtnards-toolkit"
 
+
+[project.optional-dependencies]
+mcp = [
+  "httpx>=0.20.0",
+  "mcp>=1.6",
+  "mcp[cli]>=1.6",
+]
 
 [tool.hatch.build.targets.sdist]
 exclude = [

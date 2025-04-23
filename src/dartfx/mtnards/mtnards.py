@@ -1,7 +1,7 @@
 import logging
 from typing import Optional, Union
 import mlcroissant as mlc
-from markdownify import markdownify as md
+from markdownify import markdownify
 import os
 from pydantic import AliasChoices, BaseModel, Field, PrivateAttr, computed_field, model_validator
 import re
@@ -28,8 +28,8 @@ class MtnaRdsServerInfo(BaseModel):
 
 class MtnaRdsServer(BaseModel):
     host: str
-    base_path: str = Field(default="rds")
-    api_path: str = Field(default="api")
+    base_path: str | None = Field(default="rds")
+    api_path: str | None = Field(default="api")
     api_key: str | None = None
     ssl_verify : bool = Field(default=True)
     _catalogs: dict[str,"MtnaRdsCatalog"] = None
@@ -198,7 +198,7 @@ class MtnaRdsServer(BaseModel):
             "rdsExplorerBaseUrl": f"{self.base_url}/explorer/explore",
             "rdsTabEngineBaseUrl": f"{self.base_url}/tabengine/tabulation",
         }
-        logging.debug(url)
+        #logging.debug(url)
         result = self.api_request(url, method="GET", params=params)
         if result.status_code == 200:
             data = result.json()
@@ -247,11 +247,11 @@ class MtnaRdsServer(BaseModel):
         while time.time() - start < timeout:
             process_details = self.get_process_details(pid)
             if process_details:
-                logging.debug(f"Process {pid} status {process_details.status} ({process_details.completed}%)")
+                #logging.debug(f"Process {pid} status {process_details.status} ({process_details.completed}%)")
                 if process_details.completed == 100:
                     break
             else:
-                logging.debug("Failed to retrieve process {pid} details ({get_errors}/{max_get_errors})")
+                #logging.debug("Failed to retrieve process {pid} details ({get_errors}/{max_get_errors})")
                 get_errors += 1
                 if get_errors > max_get_errors:
                     logging.error(f"Retrieving process {pid} details failed too many times ({get_errors})")
@@ -375,6 +375,16 @@ class MtnaRdsDataProduct(MtnaRdsResource):
 
     @computed_field
     @property
+    def catalog_id(self) -> str:
+        return self._catalog.id
+
+    @computed_field
+    @property   
+    def catalog_uri(self) -> str:
+        return self._catalog.uri
+    
+    @computed_field
+    @property
     def classifications(self) -> dict[str, Union["MtnaRdsClassificationStub","MtnaRdsClassification"]]:
         if self._classifications is None:
             # get from server
@@ -433,7 +443,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         return self._catalog.delete_data_product(self.uri)
 
     def get_classification_by_uri(self, uri):
-        for classification in self.classifications:
+        for classification in self.classifications.values():
             if classification.uri == uri:
                 return classification
     
@@ -460,7 +470,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
             version = int(self.revision_number)
         )
         if self.description:
-            metadata.description = md(self.description)
+            metadata.description = markdownify(self.description)
         # distribution
         distribution = []
         # csv distribution
@@ -546,6 +556,39 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     def get_import_configuration(self, file_info):
         return self._catalog.get_import_configuration(self.uri, file_info)
     
+    def get_markdown(self, sections:list[str]=[]):
+        """
+        Returns the markdown description of the data product.
+        """
+        # TODO: upgrade to use Jinja2 templates
+        self.load_metadata() # make sure metadata is fully loaded
+        # generate
+        md = ""
+        md += f"# {self.name}\n\n"
+        if self.description:
+            md += f"{markdownify(self.description)}\n\n"
+        if not sections or 'variables' in sections:
+            md += f"\n## Variables\n\n"
+            md += "| Name | Label | Type | Classification |\n"
+            md += "|---|---|---|---|\n"
+            for variable in self.variables.values():
+                md += f"| {variable.name} | {variable.label} | {variable.data_type} "
+                if variable.classification_id:
+                    md += f" | {variable.classification_id} ({variable.classification.code_count} codes) |\n"
+                else:
+                    md += " | - |\n"
+        if not sections or 'classifications' in sections:
+            md += f"\n## Classifications\n\n"
+            for classification in self.classifications.values():
+                md += f"\n### {classification.id}\n\n"
+                md += f"{classification.code_count} codes\n\n"
+                md += "| Code | Label |\n"
+                md += "|---|---|\n"
+                for code in classification.codes:
+                    md += f"| {code.code_value} | {code.name} |\n"
+                md + "\n"
+        return md
+
     def get_postman_collection(self):
         return self._catalog.get_postman_collection(self.id)
     
@@ -556,6 +599,76 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     
     def get_variable_by_id(self, id):
         return self.variables.get(id)
+
+
+    def load_metadata(self):
+        # check if metadata is fully loaded
+        # note that if one element is not fully loaded, we simply load all of them
+        load_variables = False
+        if self._variables is not None:
+            for variable in self._variables.values():
+                if not isinstance(variable, MtnaRdsVariable):
+                    load_variables = True
+                    break
+        else:
+            load_variables = True
+        load_classifications = False
+        if self._classifications is not None:
+            for classification in self._classifications.values():
+                if not isinstance(variable, MtnaRdsClassificationStub):
+                    load_classifications = True
+                    break
+                if not classification._codes:
+                    load_classifications = True
+                    break
+        else:
+            load_classifications = True
+        # load metadata if needed
+        if load_classifications or load_variables:
+            response = self._catalog._server.api_request(f"catalog/{self._catalog.id}/{self.id}/metadata/json")
+            if response.status_code == 200:
+                metadata = response.json()
+                # load classifications
+                if load_classifications:
+                    if self._classifications is None:
+                        self._classifications = dict()
+                    for metadata_classification in metadata["classifications"]:
+                        id = metadata_classification["id"]
+                        if id not in self._classifications:
+                            classification = MtnaRdsClassificationStub(**metadata_classification)
+                            classification._data_product = self
+                            self._classifications[id] = classification
+                        else:
+                            classification = self._classifications[id]
+                        # load classification codes if not already loaded
+                        if not classification._codes:
+                            classification._codes = []
+                            for metadata_classification_code in metadata_classification["codes"]:
+                                code = MtnaRdsClassificationCode(**metadata_classification_code)
+                                code._classification = classification
+                                classification._codes.append(code)
+                        classification.code_count = len(classification._codes) # this is noy in the metadata at this time
+                # load variables
+                if load_variables:
+                    if self._variables is None:
+                        self._variables = dict()
+                    for metadata_variable in metadata["recordLayout"]["variables"]:
+                        id = metadata_variable["id"]
+                        if id not in self._variables:
+                            variable = MtnaRdsVariable(**metadata_variable)
+                            variable._data_product = self
+                            self._variables[id] = variable
+                            # classificationId is not in the metadata
+                            if variable.classification_uri:
+                                # find the classification by uri
+                                classification = self.get_classification_by_uri(variable.classification_uri)
+                                variable.classification_id = classification.id
+                        else:
+                            variable = self._variables[id]
+            else:
+                logging.error(f"Could not get metadata: {response.status_code}")
+        else:
+            logging.debug("Metadata already fully loaded")
 
     def resolve_classifications(self):
         for classification in self.classifications:
@@ -593,6 +706,36 @@ class MtnaRdsVariableStub(MtnaRdsResource):
 
     @computed_field
     @property
+    def catalog_id(self) -> str:
+        return self._data_product._catalog.id
+    
+    @computed_field
+    @property
+    def catalog_uri(self) -> str:
+        return self._data_product._catalog.uri
+
+    @computed_field
+    @property
+    def classification(self) -> Optional[Union["MtnaRdsClassificationStub","MtnaRdsClassification"]]:
+        if self.classification_id:
+            classification = self._data_product.get_classification_by_id(self.classification_id)
+            return classification
+        else:
+            return None
+
+    @computed_field
+    @property
+    def data_product_id(self) -> str:
+        return self._data_product.id
+    
+    @computed_field
+    @property
+    def data_product_uri(self) -> str:
+        return self._data_product.uri
+
+
+    @computed_field
+    @property
     def is_stub(self) -> bool:
         return not isinstance(self, MtnaRdsVariable)
     
@@ -605,6 +748,7 @@ class MtnaRdsVariableStub(MtnaRdsResource):
         if response.status_code == 200:
             data = response.json()
             variable = MtnaRdsVariable(_data_product=self._data_product, **data)
+            # replace the stub with the detailed variable in the data product
             self._data_product._variables[variable.id] = variable
             return variable
         else:
