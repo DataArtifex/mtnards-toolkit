@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Union
+from typing import Optional, Union, Any
 import mlcroissant as mlc
 from markdownify import markdownify
 import os
@@ -36,6 +36,7 @@ class MtnaRdsServer(BaseModel):
     _info: MtnaRdsServerInfo | None = None
 
 
+    # This validator ensures that the host URL starts with "https://" before model initialization.
     @model_validator(mode="before")
     @classmethod
     def ensure_https_host(cls, values):
@@ -43,14 +44,13 @@ class MtnaRdsServer(BaseModel):
         if not re.match(r"^https?://", host):
             values["host"] = f"https://{host}"
         return values
-    
+
     @computed_field
-    @property
     def api_endpoint(self) -> str:
         return f"{self.base_path}/{self.api_path}" if self.base_path else self.api_path
 
     @property
-    def catalogs(self, refresh=False) -> dict[str,"MtnaRdsCatalog"]:
+    def catalogs(self, refresh: bool = False) -> dict[str, "MtnaRdsCatalog"]:
         if refresh or self._catalogs is None:
             if refresh:
                 self._catalogs = None
@@ -66,18 +66,19 @@ class MtnaRdsServer(BaseModel):
             else:
                 logging.error(f"Could not get server level catalog: {response.status_code}")
         return self._catalogs
-    
     @computed_field
-    @property
     def base_url(self) -> str:
         return f"{self.host}/{self.base_path}"
 
     @computed_field
-    @property
     def api_url(self) -> str:
         return f"{self.host}/{self.api_endpoint}"
-    
-    @property
+
+    @computed_field
+    def hostname(self) -> str:
+        return re.sub(r"^https?://", "", self.host)
+
+    @computed_field
     def info(self) -> MtnaRdsServerInfo:
         if self._info is None:
             response = self.api_request("server/info")
@@ -86,6 +87,7 @@ class MtnaRdsServer(BaseModel):
                 self._info = MtnaRdsServerInfo(**data)
             else:
                 logging.error(f"Could not get server info: {response.status_code}")
+        return self._info
         return self._info
 
 
@@ -152,7 +154,7 @@ class MtnaRdsServer(BaseModel):
             logging.error(f"Could not delete data product: {result.status_code}")
 
 
-    def get_catalog_by_uri(self, uri):
+    def get_catalog_by_uri(self, uri) -> Optional["MtnaRdsCatalog"]:
         for catalog in self.catalogs.values():
             if catalog.uri == uri:
                 return catalog
@@ -185,7 +187,7 @@ class MtnaRdsServer(BaseModel):
         else:
             logging.error(f"Could not get server info: {response.status_code}")
 
-    def get_postman_collection(self, catalog_id=None, data_product_id=None):
+    def get_postman_collection(self, catalog_id=None, data_product_id=None) -> dict[str, Any]:
         """Returns a Postman collection for the server, a catalog, or a data product.
         """
         url = "management/postman"
@@ -348,7 +350,7 @@ class MtnaRdsCatalog(MtnaRdsResource):
     def delete_data_product(self, data_product_uri):
         return self._server.delete_data_product(self.uri, data_product_uri)
 
-    def get_postman_collection(self, data_product_id=None):
+    def get_postman_collection(self, data_product_id=None) -> dict[str, Any]:
         """Returns a Postman collection for this catalog or one of its data product."""
         return self._server.get_postman_collection(self.id, data_product_id)
 
@@ -374,17 +376,18 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     _classifications: "Optional[list[MtnaRdsClassificationStub | MtnaRdsClassification]]" = PrivateAttr(default=None) # key is classification id
 
     @computed_field
-    @property
+    def api_documentation_url(self) -> str:
+        return f"{self._catalog._server.base_url}/swagger/"
+
+    @computed_field
     def catalog_id(self) -> str:
         return self._catalog.id
 
     @computed_field
-    @property   
     def catalog_uri(self) -> str:
         return self._catalog.uri
     
     @computed_field
-    @property
     def classifications(self) -> dict[str, Union["MtnaRdsClassificationStub","MtnaRdsClassification"]]:
         if self._classifications is None:
             # get from server
@@ -401,29 +404,46 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         return self._classifications
 
     @computed_field
-    @property
+    def count_api_url(self) -> str:
+        return f"{self._catalog._server.api_url}/query/{self._catalog.id}/{self.id}/count"
+
+    @computed_field
     def csv_download_url(self) -> str:
         return f"{self._catalog._server.api_url}/package/{self._catalog.id}/{self.id}.csv"
 
-
     @computed_field
-    @property
     def explorer_url(self) -> str:
-        return f"{self._catalog._server.explorer_url}/explore/{self._catalog.id}/{self.id}"
+        return f"{self._catalog._server.explorer_url}/explore/{self._catalog.id}/{self.id}/data"
 
     @computed_field
-    @property
+    def code_generators_api_url(self) -> str:
+        return f"{self._catalog._server.api_url}/snippet/{self._catalog.id}/{self.id}"
+
+    @computed_field
+    def metadata_api_url(self) -> str:
+        return f"{self._catalog._server.api_url}/catalog/{self._catalog.id}/{self.id}"
+
+    @computed_field
     def parquet_download_url(self) -> str:
         return f"{self._catalog._server.api_url}/package/{self._catalog.id}/{self.id}.parquet"
 
     @computed_field
-    @property
-    def tabengine_url(self) -> str:
-        return f"{self._catalog._server.tabengine_url}/tabulate/{self._catalog.id}/{self.id}"
-
+    def regression_api_url(self) -> str:
+        return f"{self._catalog._server.api_url}/query/{self._catalog.id}/{self.id}/regression"
 
     @computed_field
-    @property
+    def select_api_url(self) -> str:
+        return f"{self._catalog._server.api_url}/query/{self._catalog.id}/{self.id}/select"
+
+    @computed_field
+    def tabulate_api_url(self) -> str:
+        return f"{self._catalog._server.api_url}/query/{self._catalog.id}/{self.id}/tabulate"
+
+    @computed_field
+    def tabengine_url(self) -> str:
+        return f"{self._catalog._server.tabengine_url}/tabulation/{self._catalog.id}/{self.id}/custom-tables"
+
+    @computed_field
     def variables(self) -> dict[str,Union["MtnaRdsVariableStub","MtnaRdsVariable"]]:
         if self._variables is None:
             # get from server
@@ -439,6 +459,10 @@ class MtnaRdsDataProduct(MtnaRdsResource):
                 logging.error(f"Could not get classifications: {response.status_code}")
         return self._variables
 
+    @computed_field
+    def variables_count(self) -> int:    
+        return len(self.variables)
+    
     def delete(self):
         return self._catalog.delete_data_product(self.uri)
 
@@ -449,6 +473,13 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     
     def get_classification_by_id(self, id):
         return self.classifications.get(id)
+
+    def get_classification_variables(self, classification) -> list["MtnaRdsVariable"]:
+        variables = []
+        for variable in self.variables.values():
+            if variable.classification_uri == classification.uri:
+                variables.append(variable)
+        return variables
 
     def get_croissant(self, include_codes=True, max_codes=100) -> mlc.Metadata:
         context = mlc.Context()
@@ -556,7 +587,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     def get_import_configuration(self, file_info):
         return self._catalog.get_import_configuration(self.uri, file_info)
     
-    def get_markdown(self, sections:list[str]=[]):
+    def get_markdown(self, sections:list[str]=[], max_codes:int=10):
         """
         Returns the markdown description of the data product.
         """
@@ -565,14 +596,17 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         # generate
         md = ""
         md += f"# {self.name}\n\n"
+        if not sections or 'links' in sections:
+            md += f"###### Open in RDS [Explorer]({self.explorer_url}) or [Tabulation Engine]({self.tabengine_url}). View [API documentation]({self.api_documentation_url}).\n\n"
         if self.description:
             md += f"{markdownify(self.description)}\n\n"
         if not sections or 'variables' in sections:
             md += f"\n## Variables\n\n"
-            md += "| Name | Label | Type | Classification |\n"
-            md += "|---|---|---|---|\n"
-            for variable in self.variables.values():
-                md += f"| {variable.name} | {variable.label} | {variable.data_type} "
+            md += f"{self.variables_count} variables\n\n"
+            md += "| Index | Name | Label | Type | Classification |\n"
+            md += "|---|---|---|---|---|\n"
+            for variable_index, variable in enumerate(self.variables.values()):
+                md += f"| {variable_index} | {variable.name} | {variable.label} | {variable.data_type} "
                 if variable.classification_id:
                     md += f" | {variable.classification_id} ({variable.classification.code_count} codes) |\n"
                 else:
@@ -582,14 +616,20 @@ class MtnaRdsDataProduct(MtnaRdsResource):
             for classification in self.classifications.values():
                 md += f"\n### {classification.id}\n\n"
                 md += f"{classification.code_count} codes\n\n"
+                # create a comma separated list of variables names using this classification. Use get_classification_variables()
+                md += f"Used by: {', '.join([variable.name for variable in self.get_classification_variables(classification)])}\n\n"
                 md += "| Code | Label |\n"
                 md += "|---|---|\n"
-                for code in classification.codes:
+                for code_index, code in enumerate(classification.codes):
+                    if code_index >= max_codes:
+                        md += f"| ... | ( { len(classification.codes) - max_codes} more) |\n"
+                        break
                     md += f"| {code.code_value} | {code.name} |\n"
+                        
                 md + "\n"
         return md
 
-    def get_postman_collection(self):
+    def get_postman_collection(self)  -> dict[str, Any]:
         return self._catalog.get_postman_collection(self.id)
     
     def get_variable_by_uri(self, uri):
@@ -699,7 +739,6 @@ class MtnaRdsVariableStub(MtnaRdsResource):
 
     @property
     def croissant_data_type(self):
-        # https://dev.socrata.com/docs/datatypes
         if self.data_type == 'NUMERIC':
             return mlc.DataType.FLOAT
         return mlc.DataType.TEXT
