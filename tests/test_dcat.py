@@ -1,6 +1,5 @@
 from dartfx.mtnards import MtnaRdsServer
 from dartfx.mtnards.dcat import DcatGenerator
-import pytest
 
 def test_dcat_hvdnet_anes1948(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
