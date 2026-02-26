@@ -38,7 +38,7 @@ Process all data products in a catalog:
    import json
    
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    
    metadata_collection = []
    
@@ -73,7 +73,7 @@ Analyze variables by their data types:
    from collections import defaultdict
    
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    data_product = catalog.data_products_by_id['anes_1948']
    
    # Group variables by type
@@ -101,7 +101,7 @@ Export variable metadata to a CSV file:
    import csv
    
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    data_product = catalog.data_products_by_id['anes_1948']
    
    # Prepare data for CSV
@@ -137,7 +137,7 @@ Extract and analyze classification codes:
    from dartfx.mtnards import MtnaRdsServer
    
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    data_product = catalog.data_products_by_id['anes_1948']
    
    # Find variables with classifications
@@ -173,7 +173,7 @@ Generate markdown documentation for multiple datasets:
    from pathlib import Path
    
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    
    # Create output directory
    output_dir = Path('docs_output')
@@ -256,7 +256,7 @@ Generate and query RDF graphs:
    from rdflib import Namespace
    
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    data_product = catalog.data_products_by_id['anes_1948']
    
    # Create DCAT exporter
@@ -354,8 +354,8 @@ Robust error handling for production code:
    
    # Usage
    server = safe_connect("rds.highvaluedata.net")
-   if server and 'us_anes' in server.catalogs:
-       catalog = server.catalogs['us_anes']
+   if server and 'us-anes' in server.catalogs:
+       catalog = server.catalogs['us-anes']
        dp = safe_get_data_product(catalog, 'anes_1948')
        if dp:
            print(f"Successfully loaded: {dp.name}")
@@ -371,7 +371,7 @@ Convert RDS data structures to Pandas DataFrames:
    import pandas as pd
    
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    data_product = catalog.data_products_by_id['anes_1948']
    
    # Create DataFrame of variables
