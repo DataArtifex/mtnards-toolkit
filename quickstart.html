@@ -1,0 +1,802 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start Guide &mdash; MTNA Rich Data Services Toolkit 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MTNA Rich Data Services Toolkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pypi-release">PyPI Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#local-development-installation">Local Development Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#using-uv-recommended">Using uv (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#using-pip">Using pip</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#optional-dependencies">Optional Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#mcp-server">MCP Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#development-tools">Development Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#documentation-build-tools">Documentation Build Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verification">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#import-errors">Import Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#ssl-certificate-issues">SSL Certificate Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-workflow">Basic Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-connect-to-an-rds-server">Step 1: Connect to an RDS Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-browse-catalogs">Step 2: Browse Catalogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-explore-data-products">Step 3: Explore Data Products</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-work-with-variables">Step 4: Work with Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#working-with-classifications">Working with Classifications</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#common-use-cases">Common Use Cases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#generate-croissant-metadata">Generate Croissant Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#export-dcat-rdf">Export DCAT/RDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-markdown-documentation">Generate Markdown Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-example">Complete Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#working-with-multiple-catalogs">Working with Multiple Catalogs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#batch-processing-data-products">Batch Processing Data Products</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#working-with-variable-types">Working with Variable Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#exporting-variables-to-csv">Exporting Variables to CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#working-with-classifications">Working with Classifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#generating-documentation-for-multiple-datasets">Generating Documentation for Multiple Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#creating-a-dataset-catalog-index">Creating a Dataset Catalog Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#working-with-rdf-graphs">Working with RDF Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#caching-and-performance">Caching and Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#error-handling-best-practices">Error Handling Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#integration-with-pandas">Integration with Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#more-examples">More Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mcp_server.html">MCP Server Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#what-is-mcp">What is MCP?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#running-the-server">Running the Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#standalone-mode">Standalone Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#claude-desktop-integration">Claude Desktop Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#configuration-location">Configuration Location</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#configuration-example">Configuration Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#using-with-pip-venv">Using with pip/venv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#available-mcp-tools">Available MCP Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#get-server-catalogs">get_server_catalogs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#future-tools-coming-soon">Future Tools (Coming Soon)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#mcp-resources">MCP Resources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#mtnards-catalog">mtnards://catalog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#greeting-name">greeting://{name}</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#using-the-mcp-server-with-claude">Using the MCP Server with Claude</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#example-interactions">Example Interactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#example-session">Example Session</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#security">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#performance">Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#server-not-starting">Server Not Starting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#claude-can-t-connect">Claude Can’t Connect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#api-authentication-errors">API Authentication Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#development">Development</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#running-in-development-mode">Running in Development Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#testing-the-server">Testing the Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mcp_server.html#extending-the-server">Extending the Server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mcp_server.html#additional-resources">Additional Resources</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/core.html">Core API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/core.html#server-connection">Server Connection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.host"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.host</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.base_path"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.base_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.api_path"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.api_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.api_key"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.api_key</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.ssl_verify"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.ssl_verify</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.ensure_https_host"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.ensure_https_host()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.api_endpoint"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.api_endpoint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.catalogs"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.catalogs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.base_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.base_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.api_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.api_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.hostname"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.hostname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.info"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.explorer_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.explorer_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.tabengine_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.tabengine_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.api_request"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.api_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.create_catalog"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.create_catalog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.delete_catalog"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.delete_catalog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.delete_data_product"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.delete_data_product()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.get_catalog_by_uri"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.get_catalog_by_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.get_catalog_by_id"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.get_catalog_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.get_ddi_codebook"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.get_ddi_codebook()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.get_import_configuration"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.get_import_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.get_info"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.get_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.get_postman_collection"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.get_postman_collection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.get_process_details"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.get_process_details()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.import_file"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.import_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.is_up"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.is_up()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.upload_file"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.upload_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.wait_for_process"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.wait_for_process()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsServer.model_post_init"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServer.model_post_init()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsServerInfo"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServerInfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsServerInfo.name"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServerInfo.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsServerInfo.released"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServerInfo.released</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsServerInfo.version"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServerInfo.version</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsServerInfo.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsServerInfo.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/core.html#catalog">Catalog</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.last_update"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.last_update</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.is_private"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.is_private</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.data_products"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.data_products</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.attach_catalog_to_products"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.attach_catalog_to_products()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.get_data_product_by_uri"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.get_data_product_by_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.get_data_product_by_id"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.get_data_product_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.get_ddi_codebook"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.get_ddi_codebook()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.get_import_configuration"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.get_import_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.create_sql_data_product"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.create_sql_data_product()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.delete"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.delete_data_product"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.delete_data_product()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.get_postman_collection"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.get_postman_collection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsCatalog.model_post_init"><code class="docutils literal notranslate"><span class="pre">MtnaRdsCatalog.model_post_init()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/core.html#data-product">Data Product</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.abbreviation"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.abbreviation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.cached"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.cached</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.doi"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.doi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.changeLog"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.changeLog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.citation"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.citation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.data_product_type"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.data_product_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.is_private"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.is_private</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.keywords"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.keywords</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.last_update"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.last_update</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.provenance"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.provenance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.urls"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.urls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.api_documentation_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.api_documentation_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.catalog_id"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.catalog_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.catalog_uri"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.catalog_uri</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.classifications"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.classifications</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.count_api_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.count_api_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.csv_download_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.csv_download_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.explorer_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.explorer_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.code_generators_api_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.code_generators_api_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.metadata_api_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.metadata_api_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.parquet_download_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.parquet_download_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.regression_api_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.regression_api_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.select_api_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.select_api_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.tabulate_api_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.tabulate_api_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.tabengine_url"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.tabengine_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.variables"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.variables</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.variables_count"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.variables_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.delete"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_classification_by_uri"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_classification_by_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_classification_by_id"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_classification_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_classification_variables"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_classification_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_croissant"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_croissant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_ddi_codebook"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_ddi_codebook()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_import_configuration"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_import_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_markdown"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_markdown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_postman_collection"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_postman_collection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_variable_by_uri"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_variable_by_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.get_variable_by_id"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.get_variable_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.load_metadata"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.load_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.resolve_classifications"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.resolve_classifications()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.resolve_variables"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.resolve_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsDataProduct.model_post_init"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDataProduct.model_post_init()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/core.html#variable">Variable</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.decimals"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.decimals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.end_position"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.end_position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.fixed_storage_width"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.fixed_storage_width</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.format"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.format</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.index"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.index</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.start_position"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.start_position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.resolve"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.resolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsVariable.model_post_init"><code class="docutils literal notranslate"><span class="pre">MtnaRdsVariable.model_post_init()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/core.html#classification">Classification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub.reference"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub.reference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub.revision_number"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub.revision_number</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub.code_count"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub.code_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub.codes"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub.codes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub.is_stub"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub.is_stub</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub.resolve"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub.resolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.MtnaRdsClassificationStub.model_post_init"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationStub.model_post_init()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassification"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassification</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassification.is_private"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassification.is_private</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassification.keyword_count"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassification.keyword_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassification.last_update"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassification.last_update</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassification.level_count"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassification.level_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassification.resolve"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassification.resolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassification.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassification.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassification.model_post_init"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassification.model_post_init()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassificationCode"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationCode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassificationCode.id"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationCode.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassificationCode.code_value"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationCode.code_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassificationCode.isPrivate"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationCode.isPrivate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassificationCode.reference"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationCode.reference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassificationCode.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationCode.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsClassificationCode.model_post_init"><code class="docutils literal notranslate"><span class="pre">MtnaRdsClassificationCode.model_post_init()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/core.html#base-classes">Base Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource.uri"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource.uri</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource.id"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource.name"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource.description"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource.reference"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource.reference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource.revision_number"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource.revision_number</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource.__hash__"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource.__hash__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/core.html#dartfx.mtnards.mtnards.MtnaRdsResource.model_config"><code class="docutils literal notranslate"><span class="pre">MtnaRdsResource.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/core.html#type-definitions">Type Definitions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/dcat.html">DCAT/RDF API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#main-class">Main Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#uri-styles">URI Styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#example-usage">Example Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/dcat.html#basic-rdf-generation">Basic RDF Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/dcat.html#different-output-formats">Different Output Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/dcat.html#querying-rdf-graphs">Querying RDF Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#rdf-namespaces">RDF Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#dcat-classes-used">DCAT Classes Used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#properties">Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#integration-with-rdflib">Integration with RDFLib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/dcat.html#choosing-uri-styles">Choosing URI Styles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/dcat.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/dcat.html#validation">Validation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#related-standards">Related Standards</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#server-module">Server Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#server-configuration">Server Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#mcp-tools">MCP Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#add">add</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#mcp-resources">MCP Resources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#mtnards-catalog">mtnards://catalog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#greeting-name">greeting://{name}</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#client-modules">Client Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#sse-client">SSE Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#stdio-client">STDIO Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#demo-script">Demo Script</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#extending-the-server">Extending the Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#adding-new-tools">Adding New Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#adding-new-resources">Adding New Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#unit-testing">Unit Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/mcp.html#integration-testing">Integration Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#performance-monitoring">Performance Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/mcp.html#related-resources">Related Resources</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#development-setup">Development Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#development-workflow">Development Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#creating-a-feature-branch">Creating a Feature Branch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#making-changes">Making Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#coding-standards">Coding Standards</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#python-style">Python Style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#type-hints">Type Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#docstrings">Docstrings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#prefer-pathlib">Prefer pathlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#use-pydantic-for-models">Use Pydantic for Models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#writing-tests">Writing Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#running-tests">Running Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-quality">Code Quality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#linting-and-formatting">Linting and Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#type-checking">Type Checking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#pre-commit-hooks">Pre-commit Hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#documentation">Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#building-documentation">Building Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation-style">Documentation Style</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#submitting-changes">Submitting Changes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#pull-request-process">Pull Request Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#pull-request-checklist">Pull Request Checklist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#commit-messages">Commit Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#issue-reporting">Issue Reporting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#bug-reports">Bug Reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#feature-requests">Feature Requests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-review">Code Review</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#what-to-expect">What to Expect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#responding-to-feedback">Responding to Feedback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#release-process">Release Process</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#version-numbering">Version Numbering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#community-guidelines">Community Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#code-of-conduct">Code of Conduct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#communication">Communication</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#getting-help">Getting Help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#questions">Questions?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">[Unreleased]</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">[0.0.1] - 2024</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#initial-release">Initial Release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id2">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#core-features">Core Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#dependencies">Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#development-tools">Development Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#known-limitations">Known Limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#migration-guide">Migration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#future-plans">Future Plans</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#planned-for-0-1-0">Planned for 0.1.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#planned-for-0-2-0">Planned for 0.2.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#long-term-roadmap">Long-term Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#deprecation-notices">Deprecation Notices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#security-updates">Security Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#how-to-upgrade">How to Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-history">Version History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#contributors">Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MTNA Rich Data Services Toolkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick Start Guide</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/DataArtifex/mtnards-toolkit/blob/main/docs/source/quickstart.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-start-guide">
+<h1>Quick Start Guide<a class="headerlink" href="#quick-start-guide" title="Link to this heading"></a></h1>
+<p>This guide will walk you through the basics of using the MTNA RDS Toolkit.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<p>Make sure you have installed the toolkit. See <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> for details.</p>
+</section>
+<section id="basic-workflow">
+<h2>Basic Workflow<a class="headerlink" href="#basic-workflow" title="Link to this heading"></a></h2>
+<p>The typical workflow involves three main steps:</p>
+<ol class="arabic simple">
+<li><p>Connect to an RDS server</p></li>
+<li><p>Browse catalogs and data products</p></li>
+<li><p>Work with data product metadata and variables</p></li>
+</ol>
+<section id="step-1-connect-to-an-rds-server">
+<h3>Step 1: Connect to an RDS Server<a class="headerlink" href="#step-1-connect-to-an-rds-server" title="Link to this heading"></a></h3>
+<p>First, create a connection to an MTNA RDS server:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dartfx.mtnards</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsServer</span>
+
+<span class="c1"># Connect to the High-Value Data Network (public server)</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">MtnaRdsServer</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;rds.highvaluedata.net&quot;</span><span class="p">)</span>
+
+<span class="c1"># View server information</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For servers requiring authentication:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="o">=</span> <span class="n">MtnaRdsServer</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;rds.example.com&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key-here&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Or using environment variables:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">server</span> <span class="o">=</span> <span class="n">MtnaRdsServer</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MTNA_RDS_HOST&quot;</span><span class="p">),</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MTNA_RDS_API_KEY&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-2-browse-catalogs">
+<h3>Step 2: Browse Catalogs<a class="headerlink" href="#step-2-browse-catalogs" title="Link to this heading"></a></h3>
+<p>Explore the available catalogs on the server:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List all catalogs</span>
+<span class="k">for</span> <span class="n">catalog_id</span><span class="p">,</span> <span class="n">catalog</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">catalogs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ID: </span><span class="si">{</span><span class="n">catalog_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name: </span><span class="si">{</span><span class="n">catalog</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Description: </span><span class="si">{</span><span class="n">catalog</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+
+<span class="c1"># Access a specific catalog</span>
+<span class="n">anes_catalog</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">catalogs</span><span class="p">[</span><span class="s1">&#39;us_anes&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Catalog: </span><span class="si">{</span><span class="n">anes_catalog</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-explore-data-products">
+<h3>Step 3: Explore Data Products<a class="headerlink" href="#step-3-explore-data-products" title="Link to this heading"></a></h3>
+<p>Browse data products (datasets) within a catalog:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List all data products in a catalog</span>
+<span class="k">for</span> <span class="n">data_product</span> <span class="ow">in</span> <span class="n">anes_catalog</span><span class="o">.</span><span class="n">data_products</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ID: </span><span class="si">{</span><span class="n">data_product</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name: </span><span class="si">{</span><span class="n">data_product</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+
+<span class="c1"># Access a specific data product by ID</span>
+<span class="n">anes_1948</span> <span class="o">=</span> <span class="n">anes_catalog</span><span class="o">.</span><span class="n">data_products_by_id</span><span class="p">[</span><span class="s1">&#39;anes_1948&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset: </span><span class="si">{</span><span class="n">anes_1948</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Description: </span><span class="si">{</span><span class="n">anes_1948</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-work-with-variables">
+<h3>Step 4: Work with Variables<a class="headerlink" href="#step-4-work-with-variables" title="Link to this heading"></a></h3>
+<p>Examine the variables (fields/columns) in a data product:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List all variables</span>
+<span class="k">for</span> <span class="n">var_id</span><span class="p">,</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">anes_1948</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variable ID: </span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name: </span><span class="si">{</span><span class="n">variable</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Label: </span><span class="si">{</span><span class="n">variable</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Type: </span><span class="si">{</span><span class="n">variable</span><span class="o">.</span><span class="n">data_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+
+<span class="c1"># Access a specific variable</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">anes_1948</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;V480018&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variable: </span><span class="si">{</span><span class="n">var</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Description: </span><span class="si">{</span><span class="n">var</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-classifications">
+<h3>Working with Classifications<a class="headerlink" href="#working-with-classifications" title="Link to this heading"></a></h3>
+<p>For categorical variables, you can access their classification codes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check if a variable has classifications</span>
+<span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">classification_stub</span><span class="p">:</span>
+    <span class="n">classification</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">classification</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Classification: </span><span class="si">{</span><span class="n">classification</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># List classification codes</span>
+    <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">classification</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">code</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">code</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-use-cases">
+<h2>Common Use Cases<a class="headerlink" href="#common-use-cases" title="Link to this heading"></a></h2>
+<section id="generate-croissant-metadata">
+<h3>Generate Croissant Metadata<a class="headerlink" href="#generate-croissant-metadata" title="Link to this heading"></a></h3>
+<p>Create ML-ready dataset documentation in Croissant format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate Croissant metadata for a data product</span>
+<span class="n">croissant_metadata</span> <span class="o">=</span> <span class="n">anes_1948</span><span class="o">.</span><span class="n">croissant</span><span class="p">()</span>
+
+<span class="c1"># Save to file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;anes_1948.croissant.jsonld&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">croissant_metadata</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+
+<span class="c1"># Or get as dictionary</span>
+<span class="n">metadata_dict</span> <span class="o">=</span> <span class="n">croissant_metadata</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="export-dcat-rdf">
+<h3>Export DCAT/RDF<a class="headerlink" href="#export-dcat-rdf" title="Link to this heading"></a></h3>
+<p>Generate semantic web metadata in DCAT format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dartfx.mtnards.dcat</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsDcat</span>
+
+<span class="c1"># Create DCAT exporter</span>
+<span class="n">dcat</span> <span class="o">=</span> <span class="n">MtnaRdsDcat</span><span class="p">(</span>
+    <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
+    <span class="n">catalog</span><span class="o">=</span><span class="n">anes_catalog</span><span class="p">,</span>
+    <span class="n">data_product</span><span class="o">=</span><span class="n">anes_1948</span><span class="p">,</span>
+    <span class="n">uri_style</span><span class="o">=</span><span class="s2">&quot;uuid&quot;</span>  <span class="c1"># Options: &quot;uuid&quot;, &quot;uuid_urn&quot;, &quot;hostname&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Generate RDF graph</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">dcat</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span>
+
+<span class="c1"># Export as Turtle</span>
+<span class="n">turtle</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;turtle&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">turtle</span><span class="p">)</span>
+
+<span class="c1"># Or save to file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;anes_1948.ttl&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">turtle</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-markdown-documentation">
+<h3>Generate Markdown Documentation<a class="headerlink" href="#generate-markdown-documentation" title="Link to this heading"></a></h3>
+<p>Create human-readable documentation for a dataset:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate markdown documentation</span>
+<span class="n">markdown</span> <span class="o">=</span> <span class="n">anes_1948</span><span class="o">.</span><span class="n">markdown</span><span class="p">()</span>
+
+<span class="c1"># Save to file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;anes_1948.md&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">markdown</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="complete-example">
+<h2>Complete Example<a class="headerlink" href="#complete-example" title="Link to this heading"></a></h2>
+<p>Here’s a complete example that ties everything together:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dartfx.mtnards</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsServer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dartfx.mtnards.dcat</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsDcat</span>
+
+<span class="c1"># 1. Connect to server</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">MtnaRdsServer</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;rds.highvaluedata.net&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connected to: </span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. Get a catalog</span>
+<span class="n">catalog</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">catalogs</span><span class="p">[</span><span class="s1">&#39;us_anes&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Working with catalog: </span><span class="si">{</span><span class="n">catalog</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3. Get a data product</span>
+<span class="n">data_product</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="n">data_products_by_id</span><span class="p">[</span><span class="s1">&#39;anes_1948&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset: </span><span class="si">{</span><span class="n">data_product</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variables: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data_product</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 4. Generate metadata in multiple formats</span>
+
+<span class="c1"># Croissant for ML</span>
+<span class="n">croissant</span> <span class="o">=</span> <span class="n">data_product</span><span class="o">.</span><span class="n">croissant</span><span class="p">()</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;output.croissant.jsonld&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">croissant</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Croissant metadata generated&quot;</span><span class="p">)</span>
+
+<span class="c1"># DCAT for semantic web</span>
+<span class="n">dcat</span> <span class="o">=</span> <span class="n">MtnaRdsDcat</span><span class="p">(</span>
+    <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
+    <span class="n">catalog</span><span class="o">=</span><span class="n">catalog</span><span class="p">,</span>
+    <span class="n">data_product</span><span class="o">=</span><span class="n">data_product</span>
+<span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;output.ttl&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dcat</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;turtle&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ DCAT/RDF metadata generated&quot;</span><span class="p">)</span>
+
+<span class="c1"># Markdown documentation</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;output.md&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data_product</span><span class="o">.</span><span class="n">markdown</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Markdown documentation generated&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">All metadata files generated successfully!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>Always handle potential errors when working with remote servers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">MtnaRdsServer</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;rds.highvaluedata.net&quot;</span><span class="p">)</span>
+    <span class="n">catalogs</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">catalogs</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error connecting to server: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check if a catalog exists before accessing</span>
+<span class="k">if</span> <span class="s1">&#39;us_anes&#39;</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">catalogs</span><span class="p">:</span>
+    <span class="n">catalog</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">catalogs</span><span class="p">[</span><span class="s1">&#39;us_anes&#39;</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Catalog not found&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Explore more detailed <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a></p></li>
+<li><p>Learn about the <a class="reference internal" href="mcp_server.html"><span class="doc">MCP Server Integration</span></a> for AI integration</p></li>
+<li><p>Read the <a class="reference internal" href="api/core.html"><span class="doc">Core API Reference</span></a> reference</p></li>
+<li><p>Check out the <a class="reference external" href="https://github.com/DataArtifex/mtnards-toolkit">GitHub repository</a> for more examples</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024-2026, Pascal L.G.A. Heus.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
