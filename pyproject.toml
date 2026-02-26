@@ -22,12 +22,14 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
+  "dartfx-rdf @ git+https://github.com/DataArtifex/rdf-toolkit.git@main",
+  "dartfx-dcat @ git+https://github.com/DataArtifex/dcat-toolkit.git@main",
   "markdownify>=0.13.0",
   "mcp[cli]>=1.6.0",
   "mlcroissant>=1.0.16",
   "pydantic>=2.0.0",
-  "requests>=2.0.0",
   "python-dotenv>=1.0.0",
+  "requests>=2.0.0",
   "rdflib>=7.0.0",
 ]
 
