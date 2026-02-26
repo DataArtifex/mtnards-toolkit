@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - Core models: `MtnaRdsServer`, `MtnaRdsCatalog`, `MtnaRdsDataProduct`, `MtnaRdsVariable`, `MtnaRdsClassificationStub`
 - `py.typed` PEP 561 marker for type checker support
 - `types-requests` dev dependency for typed HTTP stubs
-- `[tool.mypy]` configuration with namespace package support and `prop-decorator` suppression
+- `[tool.mypy]` configuration with `pydantic.mypy` plugin, namespace package support, and `prop-decorator` suppression
 - Lazy-loaded variables and classifications with stub/full resolution pattern
 - Croissant ML metadata generation (`get_croissant`)
 - DCAT/RDF graph generation via `DcatGenerator`

@@ -156,7 +156,7 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.mypy]
-# Note: pydantic.mypy plugin is incompatible with mypy >=1.19; omitted until fixed upstream.
+plugins = ["pydantic.mypy"]
 # All @computed_field use @property stacking, which is safe but triggers prop-decorator.
 disable_error_code = ["prop-decorator"]
 mypy_path = "src"
