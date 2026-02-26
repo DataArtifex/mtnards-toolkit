@@ -8,14 +8,16 @@ from rdflib import Graph
 from dartfx.dcat import dcat
 from dartfx.rdf import utils as rdfutils
 
-from .mtnards import MtnaRdsCatalog, MtnaRdsDataProduct, MtnaRdsServer
+from .catalog import MtnaRdsCatalog
+from .data_product import MtnaRdsDataProduct
+from .server import MtnaRdsServer
 
 
 class DcatGenerator:
     server: MtnaRdsServer
     catalogs: set[MtnaRdsCatalog]
     datasets: set[MtnaRdsDataProduct]
-    uri_generator: rdfutils.UriGenerator
+    uri_generator: rdfutils.UriGenerator | None
 
     def __init__(
         self,
@@ -25,6 +27,7 @@ class DcatGenerator:
         self.server = server
         self.catalogs = set()
         self.datasets = set()
+        self.uri_generator = None
         if datasets:
             self.add_datasets(datasets)
 
@@ -77,8 +80,8 @@ class DcatGenerator:
         if rds_catalog.description:
             dcat_catalog.add_description(rds_catalog.description)
         dcat_catalog.add_publisher(f"{rds_catalog._server.host}")
-        if not stub_only:
-            for rds_data_product in rds_catalog.data_products.values():
+        if not stub_only and rds_catalog.data_products:
+            for rds_data_product in rds_catalog.data_products:
                 dcat_dataset = self._create_dcat_dataset(rds_data_product)
                 dcat_catalog.add_dataset(dcat_dataset)
                 dcat_api = self._create_dcat_api_service(rds_data_product, dcat_dataset)

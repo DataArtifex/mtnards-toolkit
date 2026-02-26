@@ -4,8 +4,7 @@ import sys
 
 import pytest
 
-from dartfx.mtnards import MtnaRdsCatalog, MtnaRdsServer
-from dartfx.mtnards.mtnards import MtnaRdsVariable
+from dartfx.mtnards import MtnaRdsCatalog, MtnaRdsServer, MtnaRdsVariable
 
 # Set up logging
 logging.basicConfig(  # noqa: F821

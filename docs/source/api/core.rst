@@ -12,7 +12,7 @@ Server Connection
    :show-inheritance:
    :special-members: __init__
 
-.. autoclass:: dartfx.mtnards.mtnards.MtnaRdsServerInfo
+.. autoclass:: dartfx.mtnards.base.MtnaRdsServerInfo
    :members:
    :undoc-members:
    :show-inheritance:
@@ -38,6 +38,12 @@ Data Product
 Variable
 --------
 
+.. autoclass:: dartfx.mtnards.variable.MtnaRdsVariableStub
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :special-members: __init__
+
 .. autoclass:: dartfx.mtnards.MtnaRdsVariable
    :members:
    :undoc-members:
@@ -53,24 +59,33 @@ Classification
    :show-inheritance:
    :special-members: __init__
 
-.. autoclass:: dartfx.mtnards.mtnards.MtnaRdsClassification
+.. autoclass:: dartfx.mtnards.classification.MtnaRdsClassification
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: dartfx.mtnards.mtnards.MtnaRdsClassificationCode
+.. autoclass:: dartfx.mtnards.classification.MtnaRdsClassificationCode
    :members:
    :undoc-members:
    :show-inheritance:
+
+Process
+-------
+
+.. autoclass:: dartfx.mtnards.process.MtnaRdsProcess
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :special-members: __init__
 
 Base Classes
 ------------
 
-.. autoclass:: dartfx.mtnards.mtnards.MtnaRdsResource
+.. autoclass:: dartfx.mtnards.base.MtnaRdsResource
    :members:
    :undoc-members:
    :show-inheritance:
-   :special-members: __init__, __hash__
+   :special-members: __init__, __hash__, __eq__
 
 Type Definitions
 ----------------
