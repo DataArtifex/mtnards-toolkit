@@ -38,31 +38,37 @@ class MtnaRdsVariableStub(MtnaRdsResource):
 
     @computed_field
     @property
-    def catalog_id(self) -> str:
+    def catalog_id(self) -> str | None:
+        if self._data_product is None:
+            return None
         return self._data_product._catalog.id
 
     @computed_field
     @property
-    def catalog_uri(self) -> str:
+    def catalog_uri(self) -> str | None:
+        if self._data_product is None:
+            return None
         return self._data_product._catalog.uri
 
     @computed_field
     @property
     def classification(self) -> MtnaRdsClassificationStub | MtnaRdsClassification | None:
-        if self.classification_id:
-            classification = self._data_product.get_classification_by_id(self.classification_id)
-            return classification
-        else:
+        if self._data_product is None or not self.classification_id:
             return None
+        return self._data_product.get_classification_by_id(self.classification_id)
 
     @computed_field
     @property
-    def data_product_id(self) -> str:
+    def data_product_id(self) -> str | None:
+        if self._data_product is None:
+            return None
         return self._data_product.id
 
     @computed_field
     @property
-    def data_product_uri(self) -> str:
+    def data_product_uri(self) -> str | None:
+        if self._data_product is None:
+            return None
         return self._data_product.uri
 
     @computed_field
