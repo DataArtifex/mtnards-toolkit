@@ -3,7 +3,24 @@
 # SPDX-License-Identifier: MIT
 from .base import MtnaRdsError  # noqa: F401
 from .catalog import MtnaRdsCatalog  # noqa: F401
-from .classification import MtnaRdsClassificationStub  # noqa: F401
+from .classification import MtnaRdsClassification, MtnaRdsClassificationCode, MtnaRdsClassificationStub  # noqa: F401
 from .data_product import MtnaRdsDataProduct  # noqa: F401
 from .server import MtnaRdsServer  # noqa: F401
-from .variable import MtnaRdsVariable  # noqa: F401
+from .variable import MtnaRdsVariable, MtnaRdsVariableStub  # noqa: F401
+
+# Rebuild models that use forward references (TYPE_CHECKING imports).
+# Required so Pydantic resolves deferred annotations before Sphinx autodoc
+# or other introspection tools inspect the models.
+_types_namespace = {
+    "MtnaRdsCatalog": MtnaRdsCatalog,
+    "MtnaRdsClassification": MtnaRdsClassification,
+    "MtnaRdsClassificationCode": MtnaRdsClassificationCode,
+    "MtnaRdsClassificationStub": MtnaRdsClassificationStub,
+    "MtnaRdsDataProduct": MtnaRdsDataProduct,
+    "MtnaRdsServer": MtnaRdsServer,
+    "MtnaRdsVariable": MtnaRdsVariable,
+    "MtnaRdsVariableStub": MtnaRdsVariableStub,
+}
+MtnaRdsCatalog.model_rebuild(_types_namespace=_types_namespace)
+MtnaRdsDataProduct.model_rebuild(_types_namespace=_types_namespace)
+MtnaRdsServer.model_rebuild(_types_namespace=_types_namespace)

@@ -31,24 +31,28 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     urls: list[str] | None = None
 
     # This is set by the catalog @root_validator or programmatically
-    _catalog: MtnaRdsCatalog = PrivateAttr(default=None)
+    _catalog: MtnaRdsCatalog = PrivateAttr(default=None)  # type: ignore[assignment]
     # variables and classifications are lazy loaded when underlying property is accessed
     _variables: dict[str, MtnaRdsVariableStub | MtnaRdsVariable] | None = PrivateAttr(default=None)
     _classifications: dict[str, MtnaRdsClassificationStub | MtnaRdsClassification] | None = PrivateAttr(default=None)
 
     @computed_field
+    @property
     def api_documentation_url(self) -> str:
         return f"{self._catalog._server.base_url}/swagger/"
 
     @computed_field
+    @property
     def catalog_id(self) -> str:
         return self._catalog.id
 
     @computed_field
+    @property
     def catalog_uri(self) -> str:
         return self._catalog.uri
 
     @computed_field
+    @property
     def classifications(self) -> dict[str, MtnaRdsClassificationStub | MtnaRdsClassification]:
         if self._classifications is None:
             # get from server
@@ -65,46 +69,57 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         return self._classifications
 
     @computed_field
+    @property
     def count_api_url(self) -> str:
         return f"{self._catalog._server.api_url}/query/{self._catalog.id}/{self.id}/count"
 
     @computed_field
+    @property
     def csv_download_url(self) -> str:
         return f"{self._catalog._server.api_url}/package/{self._catalog.id}/{self.id}.csv"
 
     @computed_field
+    @property
     def explorer_url(self) -> str:
         return f"{self._catalog._server.explorer_url}/explore/{self._catalog.id}/{self.id}/data"
 
     @computed_field
+    @property
     def code_generators_api_url(self) -> str:
         return f"{self._catalog._server.api_url}/snippet/{self._catalog.id}/{self.id}"
 
     @computed_field
+    @property
     def metadata_api_url(self) -> str:
         return f"{self._catalog._server.api_url}/catalog/{self._catalog.id}/{self.id}"
 
     @computed_field
+    @property
     def parquet_download_url(self) -> str:
         return f"{self._catalog._server.api_url}/package/{self._catalog.id}/{self.id}.parquet"
 
     @computed_field
+    @property
     def regression_api_url(self) -> str:
         return f"{self._catalog._server.api_url}/query/{self._catalog.id}/{self.id}/regression"
 
     @computed_field
+    @property
     def select_api_url(self) -> str:
         return f"{self._catalog._server.api_url}/query/{self._catalog.id}/{self.id}/select"
 
     @computed_field
+    @property
     def tabulate_api_url(self) -> str:
         return f"{self._catalog._server.api_url}/query/{self._catalog.id}/{self.id}/tabulate"
 
     @computed_field
+    @property
     def tabengine_url(self) -> str:
         return f"{self._catalog._server.tabengine_url}/tabulation/{self._catalog.id}/{self.id}/custom-tables"
 
     @computed_field
+    @property
     def variables(self) -> dict[str, MtnaRdsVariableStub | MtnaRdsVariable]:
         if self._variables is None:
             # get from server
@@ -121,6 +136,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         return self._variables
 
     @computed_field
+    @property
     def variables_count(self) -> int:
         return len(self.variables)
 
@@ -154,7 +170,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         context = mlc.Context()
         context.is_live_dataset = True
         # metadata
-        publishers = []
+        publishers: list[str] = []
         metadata = mlc.Metadata(
             ctx=context,
             id=self.id,
@@ -164,7 +180,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
             keywords=self.keywords,
             publisher=publishers,
             url=self.explorer_url,
-            version=int(self.revision_number),
+            version=self.revision_number or 0,
         )
         if self.description:
             metadata.description = markdownify(self.description)
@@ -175,7 +191,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         csv_file = mlc.FileObject(
             ctx=context,
             id=self.id + ".csv",
-            name=self.name + ".csv",
+            name=(self.name or self.id) + ".csv",
             content_url=content_url,
             encoding_formats=[mlc.EncodingFormat.CSV],
         )
@@ -222,7 +238,7 @@ class MtnaRdsDataProduct(MtnaRdsResource):
                 # create record set
                 classification_record_set = mlc.RecordSet(id=classification_id, fields=fields)
                 classification_record_set.description = "Code values and labels for fields referencing this record set."
-                if classification.code_count <= max_codes:
+                if classification.code_count is not None and classification.code_count <= max_codes:
                     # complete data
                     classification_record_set.data = classification_records
                 else:
@@ -272,7 +288,9 @@ class MtnaRdsDataProduct(MtnaRdsResource):
             for variable_index, variable in enumerate(self.variables.values()):
                 md += f"| {variable_index} | {variable.name} | {variable.label} | {variable.data_type} "
                 if variable.classification_id:
-                    md += f" | {variable.classification_id} ({variable.classification.code_count} codes) |\n"
+                    cls = variable.classification
+                    code_count = cls.code_count if cls else "?"
+                    md += f" | {variable.classification_id} ({code_count} codes) |\n"
                 else:
                     md += " | - |\n"
         if not sections or "classifications" in sections:
@@ -281,7 +299,9 @@ class MtnaRdsDataProduct(MtnaRdsResource):
                 md += f"\n### {classification.id}\n\n"
                 md += f"{classification.code_count} codes\n\n"
                 # Variable names using this classification
-                var_names = [variable.name for variable in self.get_classification_variables(classification)]
+                var_names = [
+                    variable.name or variable.id for variable in self.get_classification_variables(classification)
+                ]
                 md += f"Used by: {', '.join(var_names)}\n\n"
                 md += "| Code | Label |\n"
                 md += "|---|---|\n"
@@ -371,8 +391,9 @@ class MtnaRdsDataProduct(MtnaRdsResource):
                             # classificationId is not in the metadata
                             if variable.classification_uri:
                                 # find the classification by uri
-                                classification = self.get_classification_by_uri(variable.classification_uri)
-                                variable.classification_id = classification.id
+                                found = self.get_classification_by_uri(variable.classification_uri)
+                                if found is not None:
+                                    variable.classification_id = found.id
                         else:
                             variable = self._variables[id]
             else:

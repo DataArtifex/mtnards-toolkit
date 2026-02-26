@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ### Added
 - Core models: `MtnaRdsServer`, `MtnaRdsCatalog`, `MtnaRdsDataProduct`, `MtnaRdsVariable`, `MtnaRdsClassificationStub`
+- `py.typed` PEP 561 marker for type checker support
+- `types-requests` dev dependency for typed HTTP stubs
+- `[tool.mypy]` configuration with namespace package support and `prop-decorator` suppression
 - Lazy-loaded variables and classifications with stub/full resolution pattern
 - Croissant ML metadata generation (`get_croissant`)
 - DCAT/RDF graph generation via `DcatGenerator`
@@ -40,6 +43,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - `get_ddi_codebook` uses `params` argument instead of manual query string concatenation
 - `MtnaRdsCatalog.__str__` uses `model_dump()` instead of `vars()` for Pydantic v2 compatibility
 - Sphinx docs now include `MtnaRdsProcess` and `MtnaRdsVariableStub` autoclass entries
+- All `@computed_field` decorators now stack with `@property` for mypy compatibility
+- `PrivateAttr(default=None)` lines annotated with `# type: ignore` for deferred initialization pattern
+- `DcatGenerator.add_datasets` / `add_catalogs` accept `Iterable` instead of `list`
+- `MtnaRdsProcess.__str__` uses `model_dump()` instead of `vars()` for Pydantic v2 compatibility
+- `resolve()` methods set `_data_product` after construction instead of as constructor kwarg
+- `MtnaRdsClassificationCode.id` override annotated with `# type: ignore[assignment]`
+- `api_endpoint` return type guaranteed as `str` (handles `None` base_path/api_path)
+- `catalogs` property asserts non-None after `_load_catalogs()` for type narrowing
+- `code_count` comparison guarded against `None` in `get_croissant`
+- `classification` access guarded against `None` in `get_markdown` and `load_metadata`
 
 ### Fixed
 - `get_variable_by_uri` / `get_classification_by_uri` now iterate `.values()` instead of dict keys

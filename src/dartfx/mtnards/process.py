@@ -39,10 +39,8 @@ class MtnaRdsProcess(BaseModel):
     def in_progress(self) -> bool:
         return self.status == "PROCESSING"
 
-    def __str__(self):
+    def __str__(self) -> str:
         text = ""
-        for attribute, value in vars(self).items():
-            if attribute == "server":
-                continue
+        for attribute, value in self.model_dump(exclude={"server"}).items():
             text += f"{attribute}: {value}\n"
         return text

@@ -3,10 +3,12 @@ DCAT support for MTNA RDS
 
 """
 
+from collections.abc import Iterable
+
 from rdflib import Graph
 
 from dartfx.dcat import dcat
-from dartfx.rdf import utils as rdfutils
+from dartfx.rdf import utils as rdfutils  # type: ignore[attr-defined]
 
 from .catalog import MtnaRdsCatalog
 from .data_product import MtnaRdsDataProduct
@@ -48,7 +50,7 @@ class DcatGenerator:
         """Adds a single catalog to the generator"""
         self.add_catalogs([catalog])
 
-    def add_catalogs(self, catalogs: list[MtnaRdsCatalog | str]) -> None:
+    def add_catalogs(self, catalogs: Iterable[MtnaRdsCatalog | str]) -> None:
         """Adds catalogs to the generator"""
         for item in catalogs:
             if isinstance(item, MtnaRdsCatalog):
@@ -62,7 +64,7 @@ class DcatGenerator:
         """Adds a single dataset to the generator"""
         self.add_datasets([dataset])
 
-    def add_datasets(self, datasets: list[MtnaRdsDataProduct | str]) -> None:
+    def add_datasets(self, datasets: Iterable[MtnaRdsDataProduct | str]) -> None:
         """Adds datasets to the generator"""
         for item in datasets:
             if isinstance(item, MtnaRdsDataProduct):

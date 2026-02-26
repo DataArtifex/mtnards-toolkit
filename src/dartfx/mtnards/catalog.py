@@ -19,7 +19,7 @@ class MtnaRdsCatalog(MtnaRdsResource):
     data_products: list[MtnaRdsDataProduct] | None = Field(alias="dataProducts", default=None)
 
     # Set by server @root_validator or programmatically
-    _server: MtnaRdsServer = PrivateAttr(default=None)
+    _server: MtnaRdsServer = PrivateAttr(default=None)  # type: ignore[assignment]
 
     @model_validator(mode="after")
     def attach_catalog_to_products(self):

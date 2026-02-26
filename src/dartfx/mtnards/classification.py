@@ -22,9 +22,9 @@ class MtnaRdsClassificationStub(MtnaRdsResource):
     )
 
     # Set by data product @root_validator or programmatically
-    _data_product: MtnaRdsDataProduct = PrivateAttr(default=None)
+    _data_product: MtnaRdsDataProduct = PrivateAttr(default=None)  # type: ignore[assignment]
     # codes are lazy loaded when the underlying property is accessed
-    _codes: list[MtnaRdsClassificationCode] = PrivateAttr(default=None)
+    _codes: list[MtnaRdsClassificationCode] = PrivateAttr(default=None)  # type: ignore[arg-type]
 
     @computed_field
     @property
@@ -55,11 +55,13 @@ class MtnaRdsClassificationStub(MtnaRdsResource):
         response = self._data_product._catalog._server.api_request(url)
         if response.status_code == 200:
             data = response.json()
-            classification = MtnaRdsClassification(_data_product=self._data_product, **data)
+            classification = MtnaRdsClassification(**data)
+            classification._data_product = self._data_product
             if self._codes:  # transfer the codes if already resolved
                 classification._codes = self._codes
                 for code in self._codes:
                     code._classification = classification
+            assert self._data_product._classifications is not None
             self._data_product._classifications[classification.id] = classification
             return classification
         else:
@@ -78,10 +80,10 @@ class MtnaRdsClassification(MtnaRdsClassificationStub):
 
 
 class MtnaRdsClassificationCode(MtnaRdsResource):
-    id: str | None = None  # override: codes do not have an id property
+    id: str | None = None  # type: ignore[assignment]  # override: codes may not have an id
     code_value: str | None = Field(alias="codeValue", default=None)
     is_private: bool | None = Field(alias="isPrivate", default=None)
     reference: bool | None = None
 
     # Set by classification @root_validator or programmatically
-    _classification: MtnaRdsClassificationStub | MtnaRdsClassification = PrivateAttr(default=None)
+    _classification: MtnaRdsClassificationStub | MtnaRdsClassification = PrivateAttr(default=None)  # type: ignore[assignment]

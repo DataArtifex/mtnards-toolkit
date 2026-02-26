@@ -27,7 +27,7 @@ class MtnaRdsVariableStub(MtnaRdsResource):
     storage_type: str | None = Field(alias="storageType", default=None)
 
     # Set by data product @root_validator or programmatically
-    _data_product: MtnaRdsDataProduct = PrivateAttr(default=None)
+    _data_product: MtnaRdsDataProduct = PrivateAttr(default=None)  # type: ignore[assignment]
 
     @property
     def croissant_data_type(self) -> mlc.DataType:
@@ -76,8 +76,10 @@ class MtnaRdsVariableStub(MtnaRdsResource):
         response = self._data_product._catalog._server.api_request(url)
         if response.status_code == 200:
             data = response.json()
-            variable = MtnaRdsVariable(_data_product=self._data_product, **data)
+            variable = MtnaRdsVariable(**data)
+            variable._data_product = self._data_product
             # replace the stub with the detailed variable in the data product
+            assert self._data_product._variables is not None
             self._data_product._variables[variable.id] = variable
             return variable
         else:

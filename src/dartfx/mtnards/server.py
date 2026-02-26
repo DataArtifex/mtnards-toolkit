@@ -38,14 +38,18 @@ class MtnaRdsServer(BaseModel):
         return values
 
     @computed_field
+    @property
     def api_endpoint(self) -> str:
-        return f"{self.base_path}/{self.api_path}" if self.base_path else self.api_path
+        base = self.base_path or ""
+        api = self.api_path or ""
+        return f"{base}/{api}" if base else api
 
     @property
     def catalogs(self) -> dict[str, MtnaRdsCatalog]:
         """Returns the server's catalogs, loading them on first access."""
         if self._catalogs is None:
             self._load_catalogs()
+        assert self._catalogs is not None  # set by _load_catalogs or raises
         return self._catalogs
 
     def refresh_catalogs(self) -> dict[str, MtnaRdsCatalog]:
@@ -69,18 +73,22 @@ class MtnaRdsServer(BaseModel):
             raise MtnaRdsError(f"Could not get server level catalog: {response.status_code}")
 
     @computed_field
+    @property
     def base_url(self) -> str:
         return f"{self.host}/{self.base_path}"
 
     @computed_field
+    @property
     def api_url(self) -> str:
         return f"{self.host}/{self.api_endpoint}"
 
     @computed_field
+    @property
     def hostname(self) -> str:
         return re.sub(r"^https?://", "", self.host)
 
     @computed_field
+    @property
     def info(self) -> MtnaRdsServerInfo:
         if self._info is None:
             response = self.api_request("server/info")
