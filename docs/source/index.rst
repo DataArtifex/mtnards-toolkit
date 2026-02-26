@@ -31,7 +31,6 @@ Key Features
 * **Metadata Discovery**: Browse catalogs, search data products, and explore variables
 * **Standard Metadata Formats**: Generate Croissant JSON-LD for ML pipelines and DCAT/RDF for semantic web integration
 * **Data Access**: Query variables, inspect classification codes, and subset data products
-* **AI Integration**: Model Context Protocol (MCP) server for Claude and other AI assistants
 * **Type Safety**: Full type hints and Pydantic-based models for all APIs
 * **HTML to Markdown**: Automatic conversion of dataset descriptions for improved readability
 
@@ -66,7 +65,6 @@ Documentation Contents
    installation
    quickstart
    examples
-   mcp_server
 
 .. toctree::
    :maxdepth: 2
@@ -74,7 +72,6 @@ Documentation Contents
 
    api/core
    api/dcat
-   api/mcp
 
 .. toctree::
    :maxdepth: 1

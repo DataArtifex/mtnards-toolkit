@@ -14,7 +14,6 @@ This package provides a Python toolkit for programmatic interaction with **MTNA 
 - **Generate Metadata**: Produce Croissant ML-ready dataset documentation and DCAT/RDF semantic web representations
 - **Analyze Variables**: Inspect data product variables, dimensions, measures, and classification codes
 - **Aggregate Data**: Subset and tabulate data products using variables as dimensions and measures
-- **Integrate with AI**: Expose RDS functionality via Model Context Protocol (MCP) for AI agent integration
 
 ### Core Data Model
 
@@ -33,7 +32,6 @@ The toolkit operates on these key entities:
 3. **Data Profiling**: Retrieve variable information, data types, units, classification schemes
 4. **Data Access**: Construct queries to subset and aggregate data products
 5. **HVDN Integration**: Work with High-Value Data Network (HVDN) datasets, particularly for statistical and historical data
-6. **MCP Tool Exposure**: Deploy the toolkit as an MCP server to enable Claude and other AI clients to query RDS servers directly
 
 ### Key Features & Capabilities
 
@@ -50,7 +48,6 @@ The toolkit operates on these key entities:
 - **DCAT (Data Catalog Vocabulary)**: Export datasets as DCAT RDF for semantic web compatibility
 - **Croissant**: Support for ML-ready dataset documentation via mlcroissant library
 - **RDFLib**: Semantic web integration with full RDF graph capabilities
-- **Model Context Protocol**: MCP server integration for AI agent tools
 - **HTTP Requests**: RESTful API interaction with MTNA RDS servers
 
 ### Development Constraints

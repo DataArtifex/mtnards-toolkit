@@ -22,7 +22,6 @@ A Python toolkit for programmatic interaction with **[Metadata Technology North 
 - **Metadata Discovery**: Browse catalogs, search data products, and explore variables
 - **Standard Metadata Formats**: Generate Croissant JSON-LD for ML pipelines and DCAT/RDF for semantic web integration
 - **Data Access**: Query variables, inspect classification codes, and subset data products
-- **AI Integration**: Model Context Protocol (MCP) server for Claude and other AI assistants
 - **Type Safety**: Full type hints and Pydantic-based models for all APIs
 - **HTML to Markdown**: Automatic conversion of dataset descriptions for improved readability
 
@@ -84,12 +83,7 @@ pip install -e .
 
 ### MCP Server Installation
 
-To use the Model Context Protocol (MCP) server features:
-
-```bash
-# Install with MCP dependencies
-pip install -e ".[mcp]"
-```
+MCP server support has been moved to a separate package. Stay tuned for updates.
 
 ## Usage
 
@@ -198,45 +192,6 @@ server = MtnaRdsServer(
 )
 ```
 
-### MCP Server Usage
-
-The toolkit includes a Model Context Protocol (MCP) server for integration with Claude and other AI assistants:
-
-```bash
-# Start the MCP server
-python -m dartfx.mtnards.mcp.server
-```
-
-Configure your Claude Desktop to use the MCP server by adding to `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "mtnards": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "/path/to/mtnards-toolkit",
-        "run",
-        "python",
-        "-m",
-        "dartfx.mtnards.mcp.server"
-      ],
-      "env": {
-        "MTNA_RDS_HOST": "rds.highvaluedata.net",
-        "MTNA_RDS_API_KEY": "your-api-key"
-      }
-    }
-  }
-}
-```
-
-Once configured, Claude can:
-- Browse available catalogs and data products
-- Retrieve dataset metadata and documentation
-- Explore variables and their properties
-- Help construct data queries
-
 ## Features & Capabilities
 
 ### Metadata Standards Support
@@ -261,7 +216,6 @@ Once configured, Claude can:
 
 ### Integration Points
 
-- **Model Context Protocol (MCP)**: AI assistant integration
 - **HTTP/REST API**: Full RESTful API support for MTNA RDS servers
 - **Type Safety**: Pydantic models with complete type hints
 - **Caching**: Intelligent caching of server info and catalog contents
@@ -273,7 +227,7 @@ Once configured, Claude can:
 - [x] Variable metadata access
 - [x] Croissant metadata generation
 - [x] DCAT/RDF export
-- [x] MCP server implementation
+- [ ] MCP server implementation (separate package)
 - [ ] Data querying and subsetting
 - [ ] Tabulation and aggregation tools
 - [ ] PyPI package release
