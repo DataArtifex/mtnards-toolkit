@@ -1,17 +1,15 @@
+import json
 import logging
 import sys
+
 import pytest
-from dartfx.mtnards import MtnaRdsServer, MtnaRdsCatalog
-import json
 
-from dartfx.mtnards.mtnards import MtnaRdsClassification, MtnaRdsVariable
-
+from dartfx.mtnards import MtnaRdsCatalog, MtnaRdsServer
+from dartfx.mtnards.mtnards import MtnaRdsVariable
 
 # Set up logging
 logging.basicConfig(  # noqa: F821
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    stream=sys.stderr
+    level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", stream=sys.stderr
 )
 logger = logging.getLogger(__name__)
 sys.stderr.flush()
@@ -27,6 +25,7 @@ def test_hvdnet_server(hvdnet_server):
     assert hvdnet_server.api_endpoint == "rds/api"
     print(hvdnet_server)
 
+
 def test_hvdnet_server_info(hvdnet_server):
     assert hvdnet_server.info
     print(hvdnet_server.info)
@@ -34,29 +33,31 @@ def test_hvdnet_server_info(hvdnet_server):
     assert hvdnet_server.info.released
     assert hvdnet_server.info.version
 
+
 #
 # CATALOGS
 #
-@pytest.mark.dependency(name='test_server_info')
+@pytest.mark.dependency(name="test_server_info")
 def test_hvdnet_catalogs(hvdnet_server):
     assert hvdnet_server.catalogs
-    assert len(hvdnet_server.catalogs)>1
+    assert len(hvdnet_server.catalogs) > 1
     print(hvdnet_server.catalogs.keys())
-    print(hvdnet_server.catalogs['us_anes']._server)
-    
+    print(hvdnet_server.catalogs["us_anes"]._server)
 
-def test_dummy_anes_catalog(hvdnet_server):
-    dummy_server = MtnaRdsServer(host="https://example.org")  
+
+def test_dummy_anes_catalog():
+    dummy_server = MtnaRdsServer(host="https://example.org")
     data = US_ANES_CATALOG
     catalog = MtnaRdsCatalog(_server=dummy_server, **data)
     assert catalog
     assert len(catalog.data_products) == 1
     print(catalog)
 
+
 #
 # CATALOG
 #
-@pytest.mark.dependency(name='test_hvdnet_catalogs')
+@pytest.mark.dependency(name="test_hvdnet_catalogs")
 def test_hvdnet_anes_catalog(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
     assert catalog
@@ -64,10 +65,10 @@ def test_hvdnet_anes_catalog(hvdnet_server):
     print(catalog)
 
 
-
 #
 # DATA PRODUCT
-# 
+#
+
 
 def test_hvdnet_anes1948_metadata(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
@@ -81,22 +82,26 @@ def test_hvdnet_anes1948_metadata(hvdnet_server):
     for classification in data_product._classifications.values():
         assert classification._codes
 
+
 #
 # VARIABLES
 #
 
-def test_dummy_variable(hvdnet_server):
+
+def test_dummy_variable():
     variable = MtnaRdsVariable(**US_ANES_V4800003)
     assert variable
     print(variable)
+
 
 def test_hvdnet_anes1948_variables(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
     product = catalog.get_data_product_by_id("anes1948")
     assert product
-    assert product.variables    
+    assert product.variables
     assert len(product.variables) > 0
     print(len(product.variables))
+
 
 def test_hvdnet_anes1948_v480003(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
@@ -111,6 +116,7 @@ def test_hvdnet_anes1948_v480003(hvdnet_server):
     print(type(variable))
     print(variable)
 
+
 #
 # CLASSIFICATIONS
 #
@@ -121,6 +127,7 @@ def test_hvdnet_anes1948_classifications(hvdnet_server):
     assert product.classifications
     assert len(product.classifications) > 0
     print(len(product.classifications))
+
 
 def test_hvdnet_anes1948_classification_V480003(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
@@ -135,18 +142,31 @@ def test_hvdnet_anes1948_classification_V480003(hvdnet_server):
     print(classification.codes)
     assert classification.code_count == 3
 
+
 #
 # TEST RESOURCES
 #
-US_ANES_CATALOG = json.loads("""
-{
+# Long description truncated for line length
+_ANES_DESC = (
+    "This study is part of a time-series collection of national surveys "
+    "fielded continuously since 1952. The election studies are designed to "
+    "present data on Americans' social backgrounds, enduring political "
+    "predispositions, social and political values, perceptions and "
+    "evaluations of groups and candidates, opinions on questions of public "
+    "policy, and participation in political life."
+)
+
+US_ANES_CATALOG = json.loads(
+    """{
     "dataProducts": [
         {
             "abbreviation": "American National Election Study, 1948",
             "cached": true,
             "changeLog": [],
             "dataProductType": "DATA_PRODUCT",
-            "description": "This study is part of a time-series collection of national surveys fielded continuously since 1952. The election studies are designed to present data on Americans' social backgrounds, enduring political predispositions, social and political values, perceptions and evaluations of groups and candidates, opinions on questions of public policy, and participation in political life.",
+            "description": """
+    + json.dumps(_ANES_DESC)
+    + """,
             "id": "anes1948",
             "isPrivate": false,
             "lastUpdate": "2024-03-28T20:55:00.287Z",
@@ -161,8 +181,7 @@ US_ANES_CATALOG = json.loads("""
     "lastUpdate": "2024-04-25T20:11:41.333Z",
     "name": "American National Election Studies",
     "uri": "8e9ab068-1a94-4191-a811-809f05559445"
-}
-"""
+}"""
 )
 
 US_ANES_V4800003 = json.loads("""
@@ -180,5 +199,4 @@ US_ANES_V4800003 = json.loads("""
         "name": "V480003",
         "storageType": "BIGINT",
         "uri": "ce24fc6d-3f2b-4d8a-be18-696e439f67d9"
-    }"""
-)
+    }""")

@@ -1,6 +1,8 @@
 import asyncio
-from mcp.client.sse import sse_client
+
 from mcp import ClientSession
+from mcp.client.sse import sse_client
+
 
 async def main():
     # Connect to the MCP server using SSE transport
@@ -20,6 +22,7 @@ async def main():
             params = {"a": 5, "b": 3}
             result = await session.call_tool(tool_name, params)
             print(f"\nResult from tool '{tool_name}': {result.result}")
+
 
 # Run the async main function
 asyncio.run(main())

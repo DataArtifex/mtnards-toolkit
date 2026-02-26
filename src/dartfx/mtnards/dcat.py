@@ -3,10 +3,12 @@ DCAT support for MTNA RDS
 
 """
 
-from .mtnards import MtnaRdsCatalog, MtnaRdsServer, MtnaRdsDataProduct
-from dartfx.rdf import utils as rdfutils
-from dartfx.dcat import dcat
 from rdflib import Graph
+
+from dartfx.dcat import dcat
+from dartfx.rdf import utils as rdfutils
+
+from .mtnards import MtnaRdsCatalog, MtnaRdsDataProduct, MtnaRdsServer
 
 
 class DcatGenerator:
@@ -18,8 +20,7 @@ class DcatGenerator:
     def __init__(
         self,
         server: MtnaRdsServer,
-        datasets: set[MtnaRdsDataProduct | str] = None,
-        uri_generator: rdfutils.UriGenerator = rdfutils.UuidUrnGenerator(),
+        datasets: set[MtnaRdsDataProduct | str] | None = None,
     ):
         self.server = server
         self.catalogs = set()
@@ -68,9 +69,7 @@ class DcatGenerator:
             else:
                 raise ValueError(f"Unexpected dataset type: {type(item)}")
 
-    def _create_dcat_catalog(
-        self, rds_catalog: MtnaRdsCatalog, stub_only: bool = False
-    ) -> dcat.Catalog:
+    def _create_dcat_catalog(self, rds_catalog: MtnaRdsCatalog, stub_only: bool = False) -> dcat.Catalog:
         """Internal helper to generates a DCAT graph for a catalog"""
         dcat_catalog = dcat.Catalog()
         dcat_catalog.set_uri(rds_catalog.uri)
@@ -82,12 +81,13 @@ class DcatGenerator:
             for rds_data_product in rds_catalog.data_products.values():
                 dcat_dataset = self._create_dcat_dataset(rds_data_product)
                 dcat_catalog.add_dataset(dcat_dataset)
-                dcat_api = self._create_dcat_api_service(rds_data_product, dcat_dataset)            
-                dcat_catalog.add_service(dcat_api) # add service to catalog
+                dcat_api = self._create_dcat_api_service(rds_data_product, dcat_dataset)
+                dcat_catalog.add_service(dcat_api)  # add service to catalog
         return dcat_catalog
 
     def _create_dcat_dataset(
-        self, rds_data_product: MtnaRdsDataProduct,
+        self,
+        rds_data_product: MtnaRdsDataProduct,
     ) -> dcat.Dataset:
         dcat_dataset = dcat.Dataset()
         dcat_dataset.set_uri(rds_data_product.uri)
@@ -99,20 +99,20 @@ class DcatGenerator:
         dcat_dataset.add_modified_date(rds_data_product.last_update)
         dcat_dataset.add_publisher(f"{rds_data_product._catalog._server.host}")
         return dcat_dataset
-    
-    def _create_dcat_api_service(self, rds_data_product: MtnaRdsDataProduct, dcat_dataset: dcat.Dataset) -> dcat.DataService:
+
+    def _create_dcat_api_service(
+        self,
+        rds_data_product: MtnaRdsDataProduct,
+        dcat_dataset: dcat.Dataset,
+    ) -> dcat.DataService:
         dcat_api = dcat.DataService()
         dcat_api.set_uri(f"{rds_data_product.uri}-api")
         dcat_api.add_served_dataset(dcat_dataset)
-        dcat_api.add_conforms_to(
-            rds_data_product._catalog._server.base_url + "/swagger"
-        )
+        dcat_api.add_conforms_to(rds_data_product._catalog._server.base_url + "/swagger")
         dcat_api.add_endpoint_url(rds_data_product._catalog._server.api_url)
-        dcat_api.add_type(
-            "https://highvaluedata.net/vocab/service_type#MtnaRdsOpenAPI"
-        )
+        dcat_api.add_type("https://highvaluedata.net/vocab/service_type#MtnaRdsOpenAPI")
         return dcat_api
-        
+
     def get_graph(self) -> Graph:
         """Generates RDF graph for server, catalogs, and datasets.
         The workflow is as follows:
@@ -137,8 +137,8 @@ class DcatGenerator:
         dcat_catalogs = {}  # keeps track of catalogs being added
         for rds_catalog in self.catalogs:
             dcat_catalog = self._create_dcat_catalog(rds_catalog)
-            dcat_server_catalog.add_catalog(dcat_catalog) # add to server level catalog
-            dcat_catalogs[rds_catalog.uri] = dcat_catalog # register
+            dcat_server_catalog.add_catalog(dcat_catalog)  # add to server level catalog
+            dcat_catalogs[rds_catalog.uri] = dcat_catalog  # register
 
         # Loop over datasets
         for rds_data_product in self.datasets:
@@ -146,17 +146,17 @@ class DcatGenerator:
             rds_catalog = rds_data_product._catalog
             dcat_catalog = dcat_catalogs.get(rds_catalog.uri)
             if dcat_catalog is None:
-                dcat_catalog = self._create_dcat_catalog(rds_catalog, stub_only=True)                
-                dcat_server_catalog.add_catalog(dcat_catalog) # add to server level catalog
-                dcat_catalogs[rds_catalog.uri] = dcat_catalog # register
+                dcat_catalog = self._create_dcat_catalog(rds_catalog, stub_only=True)
+                dcat_server_catalog.add_catalog(dcat_catalog)  # add to server level catalog
+                dcat_catalogs[rds_catalog.uri] = dcat_catalog  # register
 
             # create DCAT dataset
             dcat_dataset = self._create_dcat_dataset(rds_data_product)
-            dcat_catalog.add_dataset(dcat_dataset) # add dataset to catalog
+            dcat_catalog.add_dataset(dcat_dataset)  # add dataset to catalog
 
             # create DCAT API service
-            dcat_api = self._create_dcat_api_service(rds_data_product, dcat_dataset)            
-            dcat_catalog.add_service(dcat_api) # add service to catalog
+            dcat_api = self._create_dcat_api_service(rds_data_product, dcat_dataset)
+            dcat_catalog.add_service(dcat_api)  # add service to catalog
 
             # add dataset resources to graph
             dcat_dataset.add_to_rdf_graph(g)

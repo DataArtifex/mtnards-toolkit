@@ -1,12 +1,11 @@
 # server.py
 import logging
 import sys
+
 from mcp.server.fastmcp import FastMCP
 
 logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    stream=sys.stderr
+    level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", stream=sys.stderr
 )
 logger = logging.getLogger(__name__)
 logger.info("Starting MCP server...")
@@ -15,6 +14,7 @@ sys.stderr.flush()
 
 # Create an MCP server
 mcp = FastMCP("Demo")
+
 
 # Add an addition tool
 @mcp.tool()
