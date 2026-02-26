@@ -68,7 +68,7 @@ Explore the available catalogs on the server:
        print("---")
 
    # Access a specific catalog
-   anes_catalog = server.catalogs['us_anes']
+   anes_catalog = server.catalogs['us-anes']
    print(f"Catalog: {anes_catalog.name}")
 
 Step 3: Explore Data Products
@@ -203,7 +203,7 @@ Here's a complete example that ties everything together:
    print(f"Connected to: {server.info.name}")
    
    # 2. Get a catalog
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    print(f"Working with catalog: {catalog.name}")
    
    # 3. Get a data product
@@ -252,8 +252,8 @@ Always handle potential errors when working with remote servers:
 .. code-block:: python
 
    # Check if a catalog exists before accessing
-   if 'us_anes' in server.catalogs:
-       catalog = server.catalogs['us_anes']
+   if 'us-anes' in server.catalogs:
+       catalog = server.catalogs['us-anes']
    else:
        print("Catalog not found")
 

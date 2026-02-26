@@ -5,7 +5,7 @@ from dartfx.mtnards.dcat import DcatGenerator
 
 @pytest.mark.skip(reason="requires external server")
 def test_dcat_hvdnet_anes1948(hvdnet_server):
-    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    catalog = hvdnet_server.get_catalog_by_id("us-anes")
     data_product = catalog.get_data_product_by_id("anes1948")
     assert data_product
     generator = DcatGenerator(hvdnet_server, [data_product])

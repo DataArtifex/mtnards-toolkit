@@ -51,14 +51,14 @@
     "citeAs": "<p>Campbell, Angus, and Kahn, Robert L. ANES 1948 Time Series Study. Ann Arbor, MI: Inter-university Consortium for Political and Social Research [distributor], 2015-11-10. https://doi.org/10.3886/ICPSR07218.v4</p>",
     "dateModified": "2025-04-08 17:35:15.530000+00:00",
     "isLiveDataset": true,
-    "url": "https://rds.highvaluedata.net/rds/explorer/explore/us_anes/anes1948",
+    "url": "https://rds.highvaluedata.net/rds/explorer/explore/us-anes/anes1948",
     "version": "11.0.0",
     "distribution": [
         {
             "@type": "cr:FileObject",
             "@id": "anes1948.csv",
             "name": "ANES 1948 Time Series Study.csv",
-            "contentUrl": "https://rds.highvaluedata.net/rds/api/packageus_anes/anes1948.csv",
+            "contentUrl": "https://rds.highvaluedata.net/rds/api/packageus-anes/anes1948.csv",
             "encodingFormat": "text/csv"
         }
     ],

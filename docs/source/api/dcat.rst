@@ -39,7 +39,7 @@ Basic RDF Generation
    from dartfx.mtnards.dcat import MtnaRdsDcat
    
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    data_product = catalog.data_products_by_id['anes_1948']
    
    # Create DCAT exporter

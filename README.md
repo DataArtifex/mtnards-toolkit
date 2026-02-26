@@ -107,7 +107,7 @@ for catalog_id, catalog in server.catalogs.items():
 
 ```python
 # Get a specific catalog
-catalog = server.catalogs['us_anes']
+catalog = server.catalogs['us-anes']
 print(f"Catalog: {catalog.name}")
 print(f"Description: {catalog.description}")
 

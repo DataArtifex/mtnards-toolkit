@@ -49,7 +49,7 @@ Quick Example
        print(f"{catalog_id}: {catalog.name}")
 
    # Access a data product
-   catalog = server.catalogs['us_anes']
+   catalog = server.catalogs['us-anes']
    data_product = catalog.data_products_by_id['anes_1948']
 
    # Generate Croissant metadata

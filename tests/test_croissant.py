@@ -7,7 +7,7 @@ import pytest
 
 @pytest.mark.skip(reason="requires external server")
 def test_croissant_hvdnet_anes1948(hvdnet_server, tests_dir):
-    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    catalog = hvdnet_server.get_catalog_by_id("us-anes")
     data_product = catalog.get_data_product_by_id("anes1948")
     assert data_product
     include_codes = True  # set to False when developing

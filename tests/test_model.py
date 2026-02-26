@@ -43,7 +43,7 @@ def test_hvdnet_catalogs(hvdnet_server):
     assert hvdnet_server.catalogs
     assert len(hvdnet_server.catalogs) > 1
     print(hvdnet_server.catalogs.keys())
-    print(hvdnet_server.catalogs["us_anes"]._server)
+    print(hvdnet_server.catalogs["us-anes"]._server)
 
 
 def test_dummy_anes_catalog():
@@ -61,7 +61,7 @@ def test_dummy_anes_catalog():
 @pytest.mark.skip(reason="requires external server")
 @pytest.mark.dependency(name="test_hvdnet_catalogs")
 def test_hvdnet_anes_catalog(hvdnet_server):
-    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    catalog = hvdnet_server.get_catalog_by_id("us-anes")
     assert catalog
     assert len(catalog.data_products) == 1
     print(catalog)
@@ -74,7 +74,7 @@ def test_hvdnet_anes_catalog(hvdnet_server):
 
 @pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_metadata(hvdnet_server):
-    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    catalog = hvdnet_server.get_catalog_by_id("us-anes")
     data_product = catalog.get_data_product_by_id("anes1948")
     assert data_product
     data_product.load_metadata()
@@ -99,7 +99,7 @@ def test_dummy_variable():
 
 @pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_variables(hvdnet_server):
-    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    catalog = hvdnet_server.get_catalog_by_id("us-anes")
     product = catalog.get_data_product_by_id("anes1948")
     assert product
     assert product.variables
@@ -109,7 +109,7 @@ def test_hvdnet_anes1948_variables(hvdnet_server):
 
 @pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_v480003(hvdnet_server):
-    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    catalog = hvdnet_server.get_catalog_by_id("us-anes")
     product = catalog.get_data_product_by_id("anes1948")
     variable = product.get_variable_by_id("V480003")
     assert variable
@@ -127,7 +127,7 @@ def test_hvdnet_anes1948_v480003(hvdnet_server):
 #
 @pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_classifications(hvdnet_server):
-    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    catalog = hvdnet_server.get_catalog_by_id("us-anes")
     product = catalog.get_data_product_by_id("anes1948")
     assert product
     assert product.classifications
@@ -137,7 +137,7 @@ def test_hvdnet_anes1948_classifications(hvdnet_server):
 
 @pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_classification_V480003(hvdnet_server):
-    catalog = hvdnet_server.get_catalog_by_id("us_anes")
+    catalog = hvdnet_server.get_catalog_by_id("us-anes")
     product = catalog.get_data_product_by_id("anes1948")
     classification = product.get_classification_by_id("V480003")
     assert classification
@@ -183,7 +183,7 @@ US_ANES_CATALOG = json.loads(
             "uri": "c0779d53-6926-43d7-a832-7a74b0a0978f"
         }
     ],
-    "id": "us_anes",
+    "id": "us-anes",
     "isPrivate": false,
     "lastUpdate": "2024-04-25T20:11:41.333Z",
     "name": "American National Election Studies",
