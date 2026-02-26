@@ -8,7 +8,6 @@ from collections.abc import Iterable
 from rdflib import Graph
 
 from dartfx.dcat import dcat
-from dartfx.rdf import utils as rdfutils  # type: ignore[attr-defined]
 
 from .catalog import MtnaRdsCatalog
 from .data_product import MtnaRdsDataProduct
@@ -19,7 +18,6 @@ class DcatGenerator:
     server: MtnaRdsServer
     catalogs: set[MtnaRdsCatalog]
     datasets: set[MtnaRdsDataProduct]
-    uri_generator: rdfutils.UriGenerator | None
 
     def __init__(
         self,
@@ -29,7 +27,6 @@ class DcatGenerator:
         self.server = server
         self.catalogs = set()
         self.datasets = set()
-        self.uri_generator = None
         if datasets:
             self.add_datasets(datasets)
 

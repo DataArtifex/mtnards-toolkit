@@ -25,6 +25,7 @@ def test_hvdnet_server(hvdnet_server):
     print(hvdnet_server)
 
 
+@pytest.mark.skip(reason="requires external server")
 def test_hvdnet_server_info(hvdnet_server):
     assert hvdnet_server.info
     print(hvdnet_server.info)
@@ -36,6 +37,7 @@ def test_hvdnet_server_info(hvdnet_server):
 #
 # CATALOGS
 #
+@pytest.mark.skip(reason="requires external server")
 @pytest.mark.dependency(name="test_server_info")
 def test_hvdnet_catalogs(hvdnet_server):
     assert hvdnet_server.catalogs
@@ -56,6 +58,7 @@ def test_dummy_anes_catalog():
 #
 # CATALOG
 #
+@pytest.mark.skip(reason="requires external server")
 @pytest.mark.dependency(name="test_hvdnet_catalogs")
 def test_hvdnet_anes_catalog(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
@@ -69,6 +72,7 @@ def test_hvdnet_anes_catalog(hvdnet_server):
 #
 
 
+@pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_metadata(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
     data_product = catalog.get_data_product_by_id("anes1948")
@@ -93,6 +97,7 @@ def test_dummy_variable():
     print(variable)
 
 
+@pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_variables(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
     product = catalog.get_data_product_by_id("anes1948")
@@ -102,6 +107,7 @@ def test_hvdnet_anes1948_variables(hvdnet_server):
     print(len(product.variables))
 
 
+@pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_v480003(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
     product = catalog.get_data_product_by_id("anes1948")
@@ -119,6 +125,7 @@ def test_hvdnet_anes1948_v480003(hvdnet_server):
 #
 # CLASSIFICATIONS
 #
+@pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_classifications(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
     product = catalog.get_data_product_by_id("anes1948")
@@ -128,6 +135,7 @@ def test_hvdnet_anes1948_classifications(hvdnet_server):
     print(len(product.classifications))
 
 
+@pytest.mark.skip(reason="requires external server")
 def test_hvdnet_anes1948_classification_V480003(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
     product = catalog.get_data_product_by_id("anes1948")

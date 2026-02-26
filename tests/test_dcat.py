@@ -1,6 +1,9 @@
+import pytest
+
 from dartfx.mtnards.dcat import DcatGenerator
 
 
+@pytest.mark.skip(reason="requires external server")
 def test_dcat_hvdnet_anes1948(hvdnet_server):
     catalog = hvdnet_server.get_catalog_by_id("us_anes")
     data_product = catalog.get_data_product_by_id("anes1948")
@@ -11,6 +14,7 @@ def test_dcat_hvdnet_anes1948(hvdnet_server):
     print(g.serialize(format="turtle"))
 
 
+@pytest.mark.skip(reason="requires external server")
 def test_dcat_mtna_anes1948(mtna_server):
     catalog = mtna_server.get_catalog_by_id("covid19")
     data_product = catalog.get_data_product_by_id("jhu_country")
