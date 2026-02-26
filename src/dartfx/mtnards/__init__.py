@@ -5,6 +5,7 @@ from .base import MtnaRdsError  # noqa: F401
 from .catalog import MtnaRdsCatalog  # noqa: F401
 from .classification import MtnaRdsClassification, MtnaRdsClassificationCode, MtnaRdsClassificationStub  # noqa: F401
 from .data_product import MtnaRdsDataProduct  # noqa: F401
+from .process import MtnaRdsProcess  # noqa: F401
 from .server import MtnaRdsServer  # noqa: F401
 from .variable import MtnaRdsVariable, MtnaRdsVariableStub  # noqa: F401
 
@@ -17,10 +18,12 @@ _types_namespace = {
     "MtnaRdsClassificationCode": MtnaRdsClassificationCode,
     "MtnaRdsClassificationStub": MtnaRdsClassificationStub,
     "MtnaRdsDataProduct": MtnaRdsDataProduct,
+    "MtnaRdsProcess": MtnaRdsProcess,
     "MtnaRdsServer": MtnaRdsServer,
     "MtnaRdsVariable": MtnaRdsVariable,
     "MtnaRdsVariableStub": MtnaRdsVariableStub,
 }
 MtnaRdsCatalog.model_rebuild(_types_namespace=_types_namespace)
 MtnaRdsDataProduct.model_rebuild(_types_namespace=_types_namespace)
+MtnaRdsProcess.model_rebuild(_types_namespace=_types_namespace)
 MtnaRdsServer.model_rebuild(_types_namespace=_types_namespace)
