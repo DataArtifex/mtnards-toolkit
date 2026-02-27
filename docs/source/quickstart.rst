@@ -261,6 +261,5 @@ Next Steps
 ----------
 
 * Explore more detailed :doc:`examples`
-* Learn about the :doc:`mcp_server` for AI integration
 * Read the :doc:`api/core` reference
 * Check out the `GitHub repository <https://github.com/DataArtifex/mtnards-toolkit>`_ for more examples

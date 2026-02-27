@@ -325,7 +325,7 @@ Good commit message examples:
 
 * ``Add support for custom URI schemes in DCAT export``
 * ``Fix variable classification caching issue``
-* ``Update documentation for MCP server configuration``
+* ``Update installation guide for optional dependencies``
 
 Issue Reporting
 ---------------

@@ -57,18 +57,11 @@ Using pip
 Optional Dependencies
 ---------------------
 
-MCP Server
-~~~~~~~~~~
+MCP Server (Separate Package)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To use the Model Context Protocol (MCP) server features:
-
-.. code-block:: bash
-
-   # With pip
-   pip install -e ".[mcp]"
-
-   # With uv (already included in sync)
-   uv sync
+MCP server support has moved to a separate package and is not installed with
+this toolkit. See the project README for updates on MCP availability.
 
 Development Tools
 ~~~~~~~~~~~~~~~~~

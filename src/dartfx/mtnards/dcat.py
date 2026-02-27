@@ -14,7 +14,11 @@ from .data_product import MtnaRdsDataProduct
 from .server import MtnaRdsServer
 
 
-class DcatGenerator:
+class MtnaRdsDcat:
+    """
+    DCAT exporter for MTNA RDS servers, catalogs, and data products.
+    """
+
     server: MtnaRdsServer
     catalogs: set[MtnaRdsCatalog]
     datasets: set[MtnaRdsDataProduct]
@@ -23,12 +27,33 @@ class DcatGenerator:
         self,
         server: MtnaRdsServer,
         datasets: set[MtnaRdsDataProduct | str] | None = None,
+        catalog: MtnaRdsCatalog | None = None,
+        data_product: MtnaRdsDataProduct | None = None,
+        uri_style: str | None = None,
     ):
+        """
+        Initializes the DCAT exporter.
+
+        Args:
+            server: The MTNA RDS server to export from.
+            datasets: A set of data products to include.
+            catalog: Optional single catalog to include.
+            data_product: Optional single data product to include.
+            uri_style: Optional URI generation style (currently unused by this exporter).
+        """
         self.server = server
         self.catalogs = set()
         self.datasets = set()
         if datasets:
             self.add_datasets(datasets)
+        if catalog:
+            self.add_catalog(catalog)
+        if data_product:
+            self.add_dataset(data_product)
+
+    def graph(self) -> Graph:
+        """Alias for :meth:`get_graph` for backward compatibility with documentation."""
+        return self.get_graph()
 
     def get_prefixes_ttl(self, dataset: MtnaRdsDataProduct) -> str:
         prefixes = f"@prefix catalog: <{dataset._catalog._server.host}/>."

@@ -227,11 +227,11 @@ server = MtnaRdsServer(
 - [x] Variable metadata access
 - [x] Croissant metadata generation
 - [x] DCAT/RDF export
+- [x] Comprehensive documentation
 - [ ] MCP server implementation (separate package)
 - [ ] Data querying and subsetting
 - [ ] Tabulation and aggregation tools
 - [ ] PyPI package release
-- [ ] Comprehensive documentation
 - [ ] Additional metadata format support
 - [ ] Performance optimizations and caching strategies
 
@@ -307,10 +307,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 ## Documentation
 
 - **Project Documentation**: https://www.dataartifex.org/docs/dartfx-mtnards/
-- **API Reference**: Coming soon
+- **API Reference**: https://www.dataartifex.org/docs/dartfx-mtnards/api/core.html
 - **DeepWiki AI Index**: https://deepwiki.com/DataArtifex/mtnards-toolkit
 - **MTNA RDS**: https://www.richdataservices.com
-- **High-Value Data Network**: https://highvaluedata.net/
 
 ## Support & Community
 
