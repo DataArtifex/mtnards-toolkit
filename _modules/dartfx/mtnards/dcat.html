@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dartfx.mtnards.variable &mdash; MTNA Rich Data Services Toolkit 0.0.1 documentation</title>
+  <title>dartfx.mtnards.dcat &mdash; MTNA Rich Data Services Toolkit 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -487,7 +487,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">dartfx.mtnards.variable</li>
+      <li class="breadcrumb-item active">dartfx.mtnards.dcat</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -496,122 +496,232 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for dartfx.mtnards.variable</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Variable models for MTNA RDS data products.&quot;&quot;&quot;</span>
+  <h1>Source code for dartfx.mtnards.dcat</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">DCAT support for MTNA RDS</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">mlcroissant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mlc</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">PrivateAttr</span><span class="p">,</span> <span class="n">computed_field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Graph</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsError</span><span class="p">,</span> <span class="n">MtnaRdsResource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dartfx.dcat</span><span class="w"> </span><span class="kn">import</span> <span class="n">dcat</span>
 
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.classification</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsClassification</span><span class="p">,</span> <span class="n">MtnaRdsClassificationStub</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.data_product</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsDataProduct</span>
-
-
-<div class="viewcode-block" id="MtnaRdsVariableStub">
-<a class="viewcode-back" href="../../../api/core.html#dartfx.mtnards.variable.MtnaRdsVariableStub">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">MtnaRdsVariableStub</span><span class="p">(</span><span class="n">MtnaRdsResource</span><span class="p">):</span>
-    <span class="n">classification_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;classificationId&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">classification_uri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;classificationUri&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;dataType&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">is_dimension</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;isDimension&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">is_measure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;isMeasure&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">is_required</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;isRequired&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">is_weight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;isWeight&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">last_update</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;lastUpdate&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">storage_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;storageType&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-
-    <span class="c1"># Set by data product @root_validator or programmatically</span>
-    <span class="n">_data_product</span><span class="p">:</span> <span class="n">MtnaRdsDataProduct</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># type: ignore[assignment]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">croissant_data_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mlc</span><span class="o">.</span><span class="n">DataType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the Croissant data type for this variable.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;NUMERIC&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">mlc</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">FLOAT</span>
-        <span class="k">return</span> <span class="n">mlc</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">TEXT</span>
-
-    <span class="nd">@computed_field</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">catalog_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">id</span>
-
-    <span class="nd">@computed_field</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">catalog_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">uri</span>
-
-    <span class="nd">@computed_field</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">classification</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MtnaRdsClassificationStub</span> <span class="o">|</span> <span class="n">MtnaRdsClassification</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_id</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">get_classification_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_id</span><span class="p">)</span>
-
-    <span class="nd">@computed_field</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">data_product_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">id</span>
-
-    <span class="nd">@computed_field</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">data_product_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">uri</span>
-
-    <span class="nd">@computed_field</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">is_stub</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">MtnaRdsVariable</span><span class="p">)</span>
-
-<div class="viewcode-block" id="MtnaRdsVariableStub.resolve">
-<a class="viewcode-back" href="../../../api/core.html#dartfx.mtnards.variable.MtnaRdsVariableStub.resolve">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MtnaRdsVariable</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the stub into a detailed variable.&quot;&quot;&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;catalog/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/variable/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-            <span class="n">variable</span> <span class="o">=</span> <span class="n">MtnaRdsVariable</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">variable</span><span class="o">.</span><span class="n">_data_product</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span>
-            <span class="c1"># replace the stub with the detailed variable in the data product</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">_variables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_data_product</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">variable</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span>
-            <span class="k">return</span> <span class="n">variable</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">MtnaRdsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get variable: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
-</div>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.catalog</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsCatalog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.data_product</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsDataProduct</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.server</span><span class="w"> </span><span class="kn">import</span> <span class="n">MtnaRdsServer</span>
 
 
+<div class="viewcode-block" id="MtnaRdsDcat">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MtnaRdsDcat</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DCAT exporter for MTNA RDS servers, catalogs, and data products.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MtnaRdsVariable">
-<a class="viewcode-back" href="../../../api/core.html#dartfx.mtnards.variable.MtnaRdsVariable">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">MtnaRdsVariable</span><span class="p">(</span><span class="n">MtnaRdsVariableStub</span><span class="p">):</span>
-    <span class="n">decimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">end_position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;endPosition&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">fixed_storage_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;fixedStorageWidth&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">start_position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;startPosition&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">server</span><span class="p">:</span> <span class="n">MtnaRdsServer</span>
+    <span class="n">catalogs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">MtnaRdsCatalog</span><span class="p">]</span>
+    <span class="n">datasets</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">MtnaRdsDataProduct</span><span class="p">]</span>
 
-<div class="viewcode-block" id="MtnaRdsVariable.resolve">
-<a class="viewcode-back" href="../../../api/core.html#dartfx.mtnards.variable.MtnaRdsVariable.resolve">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MtnaRdsVariable</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Already resolved — returns self.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
+<div class="viewcode-block" id="MtnaRdsDcat.__init__">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="n">MtnaRdsServer</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">MtnaRdsDataProduct</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">catalog</span><span class="p">:</span> <span class="n">MtnaRdsCatalog</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">data_product</span><span class="p">:</span> <span class="n">MtnaRdsDataProduct</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">uri_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the DCAT exporter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            server: The MTNA RDS server to export from.</span>
+<span class="sd">            datasets: A set of data products to include.</span>
+<span class="sd">            catalog: Optional single catalog to include.</span>
+<span class="sd">            data_product: Optional single data product to include.</span>
+<span class="sd">            uri_style: Optional URI generation style (currently unused by this exporter).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalogs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">datasets</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_datasets</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">catalog</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_catalog</span><span class="p">(</span><span class="n">catalog</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_product</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span><span class="n">data_product</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MtnaRdsDcat.graph">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.graph">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :meth:`get_graph` for backward compatibility with documentation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_graph</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MtnaRdsDcat.get_prefixes_ttl">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.get_prefixes_ttl">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_prefixes_ttl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">MtnaRdsDataProduct</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">prefixes</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;@prefix catalog: &lt;</span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">/&gt;.&quot;</span>
+        <span class="n">prefixes</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        @prefix hvdn: &lt;https://rdf.highvaluedata.net/dcat#&gt; .</span>
+
+<span class="s2">        @prefix dcat: &lt;http://www.w3.org/ns/dcat#&gt; .</span>
+<span class="s2">        @prefix dcterms: &lt;http://purl.org/dc/terms/&gt; .</span>
+<span class="s2">        @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .</span>
+<span class="s2">        @prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .</span>
+<span class="s2">        @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">prefixes</span></div>
+
+
+<div class="viewcode-block" id="MtnaRdsDcat.add_catalog">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.add_catalog">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">catalog</span><span class="p">:</span> <span class="n">MtnaRdsCatalog</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a single catalog to the generator&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_catalogs</span><span class="p">([</span><span class="n">catalog</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MtnaRdsDcat.add_catalogs">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.add_catalogs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_catalogs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">catalogs</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">MtnaRdsCatalog</span> <span class="o">|</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds catalogs to the generator&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">catalogs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">MtnaRdsCatalog</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">catalogs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected catalog type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MtnaRdsDcat.add_dataset">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.add_dataset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">MtnaRdsDataProduct</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a single dataset to the generator&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_datasets</span><span class="p">([</span><span class="n">dataset</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MtnaRdsDcat.add_datasets">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.add_datasets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasets</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">MtnaRdsDataProduct</span> <span class="o">|</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds datasets to the generator&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">MtnaRdsDataProduct</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected dataset type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_dcat_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rds_catalog</span><span class="p">:</span> <span class="n">MtnaRdsCatalog</span><span class="p">,</span> <span class="n">stub_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dcat</span><span class="o">.</span><span class="n">Catalog</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal helper to generates a DCAT graph for a catalog&quot;&quot;&quot;</span>
+        <span class="n">dcat_catalog</span> <span class="o">=</span> <span class="n">dcat</span><span class="o">.</span><span class="n">Catalog</span><span class="p">()</span>
+        <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">set_uri</span><span class="p">(</span><span class="n">rds_catalog</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">add_title</span><span class="p">(</span><span class="n">rds_catalog</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rds_catalog</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">add_description</span><span class="p">(</span><span class="n">rds_catalog</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+        <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">add_publisher</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rds_catalog</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">stub_only</span> <span class="ow">and</span> <span class="n">rds_catalog</span><span class="o">.</span><span class="n">data_products</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">rds_data_product</span> <span class="ow">in</span> <span class="n">rds_catalog</span><span class="o">.</span><span class="n">data_products</span><span class="p">:</span>
+                <span class="n">dcat_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dcat_dataset</span><span class="p">(</span><span class="n">rds_data_product</span><span class="p">)</span>
+                <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span><span class="n">dcat_dataset</span><span class="p">)</span>
+                <span class="n">dcat_api</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dcat_api_service</span><span class="p">(</span><span class="n">rds_data_product</span><span class="p">,</span> <span class="n">dcat_dataset</span><span class="p">)</span>
+                <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">add_service</span><span class="p">(</span><span class="n">dcat_api</span><span class="p">)</span>  <span class="c1"># add service to catalog</span>
+        <span class="k">return</span> <span class="n">dcat_catalog</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_dcat_dataset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rds_data_product</span><span class="p">:</span> <span class="n">MtnaRdsDataProduct</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dcat</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+        <span class="n">dcat_dataset</span> <span class="o">=</span> <span class="n">dcat</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+        <span class="n">dcat_dataset</span><span class="o">.</span><span class="n">set_uri</span><span class="p">(</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">dcat_dataset</span><span class="o">.</span><span class="n">add_title</span><span class="p">(</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rds_data_product</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="n">dcat_dataset</span><span class="o">.</span><span class="n">add_description</span><span class="p">(</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+        <span class="n">explorer_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">/explorer/explore/</span><span class="si">{</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">dcat_dataset</span><span class="o">.</span><span class="n">add_landing_page</span><span class="p">(</span><span class="n">explorer_url</span><span class="p">)</span>
+        <span class="n">dcat_dataset</span><span class="o">.</span><span class="n">add_modified_date</span><span class="p">(</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">last_update</span><span class="p">)</span>
+        <span class="n">dcat_dataset</span><span class="o">.</span><span class="n">add_publisher</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dcat_dataset</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_dcat_api_service</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rds_data_product</span><span class="p">:</span> <span class="n">MtnaRdsDataProduct</span><span class="p">,</span>
+        <span class="n">dcat_dataset</span><span class="p">:</span> <span class="n">dcat</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dcat</span><span class="o">.</span><span class="n">DataService</span><span class="p">:</span>
+        <span class="n">dcat_api</span> <span class="o">=</span> <span class="n">dcat</span><span class="o">.</span><span class="n">DataService</span><span class="p">()</span>
+        <span class="n">dcat_api</span><span class="o">.</span><span class="n">set_uri</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">-api&quot;</span><span class="p">)</span>
+        <span class="n">dcat_api</span><span class="o">.</span><span class="n">add_served_dataset</span><span class="p">(</span><span class="n">dcat_dataset</span><span class="p">)</span>
+        <span class="n">dcat_api</span><span class="o">.</span><span class="n">add_conforms_to</span><span class="p">(</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">base_url</span> <span class="o">+</span> <span class="s2">&quot;/swagger&quot;</span><span class="p">)</span>
+        <span class="n">dcat_api</span><span class="o">.</span><span class="n">add_endpoint_url</span><span class="p">(</span><span class="n">rds_data_product</span><span class="o">.</span><span class="n">_catalog</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">api_url</span><span class="p">)</span>
+        <span class="n">dcat_api</span><span class="o">.</span><span class="n">add_type</span><span class="p">(</span><span class="s2">&quot;https://highvaluedata.net/vocab/service_type#MtnaRdsOpenAPI&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dcat_api</span>
+
+<div class="viewcode-block" id="MtnaRdsDcat.get_graph">
+<a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.get_graph">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates RDF graph for server, catalogs, and datasets.</span>
+<span class="sd">        The workflow is as follows:</span>
+<span class="sd">        - Generate DCAT graph</span>
+<span class="sd">        - Initialize the server catalog</span>
+<span class="sd">        - Initialize the catalogs</span>
+<span class="sd">        - Initialize the datasets add to graph</span>
+<span class="sd">        - Add datasets to graph</span>
+<span class="sd">        - Add server catalog to graph</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># Server Catalog</span>
+        <span class="c1">#</span>
+        <span class="n">dcat_server_catalog</span> <span class="o">=</span> <span class="n">dcat</span><span class="o">.</span><span class="n">Catalog</span><span class="p">()</span>
+        <span class="n">dcat_server_catalog</span><span class="o">.</span><span class="n">set_uri</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">dcat_server_catalog</span><span class="o">.</span><span class="n">add_publisher</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Loop over catalogs</span>
+        <span class="n">dcat_catalogs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># keeps track of catalogs being added</span>
+        <span class="k">for</span> <span class="n">rds_catalog</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">catalogs</span><span class="p">:</span>
+            <span class="n">dcat_catalog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dcat_catalog</span><span class="p">(</span><span class="n">rds_catalog</span><span class="p">)</span>
+            <span class="n">dcat_server_catalog</span><span class="o">.</span><span class="n">add_catalog</span><span class="p">(</span><span class="n">dcat_catalog</span><span class="p">)</span>  <span class="c1"># add to server level catalog</span>
+            <span class="n">dcat_catalogs</span><span class="p">[</span><span class="n">rds_catalog</span><span class="o">.</span><span class="n">uri</span><span class="p">]</span> <span class="o">=</span> <span class="n">dcat_catalog</span>  <span class="c1"># register</span>
+
+        <span class="c1"># Loop over datasets</span>
+        <span class="k">for</span> <span class="n">rds_data_product</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+            <span class="c1"># add data product&#39;s catalog if needed</span>
+            <span class="n">rds_catalog</span> <span class="o">=</span> <span class="n">rds_data_product</span><span class="o">.</span><span class="n">_catalog</span>
+            <span class="n">dcat_catalog</span> <span class="o">=</span> <span class="n">dcat_catalogs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rds_catalog</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dcat_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">dcat_catalog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dcat_catalog</span><span class="p">(</span><span class="n">rds_catalog</span><span class="p">,</span> <span class="n">stub_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">dcat_server_catalog</span><span class="o">.</span><span class="n">add_catalog</span><span class="p">(</span><span class="n">dcat_catalog</span><span class="p">)</span>  <span class="c1"># add to server level catalog</span>
+                <span class="n">dcat_catalogs</span><span class="p">[</span><span class="n">rds_catalog</span><span class="o">.</span><span class="n">uri</span><span class="p">]</span> <span class="o">=</span> <span class="n">dcat_catalog</span>  <span class="c1"># register</span>
+
+            <span class="c1"># create DCAT dataset</span>
+            <span class="n">dcat_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dcat_dataset</span><span class="p">(</span><span class="n">rds_data_product</span><span class="p">)</span>
+            <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span><span class="n">dcat_dataset</span><span class="p">)</span>  <span class="c1"># add dataset to catalog</span>
+
+            <span class="c1"># create DCAT API service</span>
+            <span class="n">dcat_api</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dcat_api_service</span><span class="p">(</span><span class="n">rds_data_product</span><span class="p">,</span> <span class="n">dcat_dataset</span><span class="p">)</span>
+            <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">add_service</span><span class="p">(</span><span class="n">dcat_api</span><span class="p">)</span>  <span class="c1"># add service to catalog</span>
+
+            <span class="c1"># add dataset resources to graph</span>
+            <span class="n">dcat_dataset</span><span class="o">.</span><span class="n">add_to_rdf_graph</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+
+            <span class="c1"># add API service to graph</span>
+            <span class="n">dcat_api</span><span class="o">.</span><span class="n">add_to_rdf_graph</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+
+        <span class="c1"># add catalogs to graph</span>
+        <span class="k">for</span> <span class="n">dcat_catalog</span> <span class="ow">in</span> <span class="n">dcat_catalogs</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">dcat_catalog</span><span class="o">.</span><span class="n">add_to_rdf_graph</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+
+        <span class="c1"># add server catalog to graph</span>
+        <span class="n">dcat_server_catalog</span><span class="o">.</span><span class="n">add_to_rdf_graph</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">g</span></div>
 </div>
 
 </pre></div>

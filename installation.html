@@ -56,7 +56,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#optional-dependencies">Optional Dependencies</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mcp-server">MCP Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mcp-server-separate-package">MCP Server (Separate Package)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#development-tools">Development Tools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#documentation-build-tools">Documentation Build Tools</a></li>
 </ul>
@@ -340,7 +340,23 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/dcat.html">DCAT/RDF API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/dcat.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#main-class">Main Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dcat.html#main-class">Main Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.__init__"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.server"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.server</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.catalogs"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.catalogs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.datasets"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.datasets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.graph"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.get_prefixes_ttl"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.get_prefixes_ttl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.add_catalog"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.add_catalog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.add_catalogs"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.add_catalogs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.add_dataset"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.add_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.add_datasets"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.add_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.get_graph"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.get_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="api/dcat.html#uri-styles">URI Styles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/dcat.html#example-usage">Example Usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/dcat.html#basic-rdf-generation">Basic RDF Generation</a></li>
@@ -538,16 +554,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </section>
 <section id="optional-dependencies">
 <h2>Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Link to this heading"></a></h2>
-<section id="mcp-server">
-<h3>MCP Server<a class="headerlink" href="#mcp-server" title="Link to this heading"></a></h3>
-<p>To use the Model Context Protocol (MCP) server features:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># With pip</span>
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[mcp]&quot;</span>
-
-<span class="c1"># With uv (already included in sync)</span>
-uv<span class="w"> </span>sync
-</pre></div>
-</div>
+<section id="mcp-server-separate-package">
+<h3>MCP Server (Separate Package)<a class="headerlink" href="#mcp-server-separate-package" title="Link to this heading"></a></h3>
+<p>MCP server support has moved to a separate package and is not installed with
+this toolkit. See the project README for updates on MCP availability.</p>
 </section>
 <section id="development-tools">
 <h3>Development Tools<a class="headerlink" href="#development-tools" title="Link to this heading"></a></h3>

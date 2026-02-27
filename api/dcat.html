@@ -56,7 +56,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html#optional-dependencies">Optional Dependencies</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../installation.html#mcp-server">MCP Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#mcp-server-separate-package">MCP Server (Separate Package)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation.html#development-tools">Development Tools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation.html#documentation-build-tools">Documentation Build Tools</a></li>
 </ul>
@@ -340,7 +340,23 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">DCAT/RDF API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main-class">Main Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main-class">Main Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.__init__"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.server"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.server</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.catalogs"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.catalogs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.datasets"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.datasets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.graph"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.get_prefixes_ttl"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.get_prefixes_ttl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.add_catalog"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.add_catalog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.add_catalogs"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.add_catalogs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.add_dataset"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.add_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.add_datasets"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.add_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.get_graph"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.get_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#uri-styles">URI Styles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-usage">Example Usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#basic-rdf-generation">Basic RDF Generation</a></li>
@@ -493,6 +509,109 @@ the <a class="reference external" href="https://www.w3.org/TR/vocab-dcat/">Data 
 </section>
 <section id="main-class">
 <h2>Main Class<a class="headerlink" href="#main-class" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dartfx.mtnards.dcat.</span></span><span class="sig-name descname"><span class="pre">MtnaRdsDcat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_product</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>DCAT exporter for MTNA RDS servers, catalogs, and data products.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_product</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the DCAT exporter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>server</strong> (<a class="reference internal" href="core.html#dartfx.mtnards.MtnaRdsServer" title="dartfx.mtnards.server.MtnaRdsServer"><em>MtnaRdsServer</em></a>) – The MTNA RDS server to export from.</p></li>
+<li><p><strong>datasets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.14)"><em>set</em></a><em>[</em><a class="reference internal" href="core.html#dartfx.mtnards.MtnaRdsDataProduct" title="dartfx.mtnards.data_product.MtnaRdsDataProduct"><em>MtnaRdsDataProduct</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – A set of data products to include.</p></li>
+<li><p><strong>catalog</strong> (<a class="reference internal" href="core.html#dartfx.mtnards.MtnaRdsCatalog" title="dartfx.mtnards.catalog.MtnaRdsCatalog"><em>MtnaRdsCatalog</em></a><em> | </em><em>None</em>) – Optional single catalog to include.</p></li>
+<li><p><strong>data_product</strong> (<a class="reference internal" href="core.html#dartfx.mtnards.MtnaRdsDataProduct" title="dartfx.mtnards.data_product.MtnaRdsDataProduct"><em>MtnaRdsDataProduct</em></a><em> | </em><em>None</em>) – Optional single data product to include.</p></li>
+<li><p><strong>uri_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>) – Optional URI generation style (currently unused by this exporter).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.server">
+<span class="sig-name descname"><span class="pre">server</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="core.html#dartfx.mtnards.MtnaRdsServer" title="dartfx.mtnards.server.MtnaRdsServer"><span class="pre">MtnaRdsServer</span></a></span><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.server" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.catalogs">
+<span class="sig-name descname"><span class="pre">catalogs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.14)"><span class="pre">set</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="core.html#dartfx.mtnards.MtnaRdsCatalog" title="dartfx.mtnards.catalog.MtnaRdsCatalog"><span class="pre">MtnaRdsCatalog</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.catalogs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.datasets">
+<span class="sig-name descname"><span class="pre">datasets</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.14)"><span class="pre">set</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="core.html#dartfx.mtnards.MtnaRdsDataProduct" title="dartfx.mtnards.data_product.MtnaRdsDataProduct"><span class="pre">MtnaRdsDataProduct</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.datasets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.graph">
+<span class="sig-name descname"><span class="pre">graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat.graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.graph" title="Link to this definition"></a></dt>
+<dd><p>Alias for <a class="reference internal" href="#dartfx.mtnards.dcat.MtnaRdsDcat.get_graph" title="dartfx.mtnards.dcat.MtnaRdsDcat.get_graph"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_graph()</span></code></a> for backward compatibility with documentation.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.get_prefixes_ttl">
+<span class="sig-name descname"><span class="pre">get_prefixes_ttl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat.get_prefixes_ttl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.get_prefixes_ttl" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.add_catalog">
+<span class="sig-name descname"><span class="pre">add_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catalog</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat.add_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.add_catalog" title="Link to this definition"></a></dt>
+<dd><p>Adds a single catalog to the generator</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.add_catalogs">
+<span class="sig-name descname"><span class="pre">add_catalogs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catalogs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat.add_catalogs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.add_catalogs" title="Link to this definition"></a></dt>
+<dd><p>Adds catalogs to the generator</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.add_dataset">
+<span class="sig-name descname"><span class="pre">add_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat.add_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.add_dataset" title="Link to this definition"></a></dt>
+<dd><p>Adds a single dataset to the generator</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.add_datasets">
+<span class="sig-name descname"><span class="pre">add_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat.add_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.add_datasets" title="Link to this definition"></a></dt>
+<dd><p>Adds datasets to the generator</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dartfx.mtnards.dcat.MtnaRdsDcat.get_graph">
+<span class="sig-name descname"><span class="pre">get_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dartfx/mtnards/dcat.html#MtnaRdsDcat.get_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dartfx.mtnards.dcat.MtnaRdsDcat.get_graph" title="Link to this definition"></a></dt>
+<dd><p>Generates RDF graph for server, catalogs, and datasets.
+The workflow is as follows:
+- Generate DCAT graph
+- Initialize the server catalog
+- Initialize the catalogs
+- Initialize the datasets add to graph
+- Add datasets to graph
+- Add server catalog to graph</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="uri-styles">
 <h2>URI Styles<a class="headerlink" href="#uri-styles" title="Link to this heading"></a></h2>

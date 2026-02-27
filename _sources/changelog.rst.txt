@@ -16,7 +16,6 @@ Added
 * Installation guide with uv and pip instructions
 * Quick start guide with examples
 * Detailed API reference
-* MCP server user guide
 * Contributing guidelines
 
 Changed
@@ -24,6 +23,7 @@ Changed
 
 * Improved README with comprehensive project information
 * Enhanced documentation structure
+* Removed MCP server references (now maintained in a separate package)
 
 [0.0.1] - 2024
 --------------
@@ -39,7 +39,6 @@ Added
 * Variable metadata access
 * Croissant metadata generation
 * DCAT/RDF export functionality
-* Model Context Protocol (MCP) server implementation
 * Type-safe Pydantic models
 * HTML to Markdown conversion
 * Comprehensive test suite
@@ -54,7 +53,6 @@ Core Features
 * **MtnaRdsVariable**: Variable inspection with classification support
 * **DCAT Export**: RDF graph generation for semantic web
 * **Croissant Export**: ML-ready dataset documentation
-* **MCP Server**: AI assistant integration via Model Context Protocol
 
 Dependencies
 ~~~~~~~~~~~~
@@ -63,7 +61,6 @@ Dependencies
 * Pydantic 2.0+ for data modeling
 * RDFLib 7.0+ for RDF graphs
 * mlcroissant 1.0+ for Croissant metadata
-* FastMCP 1.6+ for MCP server
 * markdownify for HTML conversion
 
 Development Tools
@@ -80,7 +77,6 @@ Known Limitations
 ~~~~~~~~~~~~~~~~~
 
 * Documentation is still being expanded
-* Some MCP tools are not yet implemented (commented out)
 * Data querying and aggregation features are planned
 * PyPI package not yet published
 
@@ -95,7 +91,6 @@ Future Plans
 Planned for 0.1.0
 ~~~~~~~~~~~~~~~~~
 
-* Complete MCP server tool implementation
 * Data querying and subsetting functionality
 * Tabulation and aggregation tools
 * Enhanced caching strategies
