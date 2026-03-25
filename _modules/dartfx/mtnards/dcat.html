@@ -341,6 +341,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.__init__"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.server"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.server</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.uri_style"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.uri_style</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.catalogs"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.catalogs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.datasets"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.datasets</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.graph"><code class="docutils literal notranslate"><span class="pre">MtnaRdsDcat.graph()</span></code></a></li>
@@ -523,6 +524,7 @@
     <span class="n">server</span><span class="p">:</span> <span class="n">MtnaRdsServer</span>
     <span class="n">catalogs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">MtnaRdsCatalog</span><span class="p">]</span>
     <span class="n">datasets</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">MtnaRdsDataProduct</span><span class="p">]</span>
+    <span class="n">uri_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="MtnaRdsDcat.__init__">
 <a class="viewcode-back" href="../../../api/dcat.html#dartfx.mtnards.dcat.MtnaRdsDcat.__init__">[docs]</a>
@@ -545,6 +547,7 @@
 <span class="sd">            uri_style: Optional URI generation style (currently unused by this exporter).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri_style</span> <span class="o">=</span> <span class="n">uri_style</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">catalogs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">datasets</span><span class="p">:</span>
