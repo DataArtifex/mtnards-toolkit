@@ -22,6 +22,7 @@ class MtnaRdsDcat:
     server: MtnaRdsServer
     catalogs: set[MtnaRdsCatalog]
     datasets: set[MtnaRdsDataProduct]
+    uri_style: str | None
 
     def __init__(
         self,
@@ -42,6 +43,7 @@ class MtnaRdsDcat:
             uri_style: Optional URI generation style (currently unused by this exporter).
         """
         self.server = server
+        self.uri_style = uri_style
         self.catalogs = set()
         self.datasets = set()
         if datasets:
