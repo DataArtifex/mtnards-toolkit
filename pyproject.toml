@@ -56,17 +56,18 @@ path = "src/dartfx/mtnards/__about__.py"
 
 [dependency-groups]
 dev = [
-  "coverage[toml]>=6.5",
+  "coverage[toml]>=7.0.0",
   "pytest>=9",
-  "pytest-benchmark>=4.0.0",
+  "pytest-benchmark>=5.0.0",
   "mypy>=1.0.0",
   "types-requests>=2.31.0",
   "python-dotenv>=1.0.0",
   "ruff>=0.3.0",
-  "pre-commit>=3.0.0",
+  "pre-commit>=4.0.0",
+  "types-ujson>=5.0.0"
 ]
 docs = [
-  "sphinx>=7.0.0",
+  "sphinx>=9.0.0",
   "sphinx-rtd-theme>=1.2.0",
   "myst-parser>=5.0.0",
   "sphinx-copybutton>=0.5.0",
@@ -160,11 +161,16 @@ line-ending = "auto"
 
 [tool.mypy]
 plugins = ["pydantic.mypy"]
-# All @computed_field use @property stacking, which is safe but triggers prop-decorator.
-disable_error_code = ["prop-decorator"]
+python_version = "3.12"
+check_untyped_defs = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+show_error_codes = true
 mypy_path = "src"
 explicit_package_bases = true
-namespace_packages = true
+# All @computed_field use @property stacking, which is safe but triggers prop-decorator.
+disable_error_code = ["prop-decorator"]
+
 
 [[tool.mypy.overrides]]
 module = [
