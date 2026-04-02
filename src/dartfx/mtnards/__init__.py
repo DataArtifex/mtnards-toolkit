@@ -9,6 +9,19 @@ from .process import MtnaRdsProcess  # noqa: F401
 from .server import MtnaRdsServer  # noqa: F401
 from .variable import MtnaRdsVariable, MtnaRdsVariableStub  # noqa: F401
 
+__all__ = [
+    "MtnaRdsError",
+    "MtnaRdsCatalog",
+    "MtnaRdsClassification",
+    "MtnaRdsClassificationCode",
+    "MtnaRdsClassificationStub",
+    "MtnaRdsDataProduct",
+    "MtnaRdsProcess",
+    "MtnaRdsServer",
+    "MtnaRdsVariable",
+    "MtnaRdsVariableStub",
+]
+
 # Rebuild models that use forward references (TYPE_CHECKING imports).
 # Required so Pydantic resolves deferred annotations before Sphinx autodoc
 # or other introspection tools inspect the models.

@@ -31,11 +31,20 @@ class MtnaRdsServer(BaseModel):
     # This validator ensures that the host URL starts with "https://" before model initialization.
     @model_validator(mode="before")
     @classmethod
-    def ensure_https_host(cls, values):
+    def ensure_https_host(cls, values: Any) -> Any:
+        if not isinstance(values, dict):
+            return values
         host = values.get("host")
         if host and not re.match(r"^https?://", host):
             values["host"] = f"https://{host}"
         return values
+
+    @staticmethod
+    def _response_json_dict(response: requests.Response) -> dict[str, Any]:
+        data = response.json()
+        if not isinstance(data, dict):
+            raise MtnaRdsError("Expected JSON object response")
+        return data
 
     @computed_field
     @property
@@ -201,8 +210,7 @@ class MtnaRdsServer(BaseModel):
         path = f"management/catalog/{catalog_uri}/product/{product_uri}/import/configure"
         response = self.api_request(path, method="POST", body_json=file_info)
         if response.status_code == 200:
-            data = response.json()
-            return data
+            return self._response_json_dict(response)
         else:
             raise MtnaRdsError(f"Could not get import configuration: {response.status_code}")
 
@@ -211,7 +219,7 @@ class MtnaRdsServer(BaseModel):
         path = "server/info"
         response = self.api_request(path)
         if response.status_code == 200:
-            return response.json()
+            return self._response_json_dict(response)
         else:
             raise MtnaRdsError(f"Could not get server info: {response.status_code}")
 
@@ -231,7 +239,7 @@ class MtnaRdsServer(BaseModel):
         }
         result = self.api_request(url, method="GET", params=params)
         if result.status_code == 200:
-            data = result.json()
+            data = self._response_json_dict(result)
             # patch
             del data["info"]["_postman_id"]  # remove to prevent an invalidUidError
             return data
@@ -275,7 +283,7 @@ class MtnaRdsServer(BaseModel):
             files = {"file": f}
             response = requests.post(url, files=files, headers={"X-API-KEY": self.api_key}, verify=self.ssl_verify)
             if response.status_code == 200:
-                return response.json()
+                return self._response_json_dict(response)
             else:
                 raise MtnaRdsError(f"Could not upload file: {response.status_code}")
 

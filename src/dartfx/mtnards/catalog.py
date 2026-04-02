@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 
 from pydantic import Field, PrivateAttr, model_validator
 
@@ -22,7 +22,7 @@ class MtnaRdsCatalog(MtnaRdsResource):
     _server: MtnaRdsServer = PrivateAttr(default=None)  # type: ignore[assignment]
 
     @model_validator(mode="after")
-    def attach_catalog_to_products(self):
+    def attach_catalog_to_products(self) -> Self:
         # attach the catalog to the data products
         if self.data_products:
             for product in self.data_products:

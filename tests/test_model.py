@@ -1,10 +1,17 @@
 import json
 import logging
 import sys
+from collections.abc import Callable
+from typing import Any, TypeVar, cast
 
 import pytest
 
 from dartfx.mtnards import MtnaRdsCatalog, MtnaRdsServer, MtnaRdsVariable
+
+TestFunc = TypeVar("TestFunc", bound=Callable[..., Any])
+skip_external = cast(Callable[[TestFunc], TestFunc], pytest.mark.skip(reason="requires external server"))
+depends_server_info = cast(Callable[[TestFunc], TestFunc], pytest.mark.dependency(name="test_server_info"))
+depends_hvdnet_catalogs = cast(Callable[[TestFunc], TestFunc], pytest.mark.dependency(name="test_hvdnet_catalogs"))
 
 # Set up logging
 logging.basicConfig(  # noqa: F821
@@ -17,7 +24,7 @@ sys.stderr.flush()
 #
 # SERVER
 #
-def test_hvdnet_server(hvdnet_server):
+def test_hvdnet_server(hvdnet_server: MtnaRdsServer) -> None:
     assert hvdnet_server
     assert hvdnet_server.base_path == "rds"
     assert hvdnet_server.api_path == "api"
@@ -25,8 +32,8 @@ def test_hvdnet_server(hvdnet_server):
     print(hvdnet_server)
 
 
-@pytest.mark.skip(reason="requires external server")
-def test_hvdnet_server_info(hvdnet_server):
+@skip_external
+def test_hvdnet_server_info(hvdnet_server: MtnaRdsServer) -> None:
     assert hvdnet_server.info
     print(hvdnet_server.info)
     assert hvdnet_server.info.name
@@ -37,20 +44,21 @@ def test_hvdnet_server_info(hvdnet_server):
 #
 # CATALOGS
 #
-@pytest.mark.skip(reason="requires external server")
-@pytest.mark.dependency(name="test_server_info")
-def test_hvdnet_catalogs(hvdnet_server):
+@skip_external
+@depends_server_info
+def test_hvdnet_catalogs(hvdnet_server: MtnaRdsServer) -> None:
     assert hvdnet_server.catalogs
     assert len(hvdnet_server.catalogs) > 1
     print(hvdnet_server.catalogs.keys())
     print(hvdnet_server.catalogs["us-anes"]._server)
 
 
-def test_dummy_anes_catalog():
+def test_dummy_anes_catalog() -> None:
     dummy_server = MtnaRdsServer(host="https://example.org")
     data = US_ANES_CATALOG
     catalog = MtnaRdsCatalog(_server=dummy_server, **data)
     assert catalog
+    assert catalog.data_products is not None
     assert len(catalog.data_products) == 1
     print(catalog)
 
@@ -58,11 +66,12 @@ def test_dummy_anes_catalog():
 #
 # CATALOG
 #
-@pytest.mark.skip(reason="requires external server")
-@pytest.mark.dependency(name="test_hvdnet_catalogs")
-def test_hvdnet_anes_catalog(hvdnet_server):
+@skip_external
+@depends_hvdnet_catalogs
+def test_hvdnet_anes_catalog(hvdnet_server: MtnaRdsServer) -> None:
     catalog = hvdnet_server.get_catalog_by_id("us-anes")
     assert catalog
+    assert catalog.data_products is not None
     assert len(catalog.data_products) == 1
     print(catalog)
 
@@ -72,9 +81,10 @@ def test_hvdnet_anes_catalog(hvdnet_server):
 #
 
 
-@pytest.mark.skip(reason="requires external server")
-def test_hvdnet_anes1948_metadata(hvdnet_server):
+@skip_external
+def test_hvdnet_anes1948_metadata(hvdnet_server: MtnaRdsServer) -> None:
     catalog = hvdnet_server.get_catalog_by_id("us-anes")
+    assert catalog
     data_product = catalog.get_data_product_by_id("anes1948")
     assert data_product
     data_product.load_metadata()
@@ -91,15 +101,16 @@ def test_hvdnet_anes1948_metadata(hvdnet_server):
 #
 
 
-def test_dummy_variable():
+def test_dummy_variable() -> None:
     variable = MtnaRdsVariable(**US_ANES_V4800003)
     assert variable
     print(variable)
 
 
-@pytest.mark.skip(reason="requires external server")
-def test_hvdnet_anes1948_variables(hvdnet_server):
+@skip_external
+def test_hvdnet_anes1948_variables(hvdnet_server: MtnaRdsServer) -> None:
     catalog = hvdnet_server.get_catalog_by_id("us-anes")
+    assert catalog
     product = catalog.get_data_product_by_id("anes1948")
     assert product
     assert product.variables
@@ -107,10 +118,12 @@ def test_hvdnet_anes1948_variables(hvdnet_server):
     print(len(product.variables))
 
 
-@pytest.mark.skip(reason="requires external server")
-def test_hvdnet_anes1948_v480003(hvdnet_server):
+@skip_external
+def test_hvdnet_anes1948_v480003(hvdnet_server: MtnaRdsServer) -> None:
     catalog = hvdnet_server.get_catalog_by_id("us-anes")
+    assert catalog
     product = catalog.get_data_product_by_id("anes1948")
+    assert product
     variable = product.get_variable_by_id("V480003")
     assert variable
     print(type(variable))
@@ -125,9 +138,10 @@ def test_hvdnet_anes1948_v480003(hvdnet_server):
 #
 # CLASSIFICATIONS
 #
-@pytest.mark.skip(reason="requires external server")
-def test_hvdnet_anes1948_classifications(hvdnet_server):
+@skip_external
+def test_hvdnet_anes1948_classifications(hvdnet_server: MtnaRdsServer) -> None:
     catalog = hvdnet_server.get_catalog_by_id("us-anes")
+    assert catalog
     product = catalog.get_data_product_by_id("anes1948")
     assert product
     assert product.classifications
@@ -135,10 +149,12 @@ def test_hvdnet_anes1948_classifications(hvdnet_server):
     print(len(product.classifications))
 
 
-@pytest.mark.skip(reason="requires external server")
-def test_hvdnet_anes1948_classification_V480003(hvdnet_server):
+@skip_external
+def test_hvdnet_anes1948_classification_V480003(hvdnet_server: MtnaRdsServer) -> None:
     catalog = hvdnet_server.get_catalog_by_id("us-anes")
+    assert catalog
     product = catalog.get_data_product_by_id("anes1948")
+    assert product
     classification = product.get_classification_by_id("V480003")
     assert classification
     print(type(classification))
