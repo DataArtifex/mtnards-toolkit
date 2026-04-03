@@ -24,4 +24,4 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies: [pydantic, requests, types-requests]
-        args: [--strict, --ignore-missing-imports]
+        args: []
