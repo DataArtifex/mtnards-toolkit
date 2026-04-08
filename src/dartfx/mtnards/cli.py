@@ -675,8 +675,9 @@ def main(
     ] = None,
     base_path: Annotated[str, typer.Option("--base-path", help="RDS base path")] = "rds",
     api_path: Annotated[str, typer.Option("--api-path", help="RDS API path")] = "api",
-    catalog: Annotated[str | None, typer.Option("--catalog", "-c", help="Initial catalog context")] = None,
-    product: Annotated[str | None, typer.Option("--product", "-p", help="Initial product context")] = None,
+    catalog: Annotated[str | None, typer.Option("--catalog", "-c", help="Initial catalog context", hidden=True)] = None,
+    product: Annotated[str | None, typer.Option("--product", "-p", help="Initial product context", hidden=True)] = None,
+    path: Annotated[str | None, typer.Option("--path", "-P", help="Initial path context (e.g. cat/prod)")] = None,
 ):
     """MTNA RDS CLI toolkit."""
     # Store settings in context to be used by subcommands
@@ -685,8 +686,7 @@ def main(
         "api_key": api_key,
         "base_path": base_path,
         "api_path": api_path,
-        "catalog": catalog,
-        "product": product,
+        "path": path or (f"{catalog}.{product}" if catalog and product else catalog),
     }
 
     if ctx.invoked_subcommand is None:
@@ -717,16 +717,14 @@ def _run_shell_impl(ctx: typer.Context):
     """Internal implementation of the interactive shell."""
     host = ctx.obj.get("host")
     api_key = ctx.obj.get("api_key")
-    initial_cat = ctx.obj.get("catalog")
-    initial_prod = ctx.obj.get("product")
+    initial_path = ctx.obj.get("path")
 
     shell_obj = RdsShell(host=host, api_key=api_key)
 
     # Resolve initial context if requested
-    if initial_cat:
+    if initial_path:
         try:
-            path = f"{initial_cat}.{initial_prod}" if initial_prod else initial_cat
-            shell_obj.do_cd(path)
+            shell_obj.do_cd(initial_path)
         except Exception:
             # Fall back to root if invalid, error already printed by do_cd
             pass
@@ -802,14 +800,11 @@ def _run_shell_impl(ctx: typer.Context):
 @app.command()
 def shell(
     ctx: typer.Context,
-    catalog: Annotated[str | None, typer.Option("--catalog", "-c", help="Initial catalog context")] = None,
-    product: Annotated[str | None, typer.Option("--product", "-p", help="Initial product context")] = None,
+    path: Annotated[str | None, typer.Option("--path", "-P", help="Initial path context (e.g. cat/prod)")] = None,
 ):
     """Enter an interactive shell mode."""
-    if catalog:
-        ctx.obj["catalog"] = catalog
-    if product:
-        ctx.obj["product"] = product
+    if path:
+        ctx.obj["path"] = path
     _run_shell_impl(ctx)
 
 
@@ -843,10 +838,6 @@ class PromptHTMLWrapper:
         import re
 
         return len(re.sub(r"\[/?.*?\]", "", self.text))
-
-
-if __name__ == "__main__":
-    app()
 
 
 if __name__ == "__main__":
