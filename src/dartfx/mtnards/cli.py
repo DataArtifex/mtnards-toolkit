@@ -585,6 +585,15 @@ class RdsShell:
         """Delete a resource (requires confirmation)."""
         try:
             res_info = self.resolve_path(path)
+
+            # Constraint: Deleting a product is only allowed from catalog context (not from within the product)
+            if res_info.type == "product" and self.product_id:
+                console.print(
+                    "[yellow]Safety check: Cannot delete a product while you are inside a product context.[/yellow]\n"
+                    "Navigate up to the catalog level first: [bold]cd ..[/bold]"
+                )
+                return
+
             if Confirm.ask(f"[red]CRITICAL:[/red] Delete {res_info.type} '{path}'?"):
                 console.print(f"[yellow]Stub: Deleting {path}[/yellow]")
         except Exception as e:
