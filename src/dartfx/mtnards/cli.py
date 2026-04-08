@@ -167,7 +167,7 @@ class RdsShell:
 
     def get_catalog(self, catalog_id: str) -> "MtnaRdsCatalog":
         if catalog_id not in self._catalog_cache:
-            cat = self.server.catalogs.get(catalog_id)
+            cat = self.server.get_catalog_by_id(catalog_id)
             if not cat:
                 raise ValueError(f"Catalog '{catalog_id}' not found")
             self._catalog_cache[catalog_id] = cat
