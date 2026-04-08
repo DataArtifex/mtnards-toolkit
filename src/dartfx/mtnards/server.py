@@ -153,6 +153,7 @@ class MtnaRdsServer(BaseModel):
             {
                 "method": method,
                 "path": path,
+                "url": url,
                 "status": response.status_code,
                 "duration": duration,
                 "timestamp": start_time,

@@ -575,14 +575,17 @@ class RdsShell:
                 self.execute_line(line)
         console.print("[bold green]Script finished.[/bold green]")
 
-    def do_api(self):
+    def do_api(self, limit: int = 100):
         """Display API call history."""
         history = self.server.api_history
         if not history:
             console.print("[yellow]No API calls recorded yet.[/yellow]")
             return
 
-        table = Table(title="API Call History")
+        # Show most recent first
+        display_history = list(reversed(history))[:limit]
+
+        table = Table(title=f"API Call History (Most Recent {len(display_history)})")
         table.add_column("#", justify="right", style="dim")
         table.add_column("Time", style="dim")
         table.add_column("Method", style="bold cyan")
@@ -590,18 +593,24 @@ class RdsShell:
         table.add_column("Status", justify="right")
         table.add_column("Duration (s)", justify="right", style="yellow")
 
-        for i, entry in enumerate(history, 1):
+        for i, entry in enumerate(display_history, 1):
+            idx = len(history) - i + 1
             status = str(entry["status"])
             status_color = "green" if entry["status"] < 400 else "red"
 
             # Format timestamp
             t = time.strftime("%H:%M:%S", time.localtime(entry["timestamp"]))
 
+            # Make path clickable if url is present
+            path_display = entry["path"]
+            if "url" in entry:
+                path_display = f"[link={entry['url']}]{entry['path']}[/link]"
+
             table.add_row(
-                str(i),
+                str(idx),
                 t,
                 entry["method"],
-                entry["path"],
+                path_display,
                 f"[{status_color}]{status}[/{status_color}]",
                 f"{entry['duration']:.3f}",
             )
@@ -682,7 +691,8 @@ class RdsShell:
                     return True
                 self.do_stats(cmd_args[0] if cmd_args else None)
             elif cmd == "api":
-                self.do_api()
+                limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
+                self.do_api(limit=limit)
             elif cmd == "search":
                 if not cmd_args:
                     console.print("[yellow]Usage: search <pattern>[/yellow]")
