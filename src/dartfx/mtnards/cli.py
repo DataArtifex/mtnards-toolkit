@@ -173,7 +173,9 @@ class RdsShell:
             self._catalog_cache[catalog_id] = cat
         return self._catalog_cache[catalog_id]
 
-    def do_ls(self, path: str | None = None, limit: int = 100, offset: int = 0, count_only: bool = False):
+    def do_ls(
+        self, path: str | None = None, limit: int = 100, offset: int = 0, count_only: bool = False, codes_limit: int = 0
+    ):
         """Context-aware listing with optional path and pagination."""
         try:
             res_info = self.resolve_path(path or "")
@@ -209,13 +211,28 @@ class RdsShell:
                     table.add_column("Name", style="green")
                     if not is_class:
                         table.add_column("Label")
+                        table.add_column("Classification")
 
                     paged = items[offset : offset + limit]
                     for item in paged:
                         if is_class:
                             table.add_row(item.id, item.name or "")
                         else:
-                            table.add_row(item.id, item.name or "", item.label or "")
+                            # Variable
+                            cls_info = f"{item.classification_id}"
+                            if codes_limit > 0 and item.classification_id:
+                                try:
+                                    cls = item.classification
+                                    if cls:
+                                        codes = cls.codes[:codes_limit]
+                                        code_strs = [f"{c.code_value}:{c.name}" for c in codes]
+                                        if len(cls.codes) > codes_limit:
+                                            code_strs.append("...")
+                                        cls_info += f" [{', '.join(code_strs)}]"
+                                except Exception:
+                                    cls_info += " [error loading codes]"
+
+                            table.add_row(item.id, item.name or "", item.label or "", cls_info)
 
                     if total > offset + limit:
                         table.add_row("...", f"... and {total - (offset + limit)} more")
@@ -275,16 +292,29 @@ class RdsShell:
                 console.print(table)
 
             elif res_info.type == "classification":
-                # List codes for classification?
-                if hasattr(obj, "codes") and obj.codes:
-                    table = Table(title=f"Codes for {res_info.classification_id}")
+                # List codes for classification
+                from .classification import MtnaRdsClassification, MtnaRdsClassificationStub
+
+                if isinstance(obj, (MtnaRdsClassification, MtnaRdsClassificationStub)):
+                    total = obj.code_count or len(obj.codes)
+                    if count_only:
+                        console.print(f"Total codes: {total}")
+                        return
+
+                    show_to = min(total, offset + limit)
+                    table = Table(title=f"Codes for {res_info.classification_id} ({offset + 1}-{show_to}/{total})")
                     table.add_column("Value", style="cyan")
                     table.add_column("Label", style="green")
-                    for code in obj.codes:
+
+                    codes = obj.codes[offset : offset + limit]
+                    for code in codes:
                         table.add_row(str(code.code_value), code.name or "")
+
+                    if total > offset + limit:
+                        table.add_row("...", f"... and {total - (offset + limit)} more")
                     console.print(table)
                 else:
-                    console.print("[yellow]No codes resolved for this classification.[/yellow]")
+                    console.print("[yellow]Resource is not a classification.[/yellow]")
 
         except Exception as e:
             console.print(f"[red]Error:[/red] {e}")
@@ -324,7 +354,7 @@ class RdsShell:
         except ValueError as e:
             console.print(f"[red]Error:[/red] {e}")
 
-    def do_show(self, path: str | None = None):
+    def do_show(self, path: str | None = None, limit: int = 100, offset: int = 0, codes_limit: int = 0):
         """Show resource details or specific property."""
         try:
             res_info = self.resolve_path(path or "")
@@ -377,6 +407,72 @@ class RdsShell:
                 if getattr(obj, "description", None):
                     grid.add_row("Description: ", obj.description)
                 console.print(Panel(grid, title=f"Catalog Details: {obj.id}", expand=False))
+            elif res_info.type == "variable":
+                # Specialized variable summary
+                from .variable import MtnaRdsVariable, MtnaRdsVariableStub
+
+                if isinstance(obj, (MtnaRdsVariable, MtnaRdsVariableStub)):
+                    grid = Table.grid(padding=(0, 1))
+                    grid.add_column(style="bold cyan", no_wrap=True)
+                    grid.add_column()
+                    grid.add_row("ID: ", obj.id)
+                    grid.add_row("Name: ", obj.name or "")
+                    grid.add_row("Label: ", obj.label or "")
+                    grid.add_row("Type: ", obj.data_type or "N/A")
+                    grid.add_row("Classification: ", obj.classification_id or "None")
+
+                    if obj.classification_id:
+                        try:
+                            cls = obj.classification
+                            if cls:
+                                codes_total = cls.code_count or len(cls.codes)
+                                info = f"{cls.id} ({codes_total} codes)"
+                                if codes_limit > 0:
+                                    codes = cls.codes[:codes_limit]
+                                    code_strs = [f"{c.code_value}:{c.name}" for c in codes]
+                                    if codes_total > codes_limit:
+                                        code_strs.append("...")
+                                    info += f"\n  Codes: {', '.join(code_strs)}"
+                                else:
+                                    info += "\n  (Use --codes <n> to see classification codes)"
+                                grid.add_row("Cls Details: ", info)
+                        except Exception:
+                            grid.add_row("Cls Details: ", "[error loading classification]")
+
+                    console.print(Panel(grid, title=f"Variable Details: {obj.id}", expand=False))
+                else:
+                    console.print("[yellow]Resource is not a variable.[/yellow]")
+            elif res_info.type == "classification":
+                # Specialized classification summary
+                from .classification import MtnaRdsClassification, MtnaRdsClassificationStub
+
+                if isinstance(obj, (MtnaRdsClassification, MtnaRdsClassificationStub)):
+                    grid = Table.grid(padding=(0, 1))
+                    grid.add_column(style="bold yellow", no_wrap=True)
+                    grid.add_column()
+                    grid.add_row("ID: ", obj.id)
+                    grid.add_row("Name: ", obj.name or "")
+                    total = obj.code_count or len(obj.codes)
+                    grid.add_row("Codes: ", str(total))
+
+                    console.print(Panel(grid, title=f"Classification Details: {obj.id}", expand=False))
+
+                    # Show paged codes
+                    if total > 0:
+                        show_to = min(total, offset + limit)
+                        table = Table(title=f"Codes ({offset + 1}-{show_to}/{total})")
+                        table.add_column("Value", style="cyan")
+                        table.add_column("Label", style="green")
+
+                        codes = obj.codes[offset : offset + limit]
+                        for code in codes:
+                            table.add_row(str(code.code_value), code.name or "")
+
+                        if total > offset + limit:
+                            table.add_row("...", f"... and {total - (offset + limit)} more")
+                        console.print(table)
+                else:
+                    console.print("[yellow]Resource is not a classification.[/yellow]")
             else:
                 # Generic fallback with JSON support
                 content: Any = str(obj)
@@ -506,7 +602,11 @@ class RdsShell:
             elif cmd == "cd":
                 self.do_cd(cmd_args[0] if cmd_args else None)
             elif cmd in ["show", "get"]:
-                self.do_show(cmd_args[0] if cmd_args else None)
+                path_arg = next((a for a in cmd_args if not a.startswith("-")), None)
+                limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
+                offset = int(self._extract_param(cmd_args, "--offset", "-o") or 0)
+                codes_limit = int(self._extract_param(cmd_args, "--codes") or 0)
+                self.do_show(path=path_arg, limit=limit, offset=offset, codes_limit=codes_limit)
             elif cmd == "set":
                 if not self.product_id:
                     console.print("[yellow]Command 'set' is only available in product context.[/yellow]")
@@ -523,18 +623,23 @@ class RdsShell:
                     console.print("[yellow]Usage: run <script_path>[/yellow]")
                     return True
                 self.do_run(cmd_args[0])
-            elif cmd == "variables":
+            elif cmd in ["variables", "vars"]:
                 if not self.product_id:
                     console.print("[yellow]Command 'variables' is only available in product context.[/yellow]")
                     return True
                 limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
-                self.do_ls(path="", limit=limit)
-            elif cmd == "classifications":
+                offset = int(self._extract_param(cmd_args, "--offset", "-o") or 0)
+                codes_limit = int(self._extract_param(cmd_args, "--codes") or 0)
+                self.do_ls(path="", limit=limit, offset=offset, codes_limit=codes_limit)
+            elif cmd in ["classifications", "cls"]:
                 if not self.product_id:
-                    console.print("[yellow]Command 'classifications' is only available in product context.[/yellow]")
+                    console.print(
+                        "[yellow]Command 'cls' (classifications) is only available in product context.[/yellow]"
+                    )
                     return True
                 limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
-                self.do_ls(path="$", limit=limit)
+                offset = int(self._extract_param(cmd_args, "--offset", "-o") or 0)
+                self.do_ls(path="$", limit=limit, offset=offset)
             elif cmd == "stats":
                 if not self.product_id:
                     console.print("[yellow]Command 'stats' is only available in product context.[/yellow]")
@@ -743,7 +848,9 @@ def _run_shell_impl(ctx: typer.Context):
             "get",
             "set",
             "variables",
+            "vars",
             "classifications",
+            "cls",
             "download",
             "help",
             "exit",
