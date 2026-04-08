@@ -446,27 +446,33 @@ class RdsShell:
                     grid.add_row("Name: ", obj.name or "")
                     grid.add_row("Label: ", obj.label or "")
                     grid.add_row("Type: ", obj.data_type or "N/A")
-                    grid.add_row("Classification: ", obj.classification_id or "None")
 
                     if obj.classification_id:
                         try:
                             cls = obj.classification
                             if cls:
                                 codes_total = cls.code_count or len(cls.codes)
-                                info = f"{cls.id} ({codes_total} codes)"
-                                if codes_limit > 0:
-                                    codes = cls.codes[:codes_limit]
-                                    code_strs = [f"{c.code_value}:{c.name}" for c in codes]
-                                    if codes_total > codes_limit:
-                                        code_strs.append("...")
-                                    info += f"\n  Codes: {', '.join(code_strs)}"
-                                else:
-                                    info += "\n  (Use --codes <n> to see classification codes)"
-                                grid.add_row("Cls Details: ", info)
+                                grid.add_row("Classification: ", f"{cls.id} ({codes_total} codes)")
                         except Exception:
-                            grid.add_row("Cls Details: ", "[error loading classification]")
+                            grid.add_row("Classification: ", f"{obj.classification_id} [error loading]")
 
                     console.print(Panel(grid, title=f"Variable Details: {obj.id}", expand=False))
+
+                    # Show codes table if requested
+                    if obj.classification_id and codes_limit > 0:
+                        try:
+                            cls = obj.classification
+                            if cls:
+                                table = Table(title=f"Classification Codes: {cls.id}")
+                                table.add_column("Value", style="cyan")
+                                table.add_column("Label", style="green")
+                                for c in cls.codes[:codes_limit]:
+                                    table.add_row(str(c.code_value), c.name or "")
+                                if len(cls.codes) > codes_limit:
+                                    table.add_row("...", f"... and {len(cls.codes) - codes_limit} more")
+                                console.print(table)
+                        except Exception:
+                            console.print("[red]Error loading codes table.[/red]")
                 else:
                     console.print("[yellow]Resource is not a variable.[/yellow]")
             elif res_info.type == "classification":
@@ -668,15 +674,28 @@ class RdsShell:
                 limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
                 offset = int(self._extract_param(cmd_args, "--offset", "-o") or 0)
                 count = "--count" in cmd_args or "-n" in cmd_args
+
+                codes_limit_raw = self._extract_param(cmd_args, "--codes", "-c")
+                if codes_limit_raw is None and self._has_param(cmd_args, "--codes", "-c"):
+                    codes_limit = 10
+                else:
+                    codes_limit = int(codes_limit_raw or 0)
+
                 path_arg = next((a for a in cmd_args if not a.startswith("-")), None)
-                self.do_ls(path=path_arg, limit=limit, offset=offset, count_only=count)
+                self.do_ls(path=path_arg, limit=limit, offset=offset, count_only=count, codes_limit=codes_limit)
             elif cmd == "cd":
                 self.do_cd(cmd_args[0] if cmd_args else None)
             elif cmd in ["show", "get"]:
                 path_arg = next((a for a in cmd_args if not a.startswith("-")), None)
                 limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
                 offset = int(self._extract_param(cmd_args, "--offset", "-o") or 0)
-                codes_limit = int(self._extract_param(cmd_args, "--codes") or 0)
+
+                codes_limit_raw = self._extract_param(cmd_args, "--codes", "-c")
+                if codes_limit_raw is None and self._has_param(cmd_args, "--codes", "-c"):
+                    codes_limit = 10
+                else:
+                    codes_limit = int(codes_limit_raw or 0)
+
                 self.do_show(path=path_arg, limit=limit, offset=offset, codes_limit=codes_limit)
             elif cmd == "set":
                 if not self.product_id:
@@ -700,7 +719,13 @@ class RdsShell:
                     return True
                 limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
                 offset = int(self._extract_param(cmd_args, "--offset", "-o") or 0)
-                codes_limit = int(self._extract_param(cmd_args, "--codes") or 0)
+
+                codes_limit_raw = self._extract_param(cmd_args, "--codes", "-c")
+                if codes_limit_raw is None and self._has_param(cmd_args, "--codes", "-c"):
+                    codes_limit = 10
+                else:
+                    codes_limit = int(codes_limit_raw or 0)
+
                 self.do_ls(path="", limit=limit, offset=offset, codes_limit=codes_limit)
             elif cmd in ["classifications", "cls"]:
                 if not self.product_id:
@@ -771,10 +796,19 @@ class RdsShell:
             for idx, arg in enumerate(args):
                 if arg == name or (short and arg == short):
                     if idx + 1 < len(args):
-                        return args[idx + 1]
+                        # Make sure next arg isn't another flag
+                        if not args[idx + 1].startswith("-"):
+                            return args[idx + 1]
         except (ValueError, IndexError):
             pass
         return None
+
+    def _has_param(self, args, name, short=None):
+        """Helper to check if a flag exists in command args."""
+        for arg in args:
+            if arg == name or (short and arg == short):
+                return True
+        return False
 
     def do_help(self):
         """Show context-sensitive commands."""
