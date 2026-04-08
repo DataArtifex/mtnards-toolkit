@@ -98,8 +98,8 @@ class RdsShell:
                 return res
             return ResourceInfo(obj=self.server)
 
-        # 3. Handle absolute path starting with .
-        is_absolute = path.startswith(".")
+        # 3. Handle absolute path starting with . or /
+        is_absolute = path.startswith(".") or path.startswith("/")
         if is_absolute:
             path = path[1:]
 
