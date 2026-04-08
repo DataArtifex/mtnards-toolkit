@@ -28,6 +28,7 @@ class MtnaRdsServer(BaseModel):
     debug: bool = Field(default=False)
     _catalogs: dict[str, MtnaRdsCatalog] | None = PrivateAttr(default=None)
     _info: MtnaRdsServerInfo | None = PrivateAttr(default=None)
+    _api_history: list[dict[str, Any]] = PrivateAttr(default_factory=list)
 
     # This validator ensures that the host URL starts with "https://" before model initialization.
     @model_validator(mode="before")
@@ -144,7 +145,19 @@ class MtnaRdsServer(BaseModel):
             if body_json:
                 c.print(f"[dim]  Body: {body_json}[/dim]")
 
+        start_time = time.time()
         response = requests.request(method, url, headers=headers, params=params, json=body_json, verify=self.ssl_verify)
+        duration = time.time() - start_time
+
+        self._api_history.append(
+            {
+                "method": method,
+                "path": path,
+                "status": response.status_code,
+                "duration": duration,
+                "timestamp": start_time,
+            }
+        )
 
         if self.debug:
             status_color = "green" if response.status_code < 400 else "red"
@@ -348,3 +361,8 @@ class MtnaRdsServer(BaseModel):
         if process_details is None:
             raise MtnaRdsError(f"Timed out waiting for process {pid} after {timeout}s")
         return process_details
+
+    @property
+    def api_history(self) -> list[dict[str, Any]]:
+        """Returns the history of API calls made by this server instance."""
+        return self._api_history

@@ -2,6 +2,7 @@
 
 import os
 import shlex
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any, cast
@@ -574,6 +575,41 @@ class RdsShell:
                 self.execute_line(line)
         console.print("[bold green]Script finished.[/bold green]")
 
+    def do_api(self):
+        """Display API call history."""
+        history = self.server.api_history
+        if not history:
+            console.print("[yellow]No API calls recorded yet.[/yellow]")
+            return
+
+        table = Table(title="API Call History")
+        table.add_column("#", justify="right", style="dim")
+        table.add_column("Time", style="dim")
+        table.add_column("Method", style="bold cyan")
+        table.add_column("Path", style="green")
+        table.add_column("Status", justify="right")
+        table.add_column("Duration (s)", justify="right", style="yellow")
+
+        for i, entry in enumerate(history, 1):
+            status = str(entry["status"])
+            status_color = "green" if entry["status"] < 400 else "red"
+
+            # Format timestamp
+            t = time.strftime("%H:%M:%S", time.localtime(entry["timestamp"]))
+
+            table.add_row(
+                str(i),
+                t,
+                entry["method"],
+                entry["path"],
+                f"[{status_color}]{status}[/{status_color}]",
+                f"{entry['duration']:.3f}",
+            )
+
+        console.print(table)
+        avg_duration = sum(e["duration"] for e in history) / len(history)
+        console.print(f"[dim]Total calls: {len(history)} | Average duration: {avg_duration:.3f}s[/dim]")
+
     def execute_line(self, line: str) -> bool:
         """Execute a single command line. Returns False if shell should exit."""
         line = line.strip()
@@ -645,6 +681,8 @@ class RdsShell:
                     console.print("[yellow]Command 'stats' is only available in product context.[/yellow]")
                     return True
                 self.do_stats(cmd_args[0] if cmd_args else None)
+            elif cmd == "api":
+                self.do_api()
             elif cmd == "search":
                 if not cmd_args:
                     console.print("[yellow]Usage: search <pattern>[/yellow]")
@@ -713,6 +751,7 @@ class RdsShell:
         common.add_row("show", "show [path][@property]")
         common.add_row("whoami", "Show connection and API key info")
         common.add_row("run", "run <script_path>")
+        common.add_row("api", "Show API call history and timing")
         common.add_row("debug", "Toggle debug mode (on/off)")
         common.add_row("exit", "Exit session")
 
@@ -857,6 +896,7 @@ def _run_shell_impl(ctx: typer.Context):
             "quit",
             "clear",
             "context",
+            "api",
             "history",
             "stats",
             "search",
