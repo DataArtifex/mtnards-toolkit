@@ -212,7 +212,13 @@ class RdsShell:
                     table.add_column("Name", style="green")
                     if not is_class:
                         table.add_column("Label")
+                        table.add_column("Type", style="dim")
+                        table.add_column("Dim", justify="center")
+                        table.add_column("Meas", justify="center")
+                        table.add_column("Req", justify="center")
+                        table.add_column("Wgt", justify="center")
                         table.add_column("Classification")
+                        table.add_column("# Codes", justify="right")
 
                     paged = items[offset : offset + limit]
                     for item in paged:
@@ -220,20 +226,40 @@ class RdsShell:
                             table.add_row(item.id, item.name or "")
                         else:
                             # Variable
+                            v_type = item.data_type or ""
+                            dim = "✓" if item.is_dimension else ""
+                            meas = "✓" if item.is_measure else ""
+                            req = "✓" if item.is_required else ""
+                            wgt = "✓" if item.is_weight else ""
+
                             cls_info = f"{item.classification_id}"
-                            if codes_limit > 0 and item.classification_id:
+                            code_count = ""
+                            if item.classification_id:
                                 try:
                                     cls = item.classification
                                     if cls:
-                                        codes = cls.codes[:codes_limit]
-                                        code_strs = [f"{c.code_value}:{c.name}" for c in codes]
-                                        if len(cls.codes) > codes_limit:
-                                            code_strs.append("...")
-                                        cls_info += f" [{', '.join(code_strs)}]"
+                                        code_count = str(cls.code_count or 0)
+                                        if codes_limit > 0:
+                                            codes = cls.codes[:codes_limit]
+                                            code_strs = [f"{c.code_value}:{c.name}" for c in codes]
+                                            if len(cls.codes) > codes_limit:
+                                                code_strs.append("...")
+                                            cls_info += f" [{', '.join(code_strs)}]"
                                 except Exception:
                                     cls_info += " [error loading codes]"
 
-                            table.add_row(item.id, item.name or "", item.label or "", cls_info)
+                            table.add_row(
+                                item.id,
+                                item.name or "",
+                                item.label or "",
+                                v_type,
+                                dim,
+                                meas,
+                                req,
+                                wgt,
+                                cls_info,
+                                code_count,
+                            )
 
                     if total > offset + limit:
                         table.add_row("...", f"... and {total - (offset + limit)} more")
@@ -945,6 +971,8 @@ def _run_shell_impl(ctx: typer.Context):
                 break
 
         except KeyboardInterrupt:
+            if Confirm.ask("\nExit RDS shell?", default=False):
+                break
             continue
         except EOFError:
             break
