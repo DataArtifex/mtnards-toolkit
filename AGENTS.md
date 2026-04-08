@@ -4,6 +4,15 @@ Welcome, fellow AI. This xfile provides context and instructions for working on 
 
 The purpose of this package is to facilitate interaction with [Metadata Technology North America](https://www.mtna.us) a [Rich Data Services](https://www.richdataservices.com) server.
 
+## Agent-CLI Overview
+
+For complex discovery, navigation, and management tasks, a **comprehensive shell-first CLI** is provided.
+- **Specifications**: See [AGENT_CLI.md](file:///Users/pascal/Library/CloudStorage/Dropbox/git-dartfx/mtnards-toolkit/AGENT_CLI.md) for detailed agent-optimized command documentation.
+- **Workflow**: Agents should prioritize the CLI for hierarchical exploration, using dot-notation and shortcuts.
+
+> [!TIP]
+> When executing shell commands via a subagent, always prefer **absolute paths** (starting with `.`) to avoid context ambiguity across command invocations.
+
 ## Project Specifications
 
 ### Purpose & Scope

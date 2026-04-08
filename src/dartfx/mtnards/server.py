@@ -25,6 +25,7 @@ class MtnaRdsServer(BaseModel):
     api_path: str | None = Field(default="api")
     api_key: str | None = None
     ssl_verify: bool = Field(default=True)
+    debug: bool = Field(default=False)
     _catalogs: dict[str, MtnaRdsCatalog] | None = PrivateAttr(default=None)
     _info: MtnaRdsServerInfo | None = PrivateAttr(default=None)
 
@@ -132,7 +133,27 @@ class MtnaRdsServer(BaseModel):
         if "X-API-KEY" not in headers and self.api_key:
             headers["X-API-KEY"] = self.api_key
         url = f"{self.api_url}/{path}"
+
+        if self.debug:
+            from rich.console import Console
+
+            c = Console(stderr=True)
+            c.print(f"[dim]RDS API: [bold cyan]{method}[/bold cyan] {url}[/dim]")
+            if params:
+                c.print(f"[dim]  Params: {params}[/dim]")
+            if body_json:
+                c.print(f"[dim]  Body: {body_json}[/dim]")
+
         response = requests.request(method, url, headers=headers, params=params, json=body_json, verify=self.ssl_verify)
+
+        if self.debug:
+            status_color = "green" if response.status_code < 400 else "red"
+            from rich.console import Console
+
+            Console(stderr=True).print(
+                f"[dim]  Status: [bold {status_color}]{response.status_code}[/bold {status_color}][/dim]"
+            )
+
         return response
 
     def create_catalog(
@@ -182,8 +203,26 @@ class MtnaRdsServer(BaseModel):
                 return catalog
         return None
 
-    def get_catalog_by_id(self, id: str) -> MtnaRdsCatalog | None:
-        """Returns a catalog by its ID, or ``None`` if not found."""
+    def get_catalog_by_id(self, id: str, fetch: bool = False) -> MtnaRdsCatalog | None:
+        """Returns a catalog by its ID.
+
+        If ``fetch`` is True, it will fetch the catalog details from the server.
+        """
+        if fetch:
+            response = self.api_request(f"catalog/{id}")
+            if response.status_code == 200:
+                from .catalog import MtnaRdsCatalog
+
+                data = response.json()
+                catalog = MtnaRdsCatalog(**data)
+                catalog._server = self
+                if self._catalogs is None:
+                    self._catalogs = {}
+                self._catalogs[catalog.id] = catalog
+                return catalog
+            else:
+                raise MtnaRdsError(f"Could not get catalog {id}: {response.status_code}")
+
         return self.catalogs.get(id)
 
     def get_ddi_codebook(

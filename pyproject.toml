@@ -10,9 +10,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
 keywords = []
-authors = [
-  { name = "kulnor", email = "pascal.heus@gmail.com" },
-]
+authors = [{ name = "kulnor", email = "pascal.heus@gmail.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
@@ -30,7 +28,13 @@ dependencies = [
   "python-dotenv>=1.0.0",
   "requests>=2.32.0",
   "rdflib>=7.1.0",
+  "typer>=0.24.0",
+  "rich>=14.0.0",
+  "prompt_toolkit>=3.0.0",
 ]
+
+[project.scripts]
+dartfx-mtnards = "dartfx.mtnards.cli:app"
 
 [project.urls]
 Documentation = "https://github.com/DataArtifex/mtnards-toolkit#readme"
@@ -38,12 +42,8 @@ Issues = "https://github.com/DataArtifex/mtnards-toolkit/issues"
 Source = "https://github.com/DataArtifex/mtnards-toolkit"
 
 
-
 [tool.hatch.build.targets.sdist]
-exclude = [
-  "/.github",
-  "/docs",
-]
+exclude = ["/.github", "/docs"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/dartfx"]
@@ -64,7 +64,7 @@ dev = [
   "python-dotenv>=1.0.0",
   "ruff>=0.3.0",
   "pre-commit>=4.0.0",
-  "types-ujson>=5.0.0"
+  "types-ujson>=5.0.0",
 ]
 docs = [
   "sphinx>=9.0.0",
@@ -78,14 +78,8 @@ dependencies = ["dev"]
 [tool.hatch.envs.default.scripts]
 test = "pytest {args:tests}"
 test-cov = "coverage run -m pytest {args:tests}"
-cov-report = [
-  "- coverage combine",
-  "coverage report",
-]
-cov = [
-  "test-cov",
-  "cov-report",
-]
+cov-report = ["- coverage combine", "coverage report"]
+cov = ["test-cov", "cov-report"]
 
 [[tool.hatch.envs.all.matrix]]
 python = ["3.12", "3.13"]
@@ -108,20 +102,14 @@ allow-direct-references = true
 source_pkgs = ["mtnards", "tests"]
 branch = true
 parallel = true
-omit = [
-  "src/dartfx/mtnards/__about__.py",
-]
+omit = ["src/dartfx/mtnards/__about__.py"]
 
 [tool.coverage.paths]
 source = ["src/dartfx/mtnards", "*/mtnards-toolkit/src/dartfx/mtnards"]
 tests = ["tests", "*/dartfx/mtnards/tests"]
 
 [tool.coverage.report]
-exclude_lines = [
-  "no cov",
-  "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
-]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.pytest.ini_options]
 pythonpath = "src"
@@ -173,10 +161,5 @@ disable_error_code = ["prop-decorator"]
 
 
 [[tool.mypy.overrides]]
-module = [
-    "mlcroissant.*",
-    "dartfx.dcat.*",
-    "dartfx.rdf.*",
-    "markdownify.*",
-]
+module = ["mlcroissant.*", "dartfx.dcat.*", "dartfx.rdf.*", "markdownify.*"]
 ignore_missing_imports = true
