@@ -1,6 +1,6 @@
 # Agent-First CLI Specification
 
-The `mtnards` CLI is designed as a **shell-first, scriptable environment** optimized for both interactive use and automated agent interaction with MTNA RDS servers.
+The `dartfx-mtnards` CLI is designed as a **shell-first, scriptable environment** optimized for both interactive use and automated agent interaction with MTNA RDS servers.
 
 ## Core Capabilities for Agents
 
@@ -8,7 +8,7 @@ The `mtnards` CLI is designed as a **shell-first, scriptable environment** optim
 The CLI maintains a stateful context (Server > Catalog > Product) which reduces command length and complexity.
 - Navigation via `cd [path]` and `ls [path]`.
 - Path resolution supports dot-notation: `catalog.product.variable`.
-- Absolute paths start with a dot: `.external_catalog`.
+- Absolute paths start with a slash or dot: `/my_catalog` or `.my_catalog`.
 - Contextual defaults: If inside a product, `ls` shows variables.
 
 ### 2. High-Efficiency Resource Discovery
@@ -36,8 +36,9 @@ The CLI provides granular control over resource metadata:
 
 | Command | Recommended Agent Usage |
 | :--- | :--- |
-| `ls` | Resource discovery with `--limit` to avoid buffer overflows and `--count` for quick profiling. |
-| `show` | Fetch specific properties via `@` to maintain high token efficiency. |
+| `ls` | Resource discovery with `--limit`/`--offset` to handle large catalogs and `--count` for quick profiling. |
+| `show` | Fetch specific properties via `@` to maintain high token efficiency. Use `--codes` to peek at categorization. |
+| `api` | Audit API request latency and status for observability. |
 | `whoami` | Verify connection/context. |
 | `debug` | Toggle underlying API call visibility. |
 | `run` | Execute pre-generated logic batches. |
@@ -48,4 +49,4 @@ The CLI provides granular control over resource metadata:
 ---
 
 > [!IMPORTANT]
-> The CLI is the preferred interaction method for complex discovery tasks involving multiple levels of resource depth. When using the CLI via a subagent, always specify absolute paths (starting with `.`) to avoid context ambiguity.
+> The CLI is the preferred interaction method for complex discovery tasks involving multiple levels of resource depth. When using the CLI via a subagent, always specify absolute paths (starting with `/` or `.`) to avoid context ambiguity. Use the `api` command to monitor performance if timeouts or high-latency responses are detected.

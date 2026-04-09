@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/) and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] - 2026-04-08
+
+### Added
+- Hierarchical CLI shell navigation with `cd` support for absolute (`/`) and relative paths
+- Direct startup navigation via `--path` / `-P` options
+- `api` telemetry command displaying request history, status, and precise timing (ms)
+- Multi-column `variables` view with statistical roles (Dim, Meas, Req, Wgt) and code counts
+- Command aliases: `vars` (variables) and `cls` (classifications)
+- Dedicated classification code table for `show <variable>` for better readability
+- Standalone `--codes` / `-c` flag support (defaults to first 10 codes)
+- Interactive shell exit confirmation on `Ctrl+C`
+
+### Changed
+- Refactored `resolve_path` to support standard filesystem semantics (`/` prefix)
+- Optimized metadata display to lazy-load classification codes only when explicitly requested
+- Integrated `rich.json` and `rich.table` for premium colorized terminal output
+- Improved `show` command to handle hierarchical property resolution (e.g., `show cat.prod@label`)
+- Enhanced `variables` and `classifications` shortcuts to respect global pagination flags
+
+### Fixed
+- Multiple `mypy` type annotation errors in command dispatch and resource resolution
+- Safety guard preventing accidental deletion of the active product context
+
 ## [0.1.0]
 
 ### Added

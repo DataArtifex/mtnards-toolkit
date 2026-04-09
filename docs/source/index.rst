@@ -15,13 +15,13 @@ MTNA Rich Data Services Toolkit
 
 **A Python toolkit for programmatic interaction with MTNA Rich Data Services (RDS) servers.**
 
-This package enables data scientists, developers, and AI systems to discover, access, and analyze 
-datasets from `Metadata Technology North America (MTNA) <https://www.mtna.us>`_ 
-`Rich Data Services (RDS) <https://www.richdataservices.com>`_ servers with full support for 
+This package enables data scientists, developers, and AI systems to discover, access, and analyze
+datasets from `Metadata Technology North America (MTNA) <https://www.mtna.us>`_
+`Rich Data Services (RDS) <https://www.richdataservices.com>`_ servers with full support for
 metadata standards like Croissant and DCAT.
 
 .. warning::
-   This project is in its early development stages. Stability is not guaranteed, and documentation 
+   This project is in its early development stages. Stability is not guaranteed, and documentation
    is still being expanded. We welcome your feedback and contributions!
 
 Key Features
@@ -33,6 +33,7 @@ Key Features
 * **Data Access**: Query variables, inspect classification codes, and subset data products
 * **Type Safety**: Full type hints and Pydantic-based models for all APIs
 * **HTML to Markdown**: Automatic conversion of dataset descriptions for improved readability
+* **Interactive Shell**: Premium hierarchical CLI for hands-on metadata exploration and API telemetry
 
 Quick Example
 -------------

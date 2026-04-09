@@ -25,10 +25,10 @@ First, create a connection to an MTNA RDS server:
 .. code-block:: python
 
    from dartfx.mtnards import MtnaRdsServer
-   
+
    # Connect to the High-Value Data Network (public server)
    server = MtnaRdsServer(host="rds.highvaluedata.net")
-   
+
    # View server information
    print(server.info.name)
    print(server.info.version)
@@ -47,7 +47,7 @@ Or using environment variables:
 .. code-block:: python
 
    import os
-   
+
    server = MtnaRdsServer(
        host=os.getenv("MTNA_RDS_HOST"),
        api_key=os.getenv("MTNA_RDS_API_KEY")
@@ -120,7 +120,7 @@ For categorical variables, you can access their classification codes:
    if var.classification_stub:
        classification = var.classification
        print(f"Classification: {classification.name}")
-       
+
        # List classification codes
        for code in classification.codes.values():
            print(f"{code.value}: {code.label}")
@@ -137,11 +137,11 @@ Create ML-ready dataset documentation in Croissant format:
 
    # Generate Croissant metadata for a data product
    croissant_metadata = anes_1948.croissant()
-   
+
    # Save to file
    with open('anes_1948.croissant.jsonld', 'w') as f:
        f.write(croissant_metadata.to_json())
-   
+
    # Or get as dictionary
    metadata_dict = croissant_metadata.metadata.to_json()
 
@@ -153,7 +153,7 @@ Generate semantic web metadata in DCAT format:
 .. code-block:: python
 
    from dartfx.mtnards.dcat import MtnaRdsDcat
-   
+
    # Create DCAT exporter
    dcat = MtnaRdsDcat(
        server=server,
@@ -161,14 +161,14 @@ Generate semantic web metadata in DCAT format:
        data_product=anes_1948,
        uri_style="uuid"  # Options: "uuid", "uuid_urn", "hostname"
    )
-   
+
    # Generate RDF graph
    graph = dcat.graph()
-   
+
    # Export as Turtle
    turtle = graph.serialize(format='turtle')
    print(turtle)
-   
+
    # Or save to file
    with open('anes_1948.ttl', 'w') as f:
        f.write(turtle)
@@ -182,7 +182,7 @@ Create human-readable documentation for a dataset:
 
    # Generate markdown documentation
    markdown = anes_1948.markdown()
-   
+
    # Save to file
    with open('anes_1948.md', 'w') as f:
        f.write(markdown)
@@ -197,28 +197,28 @@ Here's a complete example that ties everything together:
    import os
    from dartfx.mtnards import MtnaRdsServer
    from dartfx.mtnards.dcat import MtnaRdsDcat
-   
+
    # 1. Connect to server
    server = MtnaRdsServer(host="rds.highvaluedata.net")
    print(f"Connected to: {server.info.name}")
-   
+
    # 2. Get a catalog
    catalog = server.catalogs['us-anes']
    print(f"Working with catalog: {catalog.name}")
-   
+
    # 3. Get a data product
    data_product = catalog.data_products_by_id['anes_1948']
    print(f"Dataset: {data_product.name}")
    print(f"Variables: {len(data_product.variables)}")
-   
+
    # 4. Generate metadata in multiple formats
-   
+
    # Croissant for ML
    croissant = data_product.croissant()
    with open('output.croissant.jsonld', 'w') as f:
        f.write(croissant.to_json())
    print("✓ Croissant metadata generated")
-   
+
    # DCAT for semantic web
    dcat = MtnaRdsDcat(
        server=server,
@@ -228,13 +228,80 @@ Here's a complete example that ties everything together:
    with open('output.ttl', 'w') as f:
        f.write(dcat.graph().serialize(format='turtle'))
    print("✓ DCAT/RDF metadata generated")
-   
+
    # Markdown documentation
    with open('output.md', 'w') as f:
        f.write(data_product.markdown())
    print("✓ Markdown documentation generated")
-   
+
    print("\nAll metadata files generated successfully!")
+
+Interactive Shell CLI
+---------------------
+
+The MTNA RDS Toolkit includes a powerful interactive shell for hands-on metadata exploration.
+
+Step 1: Start the Shell
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Launch the interactive shell directly from your terminal:
+
+.. code-block:: bash
+
+   dartfx-mtnards
+
+You can also start the shell directly focused on a specific path:
+
+.. code-block:: bash
+
+   dartfx-mtnards --path us-anes/anes1948
+
+Step 2: Navigate and Explore
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use familiar hierarchical commands to browse catalogs and products:
+
+.. code-block:: text
+
+   # List catalogs
+   ls
+
+   # Navigate into a catalog (supports absolute / paths)
+   cd /us-anes
+
+   # List data products
+   ls
+
+   # Navigate into a specific dataset
+   cd anes1948
+
+   # List variables (displays statistical roles and code counts)
+   vars
+
+Step 3: Inspect Metadata
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+View detailed properties and classification codes:
+
+.. code-block:: text
+
+   # Show dataset metadata
+   show .
+
+   # Show a specific variable and its first 10 classification codes
+   show VVERSION --codes
+
+   # Use command aliases for efficiency
+   cls
+
+Step 4: Monitor API Performance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Audit the precise timing and status of underlying RDS API calls:
+
+.. code-block:: text
+
+   api
 
 Error Handling
 --------------

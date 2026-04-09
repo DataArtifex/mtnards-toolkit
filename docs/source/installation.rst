@@ -11,7 +11,7 @@ PyPI Release
 ------------
 
 .. note::
-   Once stable, this package will be officially released and distributed through 
+   Once stable, this package will be officially released and distributed through
    `PyPI <https://pypi.org/>`_. Stay tuned for updates!
 
 Local Development Installation
@@ -89,6 +89,15 @@ To build the documentation locally:
    # With uv
    uv sync --group docs
 
+CLI Verification
+~~~~~~~~~~~~~~~~
+
+The toolkit includes the ``dartfx-mtnards`` command-line tool. Verify its installation by running:
+
+.. code-block:: bash
+
+   dartfx-mtnards --help
+
 Verification
 ------------
 
@@ -104,7 +113,7 @@ You can also test the basic functionality:
 .. code-block:: python
 
    from dartfx.mtnards import MtnaRdsServer
-   
+
    # Connect to a public server
    server = MtnaRdsServer(host="rds.highvaluedata.net")
    print(server.info)
@@ -115,7 +124,7 @@ Configuration
 Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~
 
-For production use or when working with authenticated servers, set your credentials 
+For production use or when working with authenticated servers, set your credentials
 via environment variables:
 
 .. code-block:: bash
@@ -131,7 +140,7 @@ You can also use a ``.env`` file in your project root:
    MTNA_RDS_API_KEY=your-api-key
 
 .. warning::
-   Never commit your ``.env`` file to version control. Make sure it's included 
+   Never commit your ``.env`` file to version control. Make sure it's included
    in your ``.gitignore``.
 
 Troubleshooting
@@ -149,7 +158,7 @@ If you encounter import errors, ensure that:
 SSL Certificate Issues
 ~~~~~~~~~~~~~~~~~~~~~~
 
-If you encounter SSL certificate verification issues when connecting to an RDS server, 
+If you encounter SSL certificate verification issues when connecting to an RDS server,
 you can temporarily disable SSL verification (not recommended for production):
 
 .. code-block:: python

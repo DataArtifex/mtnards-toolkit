@@ -9,21 +9,28 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 [Unreleased]
 ------------
 
+[0.2.0] - 2026-04-08
+------------------
+
 Added
 ~~~~~
 
-* Comprehensive Sphinx documentation
-* Installation guide with uv and pip instructions
-* Quick start guide with examples
-* Detailed API reference
-* Contributing guidelines
+* Hierarchical CLI shell navigation with ``cd`` support for absolute (``/``) and relative paths
+* Direct startup navigation via ``--path`` / ``-P`` options
+* ``api`` telemetry command for real-time monitoring of backend request timing and status
+* Enhanced ``variables`` view with statistical roles and code counts
+* Command aliases for rapid navigation: ``vars`` and ``cls``
+* Optimized metadata retrieval with lazy loading of classification codebooks
 
 Changed
 ~~~~~~~
 
-* Improved README with comprehensive project information
-* Enhanced documentation structure
-* Removed MCP server references (now maintained in a separate package)
+* Integrated premium terminal formatting via ``rich.table`` and ``rich.json``
+* Improved hierarchical property resolution (e.g., ``show cat.prod@label``)
+* Enhanced safety guards for interactive sessions (``Ctrl+C`` confirmation, deletion protection)
+
+[0.1.0] - 2026-04-07
+------------------
 
 [0.0.1] - 2024
 --------------
@@ -123,7 +130,7 @@ No deprecations in current version.
 Security Updates
 ----------------
 
-This project follows responsible security disclosure practices. Security vulnerabilities 
+This project follows responsible security disclosure practices. Security vulnerabilities
 will be documented here once fixed.
 
 How to Upgrade
@@ -153,7 +160,7 @@ Contributors
 
 * Pascal L.G.A. Heus - Initial work and maintainer
 
-See the `GitHub contributors page <https://github.com/DataArtifex/mtnards-toolkit/graphs/contributors>`_ 
+See the `GitHub contributors page <https://github.com/DataArtifex/mtnards-toolkit/graphs/contributors>`_
 for a full list of contributors.
 
 Links

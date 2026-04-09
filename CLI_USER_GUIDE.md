@@ -1,13 +1,13 @@
 # MTNA RDS CLI User Guide
 
-The `mtnards` CLI provides a powerful, hierarchical interface for interacting with MTNA Rich Data Services (RDS) servers. It features an interactive shell-first design, making it easy to discover datasets, inspect metadata, and manage data resources.
+The `dartfx-mtnards` CLI provides a powerful, hierarchical interface for interacting with MTNA Rich Data Services (RDS) servers. It features an interactive shell-first design, making it easy to discover datasets, inspect metadata, and manage data resources.
 
 ## 1. Getting Started
 
 ### Installation
 The tool is part of the `mtnards-toolkit`. You can run it directly using `uv`:
 ```bash
-uv run mtnards
+dartfx-mtnards
 ```
 
 ### Environment Variables
@@ -20,11 +20,11 @@ export MTNA_RDS_API_KEY="your-api-key"
 ### Starting the CLI
 If credentials are set, simply running the command starts the **Interactive Shell**:
 ```bash
-uv run mtnards
+dartfx-mtnards
 ```
 Otherwise, use options:
 ```bash
-uv run mtnards --host "https://rds.yourserver.net" --api-key "secret"
+dartfx-mtnards --host "https://rds.yourserver.net" --api-key "secret"
 ```
 
 ---
@@ -35,9 +35,10 @@ The CLI treats the RDS server like a virtual filesystem. You can navigate throug
 
 ### Path Examples
 - **Relative**: `catalog_id.product_id`
-- **Absolute**: `.global_catalog` (starts with `.`)
+- **Absolute**: `/us-anes/anes1948` (starts with `/` or `.`)
 - **Move Up**: `..` (returns to parent level)
 - **Nested**: `cd mycat.myprod.myvar`
+- **Starting Context**: Start the shell directly in a path using `dartfx-mtnards --path us-anes/anes1948`
 
 ### Special Shortcuts
 - **Property Access (`@`)**: Attach `@` and a property name to inspect specific metadata.
@@ -57,17 +58,18 @@ The shell supports standard navigation and metadata management commands.
 | :--- | :--- | :--- |
 | `ls` | `ls [path] [--limit N] [--offset M] [--count]` | List contents. Displays total count and current page range. Use `--count` (or `-n`) for only the total number. |
 | `cd` | `cd [path]` | Navigate into a catalog or data product. |
-| `show` | `show [path][@property]` | Display detailed metadata for a resource. |
+| `show` | `show [path][@property] [--codes [N]]` | Display detailed metadata. Use `--codes` (or `-c`) to view classification codes in a table. |
 | `set` | `set <path@prop> [val] [--edit]` | Update a metadata property (with optional editor). |
-| `variables` | `variables` | Shortcut to list all variables in the current product. |
-| `classifications` | `classifications` | Shortcut to list all classifications in the current product. |
+| `vars` | `vars [--codes [N]]` | Alias for `variables`. Lists variables with statistical roles and code counts. |
+| `cls` | `cls` | Alias for `classifications`. Lists classifications in the product. |
+| `api` | `api [--limit N]` | Show recent API request history, status codes, and network timing. |
 | `info` | `info` | Display basic information about the connected server. |
 | `context` | `context` | Show current server, catalog, and product status. |
 | `history` | `history` | View a list of recently executed commands. |
 | `clear` | `clear` | Clear the terminal window. |
 | `help` | `help` | Display context-sensitive list of available shell commands. |
 | `debug` | `debug [on|off]` | Toggle visibility of underlying API call details. |
-| `exit` | `exit` | Close the interactive shell session. |
+| `exit` | `exit` | Close the session (requires confirmation if using Ctrl+C). |
 
 ---
 
@@ -87,7 +89,7 @@ exit
 
 ### Running a Script
 ```bash
-uv run mtnards run check-metadata.rds
+dartfx-mtnards run check-metadata.rds
 ```
 
 ---
@@ -96,9 +98,11 @@ uv run mtnards run check-metadata.rds
 
 - **Resource Counts**: Use `ls --count` (or `ls -n`) to quickly check the size of a catalog or product without listing all items. Listing tables also show the total count in their title.
 - **Pagination**: Use `--limit` with `ls` to handle large catalogs (e.g., `ls --limit 500`) and `--offset` to navigate pages.
-- **Editor Support**: Use `set path@property --edit` to open your system's default editor (e.g., VS Code, Vim) for long descriptions.
-- **Debug Mode**: Use `debug on` to see the actual API requests the tool is making. This is helpful for understanding the underlying RDS protocol.
-- **Root Paths**: Paths starting with a dot (e.g., `.mycat`) always resolve relative to the server root, regardless of where you are.
+- **Classification Peeking**: Use `show <var> --codes` to see the first 10 codes, or `show <var> --codes 50` for more. The `-c` shorthand also works.
+- **Developer Telemetry**: Use the `api` command to audit backend performance. It shows exact timings for every request made during your session.
+- **Absolute Paths**: Paths starting with `/` (e.g., `/mycat`) always resolve relative to the server root, regardless of where you are.
+- **Exit Safety**: The shell will ask for confirmation before closing if you press `Ctrl+C`. Use the `exit` command for a quick exit.
+- **Deletion Rules**: For safety, data products can only be deleted from a catalog context, never from within the product itself.
 - **Dot-Notation**: You don't always need `cd`. You can run `ls cat.prod` from anywhere in the shell.
 
 ---
