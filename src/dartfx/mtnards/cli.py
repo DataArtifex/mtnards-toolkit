@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 import click
 import typer
+from dotenv import load_dotenv
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.history import FileHistory
@@ -20,9 +21,12 @@ from rich.panel import Panel
 from rich.prompt import Confirm
 from rich.table import Table
 
+from .base import MtnaRdsPatchConflictError
 from .server import MtnaRdsServer
 
 # Load .env if present
+load_dotenv()
+
 app = typer.Typer(
     name="dartfx-mtnards",
     help="CLI for MTNA RDS servers.",
@@ -65,7 +69,7 @@ class RdsShell:
 
     def __init__(self, host: str | None = None, api_key: str | None = None):
         self.host = host
-        self.api_key = api_key or os.environ.get("MTNA_RDS_API_KEY")
+        self.api_key = api_key or os.environ.get("MTNARDS_API_KEY")
         self.catalog_id: str | None = None
         self.product_id: str | None = None
         self._server: MtnaRdsServer | None = None
@@ -174,6 +178,14 @@ class RdsShell:
             self._catalog_cache[catalog_id] = cat
         return self._catalog_cache[catalog_id]
 
+    def _format_private_value(self, value: bool | None) -> str:
+        """Formats an isPrivate value for CLI output."""
+        if value is True:
+            return "yes"
+        if value is False:
+            return "no"
+        return ""
+
     def do_ls(
         self, path: str | None = None, limit: int = 100, offset: int = 0, count_only: bool = False, codes_limit: int = 0
     ):
@@ -202,6 +214,7 @@ class RdsShell:
                 total = class_count if is_class else var_count
 
                 console.print(f"[bold blue]Product:[/bold blue] {obj.id} ({obj.name})")
+                console.print(f"  Private: {self._format_private_value(getattr(obj, 'is_private', None))}")
                 console.print(f"  Variables: {var_count}")
                 console.print(f"  Classifications: {class_count}")
 
@@ -232,12 +245,14 @@ class RdsShell:
                             req = "✓" if item.is_required else ""
                             wgt = "✓" if item.is_weight else ""
 
-                            cls_info = f"{item.classification_id}"
+                            cls_ref = self._variable_classification_ref(item)
+                            cls_info = cls_ref or ""
                             code_count = ""
-                            if item.classification_id:
+                            if cls_ref:
                                 try:
                                     cls = item.classification
                                     if cls:
+                                        cls_info = cls.id
                                         code_count = str(cls.code_count or 0)
                                         if codes_limit > 0:
                                             codes = cls.codes[:codes_limit]
@@ -284,10 +299,13 @@ class RdsShell:
                 table = Table(title=f"Products in {res_info.catalog_id} ({offset + 1}-{show_to}/{total})")
                 table.add_column("ID", style="cyan")
                 table.add_column("Name", style="green")
+                table.add_column("Private")
 
                 paged = products[offset : offset + limit]
                 for prod in paged:
-                    table.add_row(prod.id, prod.name or "")
+                    table.add_row(
+                        prod.id, prod.name or "", self._format_private_value(getattr(prod, "is_private", None))
+                    )
 
                 if total > offset + limit:
                     table.add_row("...", f"... and {total - (offset + limit)} more")
@@ -309,10 +327,11 @@ class RdsShell:
                 table = Table(title=f"RDS Catalogs ({offset + 1}-{show_to}/{total})")
                 table.add_column("ID", style="cyan")
                 table.add_column("Name", style="green")
+                table.add_column("Private")
 
                 paged = catalogs[offset : offset + limit]
                 for cat in paged:
-                    table.add_row(cat.id, cat.name or "")
+                    table.add_row(cat.id, cat.name or "", self._format_private_value(getattr(cat, "is_private", None)))
 
                 if total > offset + limit:
                     table.add_row("...", f"... and {total - (offset + limit)} more")
@@ -381,11 +400,45 @@ class RdsShell:
         except ValueError as e:
             console.print(f"[red]Error:[/red] {e}")
 
-    def do_show(self, path: str | None = None, limit: int = 100, offset: int = 0, codes_limit: int = 0):
+    def _json_data_for_current_resource(self, obj: Any) -> Any:
+        """Return shallow JSON data for the currently selected resource.
+
+        Excluding computed fields avoids resolving linked resources such as the
+        parent catalog, server-derived URLs, variables, or classifications.
+        """
+        if hasattr(obj, "model_dump"):
+            return obj.model_dump(by_alias=True, exclude_computed_fields=True)
+        if isinstance(obj, (dict, list)):
+            return obj
+        return {"value": str(obj)}
+
+    def do_show(
+        self,
+        path: str | None = None,
+        limit: int = 100,
+        offset: int = 0,
+        codes_limit: int = 0,
+        as_json: bool = False,
+    ):
         """Show resource details or specific property."""
         try:
             res_info = self.resolve_path(path or "")
             obj = res_info.obj
+
+            if as_json:
+                from rich.json import JSON
+
+                if res_info.property_name:
+                    val = getattr(obj, res_info.property_name, None)
+                    if val is None and hasattr(obj, "model_dump"):
+                        val = self._json_data_for_current_resource(obj).get(res_info.property_name)
+                    if val is None and hasattr(obj, "dict"):
+                        val = obj.dict().get(res_info.property_name)
+                    console.print(JSON.from_data(val))
+                    return
+
+                console.print(JSON.from_data(self._json_data_for_current_resource(obj)))
+                return
 
             if res_info.property_name:
                 # Show specific property
@@ -447,19 +500,20 @@ class RdsShell:
                     grid.add_row("Label: ", obj.label or "")
                     grid.add_row("Type: ", obj.data_type or "N/A")
 
-                    if obj.classification_id:
+                    cls_ref = self._variable_classification_ref(obj)
+                    if cls_ref:
                         try:
                             cls = obj.classification
                             if cls:
                                 codes_total = cls.code_count or len(cls.codes)
                                 grid.add_row("Classification: ", f"{cls.id} ({codes_total} codes)")
                         except Exception:
-                            grid.add_row("Classification: ", f"{obj.classification_id} [error loading]")
+                            grid.add_row("Classification: ", f"{cls_ref} [error loading]")
 
                     console.print(Panel(grid, title=f"Variable Details: {obj.id}", expand=False))
 
                     # Show codes table if requested
-                    if obj.classification_id and codes_limit > 0:
+                    if cls_ref and codes_limit > 0:
                         try:
                             cls = obj.classification
                             if cls:
@@ -548,9 +602,21 @@ class RdsShell:
                 console.print("[red]Error: Value required or use --edit[/red]")
                 return
 
-            console.print(f"[yellow]Stub: Setting {path} to '{value}'[/yellow]")
-            # In a real implementation, we would call an API method here
-            # res_info.obj.set_property(res_info.property_name, value)
+            if res_info.classification_id is not None:
+                console.print("[red]Error:[/red] Classification properties are not patchable from the CLI.")
+                return
+
+            target = res_info.obj
+            if not hasattr(target, "patch"):
+                console.print("[red]Error:[/red] This resource does not support patching.")
+                return
+
+            updates = {res_info.property_name: value}
+            target.patch(updates)
+            console.print(f"[green]Updated[/green] {path} = '{value}'")
+
+        except MtnaRdsPatchConflictError as e:
+            console.print(f"[red]Patch conflict:[/red] {e}")
 
         except Exception as e:
             console.print(f"[red]Error:[/red] {e}")
@@ -561,6 +627,49 @@ class RdsShell:
             res_info = self.resolve_path(path or "")
             console.print(f"[yellow]Stub: Statistical summary for {res_info.type}[/yellow]")
             # Logic here would aggregate metrics or call a stats API
+        except Exception as e:
+            console.print(f"[red]Error:[/red] {e}")
+
+    def do_refresh(self, path: str | None = None):
+        """Clear cached context and reload server/catalog/product metadata."""
+        try:
+            if self._server is None and not self.host:
+                raise ValueError("Not connected to a server. Use 'connect <host>'")
+
+            # Reset local shell caches so subsequent lookups use fresh metadata.
+            self._catalog_cache.clear()
+            self._product_cache.clear()
+
+            res_info = self.resolve_path(path or "")
+
+            # Always refresh the root catalog index first.
+            self.server.refresh_catalogs()
+
+            if res_info.type == "root":
+                console.print("[green]Refreshed[/green] server catalog index")
+                return
+
+            if res_info.catalog_id is None:
+                console.print("[yellow]No catalog context to refresh.[/yellow]")
+                return
+
+            catalog = self.server.get_catalog_by_id(res_info.catalog_id, fetch=True)
+            if catalog is None:
+                raise ValueError(f"Catalog '{res_info.catalog_id}' not found")
+            self._catalog_cache[catalog.id] = catalog
+
+            if res_info.product_id is None:
+                console.print(f"[green]Refreshed[/green] catalog metadata: {catalog.id}")
+                return
+
+            product = catalog.get_data_product_by_id(res_info.product_id)
+            if product is None:
+                raise ValueError(f"Product '{res_info.product_id}' not found in catalog '{catalog.id}'")
+
+            product.load_metadata()
+            self._product_cache[f"{catalog.id}.{product.id}"] = product
+            console.print(f"[green]Refreshed[/green] product metadata: {catalog.id}.{product.id}")
+
         except Exception as e:
             console.print(f"[red]Error:[/red] {e}")
 
@@ -660,6 +769,13 @@ class RdsShell:
         avg_duration = sum(e["duration"] for e in history) / len(history)
         console.print(f"[dim]Total calls: {len(history)} | Average duration: {avg_duration:.3f}s[/dim]")
 
+    def _parse_set_value(self, cmd_args: list[str]) -> tuple[str | None, bool]:
+        """Parse the set command value, joining unquoted trailing tokens."""
+        edit = "--edit" in cmd_args
+        value_parts = [arg for arg in cmd_args[1:] if arg != "--edit"]
+        value = " ".join(value_parts) if value_parts else None
+        return value, edit
+
     def execute_line(self, line: str) -> bool:
         """Execute a single command line. Returns False if shell should exit."""
         line = line.strip()
@@ -676,7 +792,7 @@ class RdsShell:
             if cmd in ["exit", "quit"]:
                 return False
             elif cmd == "connect":
-                self.host = cmd_args[0] if cmd_args else os.environ.get("MTNA_RDS_HOST")
+                self.host = cmd_args[0] if cmd_args else os.environ.get("MTNARDS_HOST")
                 self._server = None  # Force reconnect
                 console.print(f"Connected to {self.host}")
             elif cmd == "ls":
@@ -698,6 +814,7 @@ class RdsShell:
                 path_arg = next((a for a in cmd_args if not a.startswith("-")), None)
                 limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
                 offset = int(self._extract_param(cmd_args, "--offset", "-o") or 0)
+                as_json = self._has_param(cmd_args, "--json", "-j")
 
                 codes_limit_raw = self._extract_param(cmd_args, "--codes", "-c")
                 if codes_limit_raw is None and self._has_param(cmd_args, "--codes", "-c"):
@@ -705,17 +822,13 @@ class RdsShell:
                 else:
                     codes_limit = int(codes_limit_raw or 0)
 
-                self.do_show(path=path_arg, limit=limit, offset=offset, codes_limit=codes_limit)
+                self.do_show(path=path_arg, limit=limit, offset=offset, codes_limit=codes_limit, as_json=as_json)
             elif cmd == "set":
-                if not self.product_id:
-                    console.print("[yellow]Command 'set' is only available in product context.[/yellow]")
-                    return True
                 if not cmd_args:
                     console.print("[yellow]Usage: set <path@property> [value] [--edit][/yellow]")
                     return True
                 path = cmd_args[0]
-                edit = "--edit" in cmd_args
-                val = cmd_args[1] if len(cmd_args) > 1 and cmd_args[1] != "--edit" else None
+                val, edit = self._parse_set_value(cmd_args)
                 self.do_set(path, val, edit=edit)
             elif cmd == "run":
                 if not cmd_args:
@@ -750,6 +863,9 @@ class RdsShell:
                     console.print("[yellow]Command 'stats' is only available in product context.[/yellow]")
                     return True
                 self.do_stats(cmd_args[0] if cmd_args else None)
+            elif cmd == "refresh":
+                path_arg = next((a for a in cmd_args if not a.startswith("-")), None)
+                self.do_refresh(path_arg)
             elif cmd == "api":
                 limit = int(self._extract_param(cmd_args, "--limit", "-l") or 100)
                 self.do_api(limit=limit)
@@ -780,6 +896,19 @@ class RdsShell:
                 console.print(f"API Key: {self.api_key or 'None'}")
             elif cmd == "debug":
                 mode = cmd_args[0].lower() if cmd_args else "toggle"
+
+                if mode == "verbose":
+                    verbose_mode = cmd_args[1].lower() if len(cmd_args) > 1 else "toggle"
+                    if verbose_mode in ["on", "true", "1"]:
+                        self.server.debug_verbose = True
+                    elif verbose_mode in ["off", "false", "0"]:
+                        self.server.debug_verbose = False
+                    else:
+                        self.server.debug_verbose = not self.server.debug_verbose
+                    state = "[green]ON[/green]" if self.server.debug_verbose else "[red]OFF[/red]"
+                    console.print(f"Verbose debug mode: {state}")
+                    return True
+
                 if mode in ["on", "true", "1"]:
                     self.server.debug = True
                 elif mode in ["off", "false", "0"]:
@@ -819,6 +948,29 @@ class RdsShell:
                 return True
         return False
 
+    def _variable_classification_ref(self, variable: Any) -> str | None:
+        """Returns best available classification reference for a variable.
+
+        Prefer classification id when available, otherwise use canonical uri,
+        resolving uri to id when possible.
+        """
+        cls_id = getattr(variable, "classification_id", None)
+        if cls_id:
+            return str(cls_id)
+
+        cls_uri = getattr(variable, "classification_uri", None)
+        if not cls_uri:
+            return None
+
+        try:
+            cls = getattr(variable, "classification", None)
+            if cls is not None and getattr(cls, "id", None):
+                return str(cls.id)
+        except Exception:
+            pass
+
+        return str(cls_uri)
+
     def do_help(self):
         """Show context-sensitive commands."""
         # 1. Common Commands
@@ -827,11 +979,13 @@ class RdsShell:
         common.add_column("Usage/Description")
         common.add_row("ls", "ls [path] [-l N] [-o M] [-n]")
         common.add_row("cd", "cd <path> (use .. to go up, . for root)")
-        common.add_row("show", "show [path][@property]")
+        common.add_row("show", "show [path][@property] [--json|-j]")
+        common.add_row("refresh", "refresh [path] (reload context metadata)")
         common.add_row("whoami", "Show connection and API key info")
         common.add_row("run", "run <script_path>")
         common.add_row("api", "Show API call history and timing")
         common.add_row("debug", "Toggle debug mode (on/off)")
+        common.add_row("debug verbose", "Toggle verbose HTTP debug details")
         common.add_row("exit", "Exit session")
 
         # 2. Context Commands
@@ -857,10 +1011,12 @@ class RdsShell:
             ctx_table.add_row("delete", "Delete this product")
         elif self.catalog_id:
             ctx_table.add_row("search", "Search for products in this catalog")
+            ctx_table.add_row("set", "Patch catalog/product metadata (e.g. set @name '...')")
             ctx_table.add_row("create", "create product <name>")
             ctx_table.add_row("delete", "Delete this catalog")
         else:  # Root
             ctx_table.add_row("search", "Global search for catalogs/products")
+            ctx_table.add_row("set", "Patch metadata by full path (e.g. set cat.prod@name '...')")
             ctx_table.add_row("create", "create catalog <name>")
 
         console.print("\n", common)
@@ -875,12 +1031,12 @@ def get_server(
 ) -> MtnaRdsServer:
     """Helper to initialize server connection."""
     if not host:
-        console.print("[red]Error:[/red] RDS host is required (use --host or MTNA_RDS_HOST environment variable)")
+        console.print("[red]Error:[/red] RDS host is required (use --host or MTNARDS_HOST environment variable)")
         raise typer.Exit(1)
 
     return MtnaRdsServer(
         host=host,
-        api_key=api_key or os.environ.get("MTNA_RDS_API_KEY"),
+        api_key=api_key or os.environ.get("MTNARDS_API_KEY"),
         base_path=base_path,
         api_path=api_path,
     )
@@ -889,12 +1045,10 @@ def get_server(
 @app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
-    host: Annotated[
-        str | None, typer.Option("--host", "-H", envvar="MTNA_RDS_HOST", help="RDS server host URL")
-    ] = None,
+    host: Annotated[str | None, typer.Option("--host", "-H", envvar="MTNARDS_HOST", help="RDS server host URL")] = None,
     api_key: Annotated[
         str | None,
-        typer.Option("--api-key", "-k", envvar="MTNA_RDS_API_KEY", help="RDS API key", show_default=False),
+        typer.Option("--api-key", "-k", envvar="MTNARDS_API_KEY", help="RDS API key", show_default=False),
     ] = None,
     base_path: Annotated[str, typer.Option("--base-path", help="RDS base path")] = "rds",
     api_path: Annotated[str, typer.Option("--api-path", help="RDS API path")] = "api",

@@ -6,7 +6,13 @@ from typing import TYPE_CHECKING, Any, Self
 
 from pydantic import Field, PrivateAttr, model_validator
 
-from .base import MtnaRdsError, MtnaRdsResource
+from .base import MtnaRdsError, MtnaRdsPatchConflictError, MtnaRdsResource
+from .patching import (
+    build_patch_request,
+    refresh_resource_from_server,
+    sync_resource_from_payload,
+    sync_resource_from_resource,
+)
 
 if TYPE_CHECKING:
     from .data_product import MtnaRdsDataProduct
@@ -122,6 +128,27 @@ class MtnaRdsCatalog(MtnaRdsResource):
     def delete_data_product(self, data_product_uri: str) -> Any:
         """Deletes a data product from this catalog."""
         return self._server.delete_data_product(self.uri, data_product_uri)
+
+    def patch(self, updates: dict[str, Any], lang: str = "en") -> Self:
+        """Patches this catalog and syncs the object from the server response."""
+        request = build_patch_request(self, updates, lang=lang)
+        try:
+            payload = self._server.patch_management(
+                request.path,
+                request.payload,
+                resource_kind=request.resource_kind,
+                resource_uri=request.resource_uri,
+                attempted_updates=updates,
+            )
+        except MtnaRdsPatchConflictError as err:
+            err.refreshed_resource = refresh_resource_from_server(self)
+            raise
+        refreshed = refresh_resource_from_server(self)
+        if refreshed is not None and isinstance(refreshed, self.__class__):
+            sync_resource_from_resource(self, refreshed)
+        else:
+            sync_resource_from_payload(self, payload)
+        return self
 
     def get_postman_collection(self, data_product_id: str | None = None) -> dict[str, Any]:
         """Returns a Postman collection for this catalog or one of its data product."""

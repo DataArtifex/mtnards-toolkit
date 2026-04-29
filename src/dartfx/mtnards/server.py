@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any
 import requests
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, computed_field, model_validator
 
-from .base import MtnaRdsError, MtnaRdsServerInfo
+from .base import MtnaRdsError, MtnaRdsPatchConflictError, MtnaRdsServerInfo
 from .process import MtnaRdsProcess
 
 if TYPE_CHECKING:
@@ -26,6 +26,7 @@ class MtnaRdsServer(BaseModel):
     api_key: str | None = None
     ssl_verify: bool = Field(default=True)
     debug: bool = Field(default=False)
+    debug_verbose: bool = Field(default=False)
     _catalogs: dict[str, MtnaRdsCatalog] | None = PrivateAttr(default=None)
     _info: MtnaRdsServerInfo | None = PrivateAttr(default=None)
     _api_history: list[dict[str, Any]] = PrivateAttr(default_factory=list)
@@ -47,6 +48,26 @@ class MtnaRdsServer(BaseModel):
         if not isinstance(data, dict):
             raise MtnaRdsError("Expected JSON object response")
         return data
+
+    @staticmethod
+    def _sanitize_headers_for_debug(headers: dict[str, str]) -> dict[str, str]:
+        """Returns request/response headers with secrets redacted."""
+        sensitive = {"authorization", "cookie", "set-cookie"}
+        sanitized: dict[str, str] = {}
+        for key, value in headers.items():
+            if key.lower() in sensitive:
+                sanitized[key] = "***REDACTED***"
+            else:
+                sanitized[key] = value
+        return sanitized
+
+    @staticmethod
+    def _truncate_for_debug(value: Any, max_chars: int = 1200) -> str:
+        """Returns a readable, size-limited string for debug output."""
+        text = str(value)
+        if len(text) <= max_chars:
+            return text
+        return f"{text[:max_chars]}... [truncated]"
 
     @computed_field
     @property
@@ -140,6 +161,9 @@ class MtnaRdsServer(BaseModel):
 
             c = Console(stderr=True)
             c.print(f"[dim]RDS API: [bold cyan]{method}[/bold cyan] {url}[/dim]")
+            if self.debug_verbose and headers:
+                safe_headers = self._sanitize_headers_for_debug(headers)
+                c.print(f"[dim]  Request headers: {safe_headers}[/dim]")
             if params:
                 c.print(f"[dim]  Params: {params}[/dim]")
             if body_json:
@@ -164,9 +188,27 @@ class MtnaRdsServer(BaseModel):
             status_color = "green" if response.status_code < 400 else "red"
             from rich.console import Console
 
-            Console(stderr=True).print(
-                f"[dim]  Status: [bold {status_color}]{response.status_code}[/bold {status_color}][/dim]"
-            )
+            c = Console(stderr=True)
+            c.print(f"[dim]  Status: [bold {status_color}]{response.status_code}[/bold {status_color}][/dim]")
+
+            if self.debug_verbose:
+                safe_response_headers = self._sanitize_headers_for_debug(dict(response.headers))
+                if safe_response_headers:
+                    c.print(f"[dim]  Response headers: {safe_response_headers}[/dim]")
+
+                response_preview: Any | None = None
+                content_type = str(response.headers.get("Content-Type", "")).lower()
+                if "application/json" in content_type:
+                    try:
+                        response_preview = response.json()
+                    except Exception:
+                        response_preview = response.text
+                else:
+                    response_preview = response.text
+
+                if response_preview not in (None, ""):
+                    preview_text = self._truncate_for_debug(response_preview)
+                    c.print(f"[dim]  Response body: {preview_text}[/dim]")
 
         return response
 
@@ -209,6 +251,27 @@ class MtnaRdsServer(BaseModel):
             return result.json()
         else:
             raise MtnaRdsError(f"Could not delete data product: {result.status_code}")
+
+    def patch_management(
+        self,
+        path: str,
+        payload: dict[str, Any],
+        *,
+        resource_kind: str,
+        resource_uri: str,
+        attempted_updates: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Executes a PATCH request under the management endpoint."""
+        response = self.api_request(path, method="PATCH", body_json=payload)
+        if response.status_code == 200:
+            return self._response_json_dict(response)
+        if response.status_code == 409:
+            raise MtnaRdsPatchConflictError(
+                resource_kind=resource_kind,
+                resource_uri=resource_uri,
+                attempted_updates=attempted_updates,
+            )
+        raise MtnaRdsError(f"Could not patch {resource_kind}: {response.status_code}")
 
     def get_catalog_by_uri(self, uri: str) -> MtnaRdsCatalog | None:
         """Returns a catalog by its URI, or ``None`` if not found."""

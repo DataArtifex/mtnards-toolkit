@@ -129,15 +129,15 @@ via environment variables:
 
 .. code-block:: bash
 
-   export MTNA_RDS_HOST="rds.highvaluedata.net"
-   export MTNA_RDS_API_KEY="your-api-key"
+   export MTNARDS_HOST="rds.highvaluedata.net"
+   export MTNARDS_API_KEY="your-api-key"
 
 You can also use a ``.env`` file in your project root:
 
 .. code-block:: text
 
-   MTNA_RDS_HOST=rds.highvaluedata.net
-   MTNA_RDS_API_KEY=your-api-key
+   MTNARDS_HOST=rds.highvaluedata.net
+   MTNARDS_API_KEY=your-api-key
 
 .. warning::
    Never commit your ``.env`` file to version control. Make sure it's included

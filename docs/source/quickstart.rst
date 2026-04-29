@@ -49,8 +49,8 @@ Or using environment variables:
    import os
 
    server = MtnaRdsServer(
-       host=os.getenv("MTNA_RDS_HOST"),
-       api_key=os.getenv("MTNA_RDS_API_KEY")
+    host=os.getenv("MTNARDS_HOST"),
+    api_key=os.getenv("MTNARDS_API_KEY")
    )
 
 Step 2: Browse Catalogs

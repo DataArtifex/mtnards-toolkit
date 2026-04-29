@@ -9,8 +9,35 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 [Unreleased]
 ------------
 
+[0.2.1] - 2026-04-23
+---------------------
+
+Added
+~~~~~
+
+* Resource patching support for catalogs, data products, and variables via management PATCH endpoints
+* New ``patching.py`` module with centralized patch contracts, field validation, alias normalization, and multilingual payload shaping
+* New ``MtnaRdsPatchConflictError`` exception for HTTP ``409`` optimistic concurrency conflicts
+* Resource-level ``patch()`` methods on ``MtnaRdsCatalog``, ``MtnaRdsDataProduct``, and ``MtnaRdsVariableStub``
+* Focused test suite in ``tests/test_patch.py`` for normalization, routing, success sync, and conflict behavior
+
+Changed
+~~~~~~~
+
+* Patch requests always include ``lastUpdate`` from the current resource state
+* Successful patch operations synchronize in-memory resource objects from the full server response payload
+* HTTP ``409`` conflict handling performs forced refresh and attaches latest state to the conflict exception
+* ``MtnaRdsResource.last_update`` is typed as ``str | None`` to match server token semantics and subclass usage
+
+Documentation
+~~~~~~~~~~~~~
+
+* Added patch usage examples and conflict handling guidance to README
+* Added patch conflict exception to API reference
+* Expanded technical implementation docs with patch architecture and endpoint contract
+
 [0.2.0] - 2026-04-08
-------------------
+---------------------
 
 Added
 ~~~~~
@@ -30,7 +57,7 @@ Changed
 * Enhanced safety guards for interactive sessions (``Ctrl+C`` confirmation, deletion protection)
 
 [0.1.0] - 2026-04-07
-------------------
+---------------------
 
 [0.0.1] - 2024
 --------------

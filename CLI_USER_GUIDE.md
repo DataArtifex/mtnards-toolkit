@@ -13,8 +13,8 @@ dartfx-mtnards
 ### Environment Variables
 For the best experience, configure your RDS host and API key via environment variables:
 ```bash
-export MTNA_RDS_HOST="https://rds.yourserver.net"
-export MTNA_RDS_API_KEY="your-api-key"
+export MTNARDS_HOST="https://rds.yourserver.net"
+export MTNARDS_API_KEY="your-api-key"
 ```
 
 ### Starting the CLI

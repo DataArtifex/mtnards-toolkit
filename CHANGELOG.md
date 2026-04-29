@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/) and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.1] - 2026-04-23
+
+### Added
+- Resource patching support for catalogs, data products, and variables via management PATCH endpoints
+- New `patching.py` module with centralized patch contracts, field validation, alias normalization, and multilingual payload shaping
+- New `MtnaRdsPatchConflictError` exception for HTTP `409` optimistic concurrency conflicts
+- Resource-level `patch()` methods on `MtnaRdsCatalog`, `MtnaRdsDataProduct`, and `MtnaRdsVariableStub`
+- Focused test suite in `tests/test_patch.py` for normalization, routing, success sync, and conflict behavior
+
+### Changed
+- Patch requests always include `lastUpdate` from the current resource state
+- Successful patch operations now synchronize in-memory resource objects from the full server response payload
+- HTTP `409` conflict handling now performs forced refresh and attaches latest state to conflict exception
+- `MtnaRdsResource.last_update` is now typed as `str | None` to match server token semantics and subclass usage
+
+### Documentation
+- Updated README with patch examples and conflict-handling guidance
+- Updated API docs to include patch conflict exception
+- Expanded implementation documentation with patch architecture and endpoint contract
+
 ## [0.2.0] - 2026-04-08
 
 ### Added

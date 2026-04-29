@@ -87,6 +87,19 @@ Base Classes
    :show-inheritance:
    :special-members: __init__, __hash__, __eq__
 
+Exceptions
+----------
+
+.. autoclass:: dartfx.mtnards.MtnaRdsError
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: dartfx.mtnards.MtnaRdsPatchConflictError
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Type Definitions
 ----------------
 

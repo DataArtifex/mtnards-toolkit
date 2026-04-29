@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024-present kulnor <pascal.heus@gmail.com>
 #
 # SPDX-License-Identifier: MIT
-from .base import MtnaRdsError  # noqa: F401
+from .base import MtnaRdsError, MtnaRdsPatchConflictError  # noqa: F401
 from .catalog import MtnaRdsCatalog  # noqa: F401
 from .classification import MtnaRdsClassification, MtnaRdsClassificationCode, MtnaRdsClassificationStub  # noqa: F401
 from .data_product import MtnaRdsDataProduct  # noqa: F401
@@ -11,6 +11,7 @@ from .variable import MtnaRdsVariable, MtnaRdsVariableStub  # noqa: F401
 
 __all__ = [
     "MtnaRdsError",
+    "MtnaRdsPatchConflictError",
     "MtnaRdsCatalog",
     "MtnaRdsClassification",
     "MtnaRdsClassificationCode",

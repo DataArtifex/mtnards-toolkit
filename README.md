@@ -127,6 +127,40 @@ for variable in data_product.variables.values():
     print(f"Variable: {variable.name}")
     print(f"  Type: {variable.data_type}")
     print(f"  Label: {variable.label}")
+
+### Patching Catalogs, Data Products, and Variables
+
+Patch operations target management endpoints and always use the resource URI in the path.
+The toolkit automatically includes `lastUpdate` in patch payloads and keeps the object synchronized with
+the full resource returned by the server.
+
+```python
+from dartfx.mtnards import MtnaRdsPatchConflictError
+
+# Example: patch a variable
+variable = data_product.get_variable_by_id("V480003")
+assert variable is not None
+
+try:
+    variable.patch(
+        {
+            "label": "EDUCATION OF RESPONDENT",  # auto-wrapped as multilingual facet payload
+            "is_measure": False,
+        },
+        lang="en",
+    )
+except MtnaRdsPatchConflictError as err:
+    # Raised on HTTP 409 (outdated lastUpdate token)
+    # err.refreshed_resource contains the latest server state when available.
+    print("Patch conflict, latest state fetched:", err.refreshed_resource)
+```
+
+Patch field rules:
+
+- Non-patchable fields are rejected (`uri`, `last_update`, and `id` for variables)
+- Multilingual fields accept either a plain string or a pre-built facet list
+- On success, the in-memory object is refreshed from the server response payload
+- On HTTP 409, the toolkit refreshes and attaches latest state to the conflict error
 ```
 
 ### Generating Croissant Metadata
@@ -176,8 +210,8 @@ server = MtnaRdsServer(
 For production use, set credentials via environment variables:
 
 ```bash
-export MTNA_RDS_HOST="rds.highvaluedata.net"
-export MTNA_RDS_API_KEY="your-api-key"
+export MTNARDS_HOST="rds.highvaluedata.net"
+export MTNARDS_API_KEY="your-api-key"
 ```
 
 Then load them in your code:
@@ -187,8 +221,8 @@ import os
 from dartfx.mtnards import MtnaRdsServer
 
 server = MtnaRdsServer(
-    host=os.getenv("MTNA_RDS_HOST"),
-    api_key=os.getenv("MTNA_RDS_API_KEY")
+    host=os.getenv("MTNARDS_HOST"),
+    api_key=os.getenv("MTNARDS_API_KEY")
 )
 ```
 
@@ -228,6 +262,7 @@ server = MtnaRdsServer(
 - [x] Croissant metadata generation
 - [x] DCAT/RDF export
 - [x] Comprehensive documentation
+- [x] Resource patching with optimistic concurrency (`lastUpdate`)
 - [ ] MCP server implementation (separate package)
 - [ ] Data querying and subsetting
 - [ ] Tabulation and aggregation tools

@@ -7,7 +7,13 @@ from typing import TYPE_CHECKING
 import mlcroissant as mlc
 from pydantic import Field, PrivateAttr, computed_field
 
-from .base import MtnaRdsError, MtnaRdsResource
+from .base import MtnaRdsError, MtnaRdsPatchConflictError, MtnaRdsResource
+from .patching import (
+    build_patch_request,
+    refresh_resource_from_server,
+    sync_resource_from_payload,
+    sync_resource_from_resource,
+)
 
 if TYPE_CHECKING:
     from .classification import MtnaRdsClassification, MtnaRdsClassificationStub
@@ -53,9 +59,19 @@ class MtnaRdsVariableStub(MtnaRdsResource):
     @computed_field
     @property
     def classification(self) -> MtnaRdsClassificationStub | MtnaRdsClassification | None:
-        if self._data_product is None or not self.classification_id:
+        if self._data_product is None:
             return None
-        return self._data_product.get_classification_by_id(self.classification_id)
+
+        # Prefer URI because it is the canonical identifier in metadata payloads.
+        if self.classification_uri:
+            by_uri = self._data_product.get_classification_by_uri(self.classification_uri)
+            if by_uri is not None:
+                return by_uri
+
+        if self.classification_id:
+            return self._data_product.get_classification_by_id(self.classification_id)
+
+        return None
 
     @computed_field
     @property
@@ -90,6 +106,30 @@ class MtnaRdsVariableStub(MtnaRdsResource):
             return variable
         else:
             raise MtnaRdsError(f"Could not get variable: {response.status_code}")
+
+    def patch(self, updates: dict[str, object], lang: str = "en") -> MtnaRdsVariableStub:
+        """Patches this variable and syncs the object from the server response."""
+        if self.last_update is None:
+            return self.resolve().patch(updates, lang=lang)
+
+        request = build_patch_request(self, updates, lang=lang)
+        try:
+            payload = self._data_product._catalog._server.patch_management(
+                request.path,
+                request.payload,
+                resource_kind=request.resource_kind,
+                resource_uri=request.resource_uri,
+                attempted_updates=updates,
+            )
+        except MtnaRdsPatchConflictError as err:
+            err.refreshed_resource = refresh_resource_from_server(self)
+            raise
+        refreshed = refresh_resource_from_server(self)
+        if refreshed is not None and isinstance(refreshed, self.__class__):
+            sync_resource_from_resource(self, refreshed)
+        else:
+            sync_resource_from_payload(self, payload)
+        return self
 
 
 class MtnaRdsVariable(MtnaRdsVariableStub):

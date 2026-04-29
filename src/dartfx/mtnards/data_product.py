@@ -9,8 +9,14 @@ import mlcroissant as mlc
 from markdownify import markdownify
 from pydantic import Field, PrivateAttr, computed_field
 
-from .base import MtnaRdsError, MtnaRdsResource
+from .base import MtnaRdsError, MtnaRdsPatchConflictError, MtnaRdsResource
 from .classification import MtnaRdsClassification, MtnaRdsClassificationCode, MtnaRdsClassificationStub
+from .patching import (
+    build_patch_request,
+    refresh_resource_from_server,
+    sync_resource_from_payload,
+    sync_resource_from_resource,
+)
 from .variable import MtnaRdsVariable, MtnaRdsVariableStub
 
 if TYPE_CHECKING:
@@ -143,6 +149,27 @@ class MtnaRdsDataProduct(MtnaRdsResource):
     def delete(self) -> Any:
         """Deletes this data product from its catalog."""
         return self._catalog.delete_data_product(self.uri)
+
+    def patch(self, updates: dict[str, Any], lang: str = "en") -> MtnaRdsDataProduct:
+        """Patches this data product and syncs the object from the server response."""
+        request = build_patch_request(self, updates, lang=lang)
+        try:
+            payload = self._catalog._server.patch_management(
+                request.path,
+                request.payload,
+                resource_kind=request.resource_kind,
+                resource_uri=request.resource_uri,
+                attempted_updates=updates,
+            )
+        except MtnaRdsPatchConflictError as err:
+            err.refreshed_resource = refresh_resource_from_server(self)
+            raise
+        refreshed = refresh_resource_from_server(self)
+        if refreshed is not None and isinstance(refreshed, self.__class__):
+            sync_resource_from_resource(self, refreshed)
+        else:
+            sync_resource_from_payload(self, payload)
+        return self
 
     def get_classification_by_uri(self, uri: str) -> MtnaRdsClassificationStub | MtnaRdsClassification | None:
         """Returns a classification by its URI, or ``None`` if not found."""

@@ -10,13 +10,14 @@ The package lives under `src/dartfx/mtnards/` as a namespace package (`dartfx.mt
 src/dartfx/mtnards/
 ├── __about__.py         # Package version (single source of truth)
 ├── __init__.py          # Public API exports
-├── base.py              # Base classes: MtnaRdsError, MtnaRdsResource, MtnaRdsServerInfo
+├── base.py              # Base classes: MtnaRdsError, MtnaRdsPatchConflictError, MtnaRdsResource, MtnaRdsServerInfo
 ├── server.py            # MtnaRdsServer — API client and connection management
 ├── catalog.py           # MtnaRdsCatalog — catalog browsing and management
 ├── data_product.py      # MtnaRdsDataProduct — dataset metadata, variables, classifications
 ├── variable.py          # MtnaRdsVariableStub / MtnaRdsVariable — variable models
 ├── classification.py    # MtnaRdsClassificationStub / MtnaRdsClassification / MtnaRdsClassificationCode
 ├── process.py           # MtnaRdsProcess — server-side async process tracking
+├── patching.py          # Patch contracts, payload normalization, and sync helpers
 └── dcat.py              # DcatGenerator — DCAT/RDF metadata generation
 ```
 
@@ -27,6 +28,7 @@ src/dartfx/mtnards/
 Defines the foundation types shared across all other modules:
 
 - **`MtnaRdsError`** — Custom exception for API failures.
+- **`MtnaRdsPatchConflictError`** — Specialized conflict exception raised for patch concurrency failures (HTTP 409).
 - **`MtnaRdsResource`** — Pydantic `BaseModel` with common fields (`uri`, `id`, `name`, `description`, `reference`, `revision_number`). Implements `__hash__` using `uri` so resources can be used in sets and as dict keys.
 - **`MtnaRdsServerInfo`** — Lightweight model for server metadata (`name`, `released`, `version`).
 
@@ -37,18 +39,32 @@ Entry point for all API interaction.
 - **`MtnaRdsServer`** — Connects to an MTNA RDS host. Handles authentication (`api_key`), URL construction (`base_url`, `api_url`), and HTTP requests via `api_request()`.
 - Catalogs are lazily loaded on first access via the `catalogs` property and can be refreshed with `refresh_catalogs()`.
 - Provides methods for CRUD operations on catalogs and data products, file upload, DDI codebook retrieval, Postman collection export, and server-side process management.
+- Provides `patch_management()` for PATCH operations under the `/management` API surface with typed conflict handling.
 - Uses `pathlib.Path` for file operations.
+
+### `patching.py`
+
+Centralizes patch behavior and policy:
+
+- **Per-resource patch specs** for catalog, data product, and variable resources
+- **Non-patchable field enforcement** (for example, `uri`, `last_update`, and variable `id`)
+- **Multilingual string normalization** to server facet payload format (`[{"facetId": "en", "value": "..."}]`)
+- **lastUpdate injection** from current resource state for optimistic concurrency
+- **URI-based management path construction**
+- **Sync and refresh helpers** for successful patch responses and conflict recovery
 
 ### `catalog.py`
 
 - **`MtnaRdsCatalog`** — Represents a collection of data products. Attaches itself to child `MtnaRdsDataProduct` instances via a `model_validator`.
 - Delegates most operations to its parent `MtnaRdsServer` instance (stored as `_server` private attribute).
+- Adds `patch()` to partially update catalog properties using management endpoints and synchronize from server response.
 
 ### `data_product.py`
 
 Largest module — models a dataset with its variables and classifications.
 
 - **`MtnaRdsDataProduct`** — Lazy-loads `variables` and `classifications` as `dict[str, ...]` keyed by resource ID. Supports Croissant ML metadata generation, DDI Codebook export, Markdown documentation, and Postman collection generation.
+- Adds `patch()` to partially update data product properties with automatic sync on success.
 - `load_metadata()` performs a bulk fetch of all variables and classifications in a single API call.
 - `resolve_variables()` / `resolve_classifications()` upgrade stubs to full detail objects.
 
@@ -57,6 +73,43 @@ Largest module — models a dataset with its variables and classifications.
 - **`MtnaRdsVariableStub`** — Lightweight variable summary with data type, classification reference, and dimensional roles.
 - **`MtnaRdsVariable`** — Full variable detail (extends stub with `decimals`, `format`, `index`, positional fields).
 - `resolve()` on stubs fetches full details and replaces the stub in the parent data product's dict.
+- Adds `patch()` on `MtnaRdsVariableStub` (inherited by `MtnaRdsVariable`) to partially update variable properties.
+
+## Patch Operation Design
+
+Patch operations are implemented as optimistic-concurrency updates over management endpoints.
+
+### Request Flow
+
+1. Resource `patch()` calls a centralized normalizer in `patching.py`
+2. Normalizer validates patchable fields, converts aliases, and injects `lastUpdate`
+3. `MtnaRdsServer.patch_management()` executes the PATCH request
+4. On success, the full resource payload returned by the server is used to sync the in-memory object
+
+### URI-based Management Paths
+
+- Catalog: `management/catalog/{catalog_uri}`
+- Data product: `management/catalog/{catalog_uri}/product/{product_uri}`
+- Variable: `management/variable/{variable_uri}`
+
+### Concurrency Behavior
+
+- `lastUpdate` is always sent from the resource's current state
+- HTTP `409` raises `MtnaRdsPatchConflictError`
+- Conflict path performs a forced refresh and attaches the refreshed object to `err.refreshed_resource`
+
+### Multilingual Value Handling
+
+For multilingual fields, callers can pass either:
+
+- Plain string (auto-normalized using provided language, default `en`)
+- Explicit facet payload list with `facetId` and `value`
+
+This behavior is currently applied to:
+
+- Catalog: `name`, `description`
+- Data product: `name`, `description`
+- Variable: `label`
 
 ### `classification.py`
 
