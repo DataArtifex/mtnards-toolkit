@@ -24,7 +24,7 @@ class MtnaRdsClassificationStub(MtnaRdsResource):
     # Set by data product @root_validator or programmatically
     _data_product: MtnaRdsDataProduct = PrivateAttr(default=None)  # type: ignore[assignment]
     # codes are lazy loaded when the underlying property is accessed
-    _codes: list[MtnaRdsClassificationCode] = PrivateAttr(default=None)  # type: ignore[arg-type]
+    _codes: list[MtnaRdsClassificationCode] | None = PrivateAttr(default=None)  # type: ignore[arg-type]
 
     @computed_field
     @property

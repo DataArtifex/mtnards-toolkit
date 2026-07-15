@@ -1,13 +1,12 @@
 from collections.abc import Callable
-from typing import Any, TypeVar, cast
+from typing import Any, cast
 
 import pytest
 
 from dartfx.mtnards import MtnaRdsServer
 from dartfx.mtnards.dcat import MtnaRdsDcat
 
-TestFunc = TypeVar("TestFunc", bound=Callable[..., Any])
-skip_external = cast(Callable[[TestFunc], TestFunc], pytest.mark.skip(reason="requires external server"))
+skip_external = cast(Callable[[Any], Any], pytest.mark.skip(reason="requires external server"))
 
 
 @skip_external

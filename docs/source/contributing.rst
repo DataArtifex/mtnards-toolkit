@@ -1,7 +1,7 @@
 Contributing
 ============
 
-Thank you for your interest in contributing to the MTNA RDS Toolkit! This page provides 
+Thank you for your interest in contributing to the MTNA RDS Toolkit! This page provides
 guidelines for contributing to the project.
 
 Getting Started
@@ -80,11 +80,11 @@ All public functions and methods must have type hints:
        options: list[str] | None = None
    ) -> tuple[bool, str]:
        """Process data with optional parameters.
-       
+
        Args:
            data: Input data dictionary
            options: Optional list of processing options
-           
+
        Returns:
            Tuple of (success, message)
        """
@@ -99,21 +99,21 @@ Use Google or NumPy style docstrings (Sphinx-compatible):
 
    def example_function(param1: str, param2: int = 0) -> bool:
        """Brief description of the function.
-       
+
        Longer description if needed, explaining the purpose
        and behavior in more detail.
-       
+
        Args:
            param1: Description of param1
            param2: Description of param2. Defaults to 0.
-           
+
        Returns:
            Description of return value
-           
+
        Raises:
            ValueError: When param2 is negative
            TypeError: When param1 is not a string
-           
+
        Example:
            >>> example_function("test", 5)
            True
@@ -129,14 +129,14 @@ Use ``pathlib.Path`` instead of ``os.path``:
 
    # Good
    from pathlib import Path
-   
+
    file_path = Path("data") / "file.csv"
    if file_path.exists():
        content = file_path.read_text()
-   
+
    # Avoid
    import os
-   
+
    file_path = os.path.join("data", "file.csv")
    if os.path.exists(file_path):
        with open(file_path) as f:
@@ -150,7 +150,7 @@ Prefer Pydantic BaseModel over dataclasses:
 .. code-block:: python
 
    from pydantic import BaseModel, Field
-   
+
    class MyModel(BaseModel):
        name: str
        count: int = Field(default=0, ge=0)
@@ -173,12 +173,12 @@ Example test:
 
    import pytest
    from dartfx.mtnards import MtnaRdsServer
-   
+
    @pytest.fixture
    def server():
        """Fixture providing a test server instance."""
        return MtnaRdsServer(host="rds.highvaluedata.net")
-   
+
    def test_server_info(server):
        """Test that server info is retrieved correctly."""
        assert server.info is not None
@@ -192,13 +192,13 @@ Running Tests
 
    # Run all tests
    uv run pytest
-   
+
    # Run with coverage
    uv run pytest --cov=dartfx.mtnards
-   
+
    # Run specific test file
    uv run pytest tests/test_model.py
-   
+
    # Run specific test
    uv run pytest tests/test_model.py::test_server_info
 
@@ -214,10 +214,10 @@ The project uses Ruff for linting and formatting:
 
    # Format code
    uv run ruff format .
-   
+
    # Check for issues
    uv run ruff check .
-   
+
    # Auto-fix issues
    uv run ruff check --fix .
 
@@ -226,7 +226,7 @@ Type Checking
 
 .. code-block:: bash
 
-   # Run mypy
+   # Run pyrefly
    hatch run types:check
 
 Pre-commit Hooks
@@ -238,7 +238,7 @@ Pre-commit hooks automatically run before each commit:
 
    # Install hooks
    pre-commit install
-   
+
    # Run manually
    pre-commit run --all-files
 
@@ -253,7 +253,7 @@ Building Documentation
    # Build HTML documentation
    cd docs
    make html
-   
+
    # View in browser
    open build/html/index.html  # macOS
    xdg-open build/html/index.html  # Linux
@@ -288,7 +288,7 @@ Pull Request Process
 3. Create a pull request on GitHub
 
 4. Fill out the PR template with:
-   
+
    * Description of changes
    * Motivation and context
    * How it was tested
@@ -314,11 +314,11 @@ Write clear, concise commit messages:
 .. code-block:: text
 
    Short summary (50 chars or less)
-   
+
    Longer explanation if needed. Wrap at 72 characters.
    Explain the problem this commit solves and why the
    change is needed.
-   
+
    Fixes #123
 
 Good commit message examples:

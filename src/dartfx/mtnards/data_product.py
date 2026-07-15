@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 import mlcroissant as mlc
@@ -197,22 +198,22 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         context = mlc.Context()
         context.is_live_dataset = True
         # metadata
-        publishers: list[str] = []
+        publishers: list[mlc.Organization | mlc.Person] = []
         metadata = mlc.Metadata(
             ctx=context,
             id=self.id,
-            name=self.name,
+            name=self.name or self.id,
             cite_as=self.citation,
-            date_modified=self.last_update,
+            date_modified=datetime.fromisoformat(self.last_update) if self.last_update else None,
             keywords=self.keywords,
             publisher=publishers,
             url=self.explorer_url,
-            version=self.revision_number or 0,
+            version=str(self.revision_number) if self.revision_number else "0",
         )
         if self.description:
             metadata.description = markdownify(self.description)
         # distribution
-        distribution = []
+        distribution: list[mlc.FileObject | mlc.FileSet] = []
         # csv distribution
         content_url = self.csv_download_url
         csv_file = mlc.FileObject(
@@ -230,11 +231,14 @@ class MtnaRdsDataProduct(MtnaRdsResource):
             field = mlc.Field(
                 ctx=context,
                 id=variable.id,
-                name=variable.name,
+                name=variable.name or variable.id,
                 description=variable.label,
-                source=mlc.Source(file_object=csv_file.id, extract=mlc.Extract(ctx=context, column=variable.name)),
+                data_types=[variable.croissant_data_type],
+                source=mlc.Source(
+                    file_object=csv_file.id,
+                    extract=mlc.Extract(ctx=context, column=variable.name or variable.id),
+                ),
             )
-            field.data_types.append(variable.croissant_data_type)
             if include_codes:
                 # add reference to classification enum
                 if variable.classification_id:

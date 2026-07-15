@@ -20,7 +20,7 @@ uv run pre-commit install
 
 ### 2. Standards
 - **Linting & Formatting**: We use [Ruff](https://beta.astral-sh/ruff/). Run `uv run ruff check .` and `uv run ruff format .` before committing.
-- **Type Checking**: We use [Mypy](http://mypy-lang.org/). Run `hatch run types:check`.
+- **Type Checking**: We use [Pyrefly](https://pyrefly.org/). Run `hatch run types:check`.
 - **Testing**: We use [Pytest](https://docs.pytest.org/). Run `uv run pytest`.
 
 ## Contribution Process
@@ -29,7 +29,7 @@ uv run pre-commit install
 2. **Branch**: Create a new branch for your work: `git checkout -b feature/your-feature-name`.
 3. **Develop**: Implement your changes, including tests and documentation updates.
 4. **Validate**: Ensure all tests pass and linting is clean.
-5. **Pull Request**: Submit a Pull Request to the `main` branch. 
+5. **Pull Request**: Submit a Pull Request to the `main` branch.
 
 ## Documentation
 - Documentation is located in `docs/source`.

@@ -56,7 +56,7 @@ jobs:
         run: uv sync --group dev
 
       - name: Type check
-        run: uv run mypy --install-types --non-interactive src tests
+        run: uv run pyrefly check src tests
 
       - name: Lint with Ruff
         run: uv run ruff check src tests

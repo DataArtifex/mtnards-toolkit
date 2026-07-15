@@ -184,5 +184,5 @@ Tests live in `tests/` and use `pytest`. The test suite requires a live MTNA RDS
 - **Build backend**: Hatchling with dynamic versioning from `__about__.py`.
 - **Namespace package**: `dartfx` namespace, `mtnards` sub-package.
 - **Linting**: Ruff (line-length=120, target Python 3.12).
-- **Type checking**: mypy.
+- **Type checking**: pyrefly.
 - **Docs**: Sphinx with MyST-Parser and Read the Docs theme.

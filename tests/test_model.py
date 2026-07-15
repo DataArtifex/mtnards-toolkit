@@ -2,16 +2,15 @@ import json
 import logging
 import sys
 from collections.abc import Callable
-from typing import Any, TypeVar, cast
+from typing import Any, cast
 
 import pytest
 
 from dartfx.mtnards import MtnaRdsCatalog, MtnaRdsServer, MtnaRdsVariable
 
-TestFunc = TypeVar("TestFunc", bound=Callable[..., Any])
-skip_external = cast(Callable[[TestFunc], TestFunc], pytest.mark.skip(reason="requires external server"))
-depends_server_info = cast(Callable[[TestFunc], TestFunc], pytest.mark.dependency(name="test_server_info"))
-depends_hvdnet_catalogs = cast(Callable[[TestFunc], TestFunc], pytest.mark.dependency(name="test_hvdnet_catalogs"))
+skip_external = cast(Callable[[Any], Any], pytest.mark.skip(reason="requires external server"))
+depends_server_info = cast(Callable[[Any], Any], pytest.mark.dependency(name="test_server_info"))
+depends_hvdnet_catalogs = cast(Callable[[Any], Any], pytest.mark.dependency(name="test_hvdnet_catalogs"))
 
 # Set up logging
 logging.basicConfig(  # noqa: F821

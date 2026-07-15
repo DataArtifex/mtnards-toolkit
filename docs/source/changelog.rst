@@ -102,7 +102,7 @@ Development Tools
 
 * Ruff for linting and formatting
 * pytest for testing
-* mypy for type checking
+* pyrefly for type checking
 * pre-commit hooks
 * Sphinx for documentation
 * GitHub Actions CI/CD

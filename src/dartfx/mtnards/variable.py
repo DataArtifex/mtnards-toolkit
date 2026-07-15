@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import mlcroissant as mlc
 from pydantic import Field, PrivateAttr, computed_field
+from rdflib import URIRef
 
 from .base import MtnaRdsError, MtnaRdsPatchConflictError, MtnaRdsResource
 from .patching import (
@@ -36,7 +37,7 @@ class MtnaRdsVariableStub(MtnaRdsResource):
     _data_product: MtnaRdsDataProduct = PrivateAttr(default=None)  # type: ignore[assignment]
 
     @property
-    def croissant_data_type(self) -> mlc.DataType:
+    def croissant_data_type(self) -> URIRef:
         """Returns the Croissant data type for this variable."""
         if self.data_type == "NUMERIC":
             return mlc.DataType.FLOAT

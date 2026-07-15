@@ -21,8 +21,8 @@ def sample_catalog(mock_server: MagicMock) -> MtnaRdsCatalog:
         id="cat1",
         uri="catalog-uri",
         name="Catalog Name",
-        last_update="2026-04-14T16:41:59.64Z",
-        is_private=False,
+        lastUpdate="2026-04-14T16:41:59.64Z",
+        isPrivate=False,
         data_products=[],
     )
     catalog._server = mock_server
@@ -139,8 +139,8 @@ def test_catalog_patch_prefers_refreshed_resource_state(
         id="cat1",
         uri="catalog-uri",
         name="Updated Catalog Name",
-        last_update="2026-04-23T10:00:00Z",
-        is_private=True,
+        lastUpdate="2026-04-23T10:00:00Z",
+        isPrivate=True,
         data_products=[
             MtnaRdsDataProduct(
                 id="anes1948",
@@ -181,8 +181,8 @@ def test_catalog_patch_on_conflict_refreshes_and_raises(
         id="cat1",
         uri="catalog-uri",
         name="Server Name",
-        last_update="2026-04-23T11:00:00Z",
-        is_private=False,
+        lastUpdate="2026-04-23T11:00:00Z",
+        isPrivate=False,
         data_products=[],
     )
     refreshed._server = mock_server
