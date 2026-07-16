@@ -7,6 +7,7 @@ from .classification import MtnaRdsClassification, MtnaRdsClassificationCode, Mt
 from .data_product import MtnaRdsDataProduct  # noqa: F401
 from .process import MtnaRdsProcess  # noqa: F401
 from .server import MtnaRdsServer  # noqa: F401
+from .utils import import_ddic_metadata, import_metadata_rdsjson_workflow  # noqa: F401
 from .variable import MtnaRdsVariable, MtnaRdsVariableStub  # noqa: F401
 
 __all__ = [
@@ -21,6 +22,8 @@ __all__ = [
     "MtnaRdsServer",
     "MtnaRdsVariable",
     "MtnaRdsVariableStub",
+    "import_ddic_metadata",
+    "import_metadata_rdsjson_workflow",
 ]
 
 # Rebuild models that use forward references (TYPE_CHECKING imports).

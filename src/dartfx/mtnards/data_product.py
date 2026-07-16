@@ -295,6 +295,14 @@ class MtnaRdsDataProduct(MtnaRdsResource):
         """Returns import configuration for uploading data into this product."""
         return self._catalog.get_import_configuration(self.uri, file_info)
 
+    def get_metadata_rdsjson_config(self) -> dict[str, Any]:
+        """Retrieves the full DataProductImportConfiguration JSON for this data product."""
+        return self._catalog.get_metadata_rdsjson_config(self.uri)
+
+    def import_metadata_rdsjson(self, configuration: dict[str, Any]) -> dict[str, Any]:
+        """Imports JSON metadata into this data product."""
+        return self._catalog.import_metadata_rdsjson(self.uri, configuration)
+
     def get_markdown(self, sections: list[str] | None = None, max_codes: int = 10) -> str:
         """Returns the markdown description of the data product."""
         # TODO: upgrade to use Jinja2 templates

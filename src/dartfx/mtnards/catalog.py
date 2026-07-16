@@ -83,6 +83,14 @@ class MtnaRdsCatalog(MtnaRdsResource):
         """Returns import configuration for a data product."""
         return self._server.get_import_configuration(self.uri, product_uri, file_info)
 
+    def get_metadata_rdsjson_config(self, product_uri: str) -> dict[str, Any]:
+        """Retrieves the full DataProductImportConfiguration JSON for a data product in this catalog."""
+        return self._server.get_metadata_rdsjson_config(self.uri, product_uri)
+
+    def import_metadata_rdsjson(self, product_uri: str, configuration: dict[str, Any]) -> dict[str, Any]:
+        """Imports JSON metadata into a data product in this catalog."""
+        return self._server.import_metadata_rdsjson(self.uri, product_uri, configuration)
+
     def create_sql_data_product(
         self,
         id: str,

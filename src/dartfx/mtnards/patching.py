@@ -2,18 +2,20 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Literal
+
+from pydantic import BaseModel, ConfigDict
 
 from .base import MtnaRdsError
 
 ResourceKind = Literal["catalog", "data_product", "variable"]
 
 
-@dataclass(frozen=True)
-class PatchRequest:
+class PatchRequest(BaseModel):
     """Normalized patch request payload and destination."""
+
+    model_config = ConfigDict(frozen=True)
 
     resource_kind: ResourceKind
     resource_uri: str
@@ -21,9 +23,10 @@ class PatchRequest:
     payload: dict[str, Any]
 
 
-@dataclass(frozen=True)
-class PatchSpec:
+class PatchSpec(BaseModel):
     """Patch constraints for a resource kind."""
+
+    model_config = ConfigDict(frozen=True)
 
     non_patchable_fields: set[str]
     multilingual_fields: set[str]

@@ -673,6 +673,105 @@ class RdsShell:
         except Exception as e:
             console.print(f"[red]Error:[/red] {e}")
 
+    def do_import_ddic(self, xml_path: str):
+        """Upload and import a DDI Codebook XML file to the current data product."""
+        catalog_id = self.catalog_id
+        product_id = self.product_id
+        if not catalog_id or not product_id:
+            console.print(
+                "[red]Error: Command 'import-ddic' is only available within a data product context.[/red]\n"
+                "Navigate to a product first (e.g. cd <catalog_id>/<product_id>)"
+            )
+            return
+
+        try:
+            catalog = self.server.get_catalog_by_id(catalog_id, fetch=True)
+            if not catalog:
+                console.print(f"[red]Error: Current catalog {catalog_id} not found on server.[/red]")
+                return
+            product = catalog.get_data_product_by_id(product_id)
+            if not product:
+                console.print(f"[red]Error: Current product {product_id} not found in catalog.[/red]")
+                return
+
+            console.print(
+                f"Importing metadata from [cyan]{xml_path}[/cyan] into product [magenta]{product.id}[/magenta]..."
+            )
+            from .utils import import_ddic_metadata
+
+            completed_job = import_ddic_metadata(product, xml_path)
+            console.print(f"[green]Success:[/green] Metadata import complete. Status: {completed_job.status}")
+
+        except Exception as e:
+            console.print(f"[red]Error during import:[/red] {e}")
+
+    def do_import_rdsjson(self, json_path: str):
+        """Upload and import a native RDS JSON metadata file to the current data product."""
+        catalog_id = self.catalog_id
+        product_id = self.product_id
+        if not catalog_id or not product_id:
+            console.print(
+                "[red]Error: Command 'import-rdsjson' is only available within a data product context.[/red]\n"
+                "Navigate to a product first (e.g. cd <catalog_id>/<product_id>)"
+            )
+            return
+
+        try:
+            catalog = self.server.get_catalog_by_id(catalog_id, fetch=True)
+            if not catalog:
+                console.print(f"[red]Error: Current catalog {catalog_id} not found on server.[/red]")
+                return
+            product = catalog.get_data_product_by_id(product_id)
+            if not product:
+                console.print(f"[red]Error: Current product {product_id} not found in catalog.[/red]")
+                return
+
+            console.print(
+                f"Importing JSON metadata from [cyan]{json_path}[/cyan] into product [magenta]{product.id}[/magenta]..."
+            )
+            from .utils import import_metadata_rdsjson_workflow
+
+            completed_job = import_metadata_rdsjson_workflow(product, json_path)
+            console.print(f"[green]Success:[/green] JSON metadata import complete. Status: {completed_job.status}")
+
+        except Exception as e:
+            console.print(f"[red]Error during JSON metadata import:[/red] {e}")
+
+    def do_export_rdsjson(self, output_path: str):
+        """Retrieve and save the DataProductImportConfiguration JSON for the current data product."""
+        catalog_id = self.catalog_id
+        product_id = self.product_id
+        if not catalog_id or not product_id:
+            console.print(
+                "[red]Error: Command 'export-rdsjson' is only available within a data product context.[/red]\n"
+                "Navigate to a product first (e.g. cd <catalog_id>/<product_id>)"
+            )
+            return
+
+        try:
+            catalog = self.server.get_catalog_by_id(catalog_id, fetch=True)
+            if not catalog:
+                console.print(f"[red]Error: Current catalog {catalog_id} not found on server.[/red]")
+                return
+            product = catalog.get_data_product_by_id(product_id)
+            if not product:
+                console.print(f"[red]Error: Current product {product_id} not found in catalog.[/red]")
+                return
+
+            console.print(f"Retrieving JSON import configuration for product [magenta]{product.id}[/magenta]...")
+            config = product.get_metadata_rdsjson_config()
+
+            import json
+            from pathlib import Path
+
+            path_obj = Path(output_path)
+            with path_obj.open("w", encoding="utf-8") as f:
+                json.dump(config, f, indent=2)
+            console.print(f"[green]Success:[/green] Saved JSON config to [cyan]{output_path}[/cyan]")
+
+        except Exception as e:
+            console.print(f"[red]Error retrieving JSON config:[/red] {e}")
+
     def do_search(self, pattern: str):
         """Search metadata for a pattern."""
         console.print(f"[yellow]Stub: Searching metadata for '{pattern}'[/yellow]")
@@ -874,6 +973,21 @@ class RdsShell:
                     console.print("[yellow]Usage: search <pattern>[/yellow]")
                     return True
                 self.do_search(cmd_args[0])
+            elif cmd == "import-ddic":
+                if not cmd_args:
+                    console.print("[yellow]Usage: import-ddic <ddi_xml_path>[/yellow]")
+                    return True
+                self.do_import_ddic(cmd_args[0])
+            elif cmd == "import-rdsjson":
+                if not cmd_args:
+                    console.print("[yellow]Usage: import-rdsjson <json_path>[/yellow]")
+                    return True
+                self.do_import_rdsjson(cmd_args[0])
+            elif cmd == "export-rdsjson":
+                if not cmd_args:
+                    console.print("[yellow]Usage: export-rdsjson <output_path>[/yellow]")
+                    return True
+                self.do_export_rdsjson(cmd_args[0])
             elif cmd == "export":
                 if not self.product_id:
                     console.print("[yellow]Command 'export' is only available in product context.[/yellow]")
@@ -1008,6 +1122,9 @@ class RdsShell:
             ctx_table.add_row("set", "Update metadata (e.g. set @description '...')")
             ctx_table.add_row("stats", "Show statistical summary (if available)")
             ctx_table.add_row("export", "Generate documentation (croissant, dcat)")
+            ctx_table.add_row("import-ddic", "Upload and import DDI-C XML metadata")
+            ctx_table.add_row("import-rdsjson", "Upload and import native RDS JSON metadata")
+            ctx_table.add_row("export-rdsjson", "Retrieve and save DataProductImportConfiguration JSON")
             ctx_table.add_row("delete", "Delete this product")
         elif self.catalog_id:
             ctx_table.add_row("search", "Search for products in this catalog")
@@ -1124,6 +1241,9 @@ def _run_shell_impl(ctx: typer.Context):
             "classifications",
             "cls",
             "download",
+            "import-ddic",
+            "import-rdsjson",
+            "export-rdsjson",
             "help",
             "exit",
             "quit",
@@ -1202,6 +1322,100 @@ def run(
 
     for line in script_file:
         shell_obj.execute_line(line)
+
+
+@app.command(name="import-ddic")
+def import_ddic(
+    ctx: typer.Context,
+    catalog_id: Annotated[str, typer.Argument(help="The ID of the catalog")],
+    product_id: Annotated[str, typer.Argument(help="The ID of the data product")],
+    xml_path: Annotated[Path, typer.Argument(help="Path to the DDI-C XML file")],
+):
+    """Upload and import DDI-C XML metadata to a data product."""
+    server = get_server(**ctx.obj)
+    try:
+        catalog = server.get_catalog_by_id(catalog_id, fetch=True)
+        if not catalog:
+            console.print(f"[red]Error:[/red] Catalog '{catalog_id}' not found.")
+            raise typer.Exit(1)
+        product = catalog.get_data_product_by_id(product_id)
+        if not product:
+            console.print(f"[red]Error:[/red] Product '{product_id}' not found.")
+            raise typer.Exit(1)
+
+        console.print(
+            f"Importing metadata from [cyan]{xml_path}[/cyan] into product [magenta]{product_id}[/magenta]..."
+        )
+        from .utils import import_ddic_metadata
+
+        completed_job = import_ddic_metadata(product, xml_path)
+        console.print(f"[green]Success:[/green] Metadata import complete. Status: {completed_job.status}")
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {e}")
+        raise typer.Exit(1) from e
+
+
+@app.command(name="import-rdsjson")
+def import_rdsjson(
+    ctx: typer.Context,
+    catalog_id: Annotated[str, typer.Argument(help="The ID of the catalog")],
+    product_id: Annotated[str, typer.Argument(help="The ID of the data product")],
+    json_path: Annotated[Path, typer.Argument(help="Path to the JSON metadata file")],
+):
+    """Upload and import native RDS JSON metadata to a data product."""
+    server = get_server(**ctx.obj)
+    try:
+        catalog = server.get_catalog_by_id(catalog_id, fetch=True)
+        if not catalog:
+            console.print(f"[red]Error:[/red] Catalog '{catalog_id}' not found.")
+            raise typer.Exit(1)
+        product = catalog.get_data_product_by_id(product_id)
+        if not product:
+            console.print(f"[red]Error:[/red] Product '{product_id}' not found.")
+            raise typer.Exit(1)
+
+        console.print(
+            f"Importing JSON metadata from [cyan]{json_path}[/cyan] into product [magenta]{product_id}[/magenta]..."
+        )
+        from .utils import import_metadata_rdsjson_workflow
+
+        completed_job = import_metadata_rdsjson_workflow(product, json_path)
+        console.print(f"[green]Success:[/green] JSON metadata import complete. Status: {completed_job.status}")
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {e}")
+        raise typer.Exit(1) from e
+
+
+@app.command(name="export-rdsjson")
+def export_rdsjson(
+    ctx: typer.Context,
+    catalog_id: Annotated[str, typer.Argument(help="The ID of the catalog")],
+    product_id: Annotated[str, typer.Argument(help="The ID of the data product")],
+    output_path: Annotated[Path, typer.Argument(help="The file path to save the JSON configuration")],
+):
+    """Retrieve and save the DataProductImportConfiguration JSON for a data product."""
+    server = get_server(**ctx.obj)
+    try:
+        catalog = server.get_catalog_by_id(catalog_id, fetch=True)
+        if not catalog:
+            console.print(f"[red]Error:[/red] Catalog '{catalog_id}' not found.")
+            raise typer.Exit(1)
+        product = catalog.get_data_product_by_id(product_id)
+        if not product:
+            console.print(f"[red]Error:[/red] Product '{product_id}' not found.")
+            raise typer.Exit(1)
+
+        console.print(f"Retrieving JSON import configuration for product [magenta]{product_id}[/magenta]...")
+        config = product.get_metadata_rdsjson_config()
+
+        import json
+
+        with output_path.open("w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2)
+        console.print(f"[green]Success:[/green] Saved JSON config to [cyan]{output_path}[/cyan]")
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {e}")
+        raise typer.Exit(1) from e
 
 
 class PromptHTMLWrapper:

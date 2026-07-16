@@ -426,6 +426,30 @@ class MtnaRdsServer(BaseModel):
             raise MtnaRdsError(f"Timed out waiting for process {pid} after {timeout}s")
         return process_details
 
+    def get_metadata_rdsjson_config(self, catalog_uri: str, product_uri: str) -> dict[str, Any]:
+        """Retrieves the full DataProductImportConfiguration JSON for a data product."""
+        path = f"management/catalog/{catalog_uri}/product/{product_uri}/metadata/json"
+        response = self.api_request(path, method="GET")
+        if response.status_code == 200:
+            data = self._response_json_dict(response)
+            # Ensure polymorphic type discriminator is set for subsequent POST
+            data["importType"] = "DATA_PRODUCT"
+            return data
+        else:
+            raise MtnaRdsError(f"Could not get metadata JSON configuration: {response.status_code}")
+
+    def import_metadata_rdsjson(
+        self, catalog_uri: str, product_uri: str, configuration: dict[str, Any]
+    ) -> dict[str, Any]:
+        """Imports JSON metadata into a data product."""
+        configuration["importType"] = "DATA_PRODUCT"
+        path = f"management/catalog/{catalog_uri}/product/{product_uri}/import"
+        response = self.api_request(path, method="POST", body_json=configuration)
+        if response.status_code == 200:
+            return self._response_json_dict(response)
+        else:
+            raise MtnaRdsError(f"Could not import JSON metadata: {response.status_code}")
+
     @property
     def api_history(self) -> list[dict[str, Any]]:
         """Returns the history of API calls made by this server instance."""

@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [0.2.2] - 2026-07-15
 
+### Added
+- Native RDS JSON (`rdsjson`) metadata import and export support.
+- Interactive shell and top-level CLI commands: `import-rdsjson` and `export-rdsjson`.
+- DDI-C XML metadata import workflow (`import_ddic_metadata`) and associated `import-ddic` CLI command.
+- central utility helpers `import_metadata_rdsjson_workflow` and `import_ddic_metadata` in `utils.py`.
+
 ### Changed
 - Migrated static type checker from mypy to pyrefly.
 - Configured local pre-commit hooks running ruff and pyrefly via `scripts/precommit_uv_run.sh`.

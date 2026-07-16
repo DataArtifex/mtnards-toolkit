@@ -45,6 +45,9 @@ The CLI provides granular control over resource metadata:
 | `stats` | Initial profiling of catalogs and products. |
 | `search` | Find resources by semantic match across the server. |
 | `export` | Trigger server-side generation of Croissant or RDF documentation. |
+| `import-ddic` | Upload and apply DDI-C XML metadata to a data product. |
+| `import-rdsjson` | Upload and apply native RDS JSON metadata to a data product. |
+| `export-rdsjson` | Download and save current `DataProductImportConfiguration` to prepare JSON metadata for import. |
 
 ---
 

@@ -69,6 +69,9 @@ The shell supports standard navigation and metadata management commands.
 | `clear` | `clear` | Clear the terminal window. |
 | `help` | `help` | Display context-sensitive list of available shell commands. |
 | `debug` | `debug [on|off]` | Toggle visibility of underlying API call details. |
+| `import-ddic` | `import-ddic <xml_path>` | Upload and import DDI-C XML metadata to the current product. |
+| `import-rdsjson` | `import-rdsjson <json_path>` | Upload and import native RDS JSON metadata to the current product. |
+| `export-rdsjson` | `export-rdsjson <output_path>` | Retrieve and save the current DataProductImportConfiguration JSON. |
 | `exit` | `exit` | Close the session (requires confirmation if using Ctrl+C). |
 
 ---
@@ -104,6 +107,46 @@ dartfx-mtnards run check-metadata.rds
 - **Exit Safety**: The shell will ask for confirmation before closing if you press `Ctrl+C`. Use the `exit` command for a quick exit.
 - **Deletion Rules**: For safety, data products can only be deleted from a catalog context, never from within the product itself.
 - **Dot-Notation**: You don't always need `cd`. You can run `ls cat.prod` from anywhere in the shell.
+
+---
+
+## 6. Metadata Import & Configuration (DDI-C / Native RDS JSON)
+
+The CLI supports round-trip metadata management, allowing you to export, edit, and import metadata configurations.
+
+### Import DDI-C Metadata
+Upload and apply a standard DDI-C Codebook XML document to a data product:
+- **Interactive Shell**:
+  ```bash
+  rds(server):catalog/product> import-ddic /path/to/metadata.xml
+  ```
+- **Direct Terminal**:
+  ```bash
+  dartfx-mtnards import-ddic <catalog-id> <product-id> /path/to/metadata.xml
+  ```
+
+### Round-trip Native RDS JSON (`rdsjson`) Import/Export
+The native RDS JSON format allows bulk loading of literals, classifications, variables, and groups. The recommended workflow is:
+
+1. **Download the current configuration template**:
+   - **Interactive Shell**:
+     ```bash
+     rds(server):catalog/product> export-rdsjson metadata.json
+     ```
+   - **Direct Terminal**:
+     ```bash
+     dartfx-mtnards export-rdsjson <catalog-id> <product-id> metadata.json
+     ```
+2. **Edit `metadata.json`** in a text editor to update variable descriptions, code values, or groups.
+3. **Import the modified JSON file**:
+   - **Interactive Shell**:
+     ```bash
+     rds(server):catalog/product> import-rdsjson metadata.json
+     ```
+   - **Direct Terminal**:
+     ```bash
+     dartfx-mtnards import-rdsjson <catalog-id> <product-id> metadata.json
+     ```
 
 ---
 

@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -360,3 +360,97 @@ def test_do_ls_product_summary_includes_private_value(mock_shell, capsys):
 
     assert "Private:" in out
     assert "yes" in out
+
+
+def test_do_import_ddic_not_in_product_context(mock_shell, capsys):
+    """do_import_ddic should fail and print an error if not in product context."""
+    mock_shell.product_id = None
+    mock_shell.do_import_ddic("some/file.xml")
+    captured = capsys.readouterr()
+    assert "only available within a data product context" in captured.out
+
+
+@patch("dartfx.mtnards.utils.import_ddic_metadata")
+def test_do_import_ddic_success(mock_import, mock_shell, capsys):
+    """do_import_ddic should resolve current product and call import_ddic_metadata."""
+    mock_shell.catalog_id = "cat1"
+    mock_shell.product_id = "prod1"
+
+    mock_catalog = MagicMock()
+    mock_product = MagicMock()
+    mock_shell._server.get_catalog_by_id.return_value = mock_catalog
+    mock_catalog.get_data_product_by_id.return_value = mock_product
+
+    completed_process = MagicMock()
+    completed_process.status = "COMPLETED"
+    mock_import.return_value = completed_process
+
+    mock_shell.do_import_ddic("some/file.xml")
+
+    mock_import.assert_called_once_with(mock_product, "some/file.xml")
+    captured = capsys.readouterr()
+    assert "Metadata import complete. Status: COMPLETED" in captured.out
+
+
+def test_do_import_rdsjson_not_in_product_context(mock_shell, capsys):
+    """do_import_rdsjson should fail and print an error if not in product context."""
+    mock_shell.product_id = None
+    mock_shell.do_import_rdsjson("some/file.json")
+    captured = capsys.readouterr()
+    assert "only available within a data product context" in captured.out
+
+
+@patch("dartfx.mtnards.utils.import_metadata_rdsjson_workflow")
+def test_do_import_rdsjson_success(mock_import, mock_shell, capsys):
+    """do_import_rdsjson should resolve current product and call import_metadata_rdsjson_workflow."""
+    mock_shell.catalog_id = "cat1"
+    mock_shell.product_id = "prod1"
+
+    mock_catalog = MagicMock()
+    mock_product = MagicMock()
+    mock_shell._server.get_catalog_by_id.return_value = mock_catalog
+    mock_catalog.get_data_product_by_id.return_value = mock_product
+
+    completed_process = MagicMock()
+    completed_process.status = "COMPLETED"
+    mock_import.return_value = completed_process
+
+    mock_shell.do_import_rdsjson("some/file.json")
+
+    mock_import.assert_called_once_with(mock_product, "some/file.json")
+    captured = capsys.readouterr()
+    assert "JSON metadata import complete. Status: COMPLETED" in captured.out
+
+
+def test_do_export_rdsjson_not_in_product_context(mock_shell, capsys):
+    """do_export_rdsjson should fail and print an error if not in product context."""
+    mock_shell.product_id = None
+    mock_shell.do_export_rdsjson("output.json")
+    captured = capsys.readouterr()
+    assert "is only available within a data product" in captured.out
+
+
+def test_do_export_rdsjson_success(mock_shell, tmp_path):
+    """do_export_rdsjson should fetch configuration and write it to output file."""
+    mock_shell.catalog_id = "cat1"
+    mock_shell.product_id = "prod1"
+
+    mock_catalog = MagicMock()
+    mock_product = MagicMock()
+    mock_shell._server.get_catalog_by_id.return_value = mock_catalog
+    mock_catalog.get_data_product_by_id.return_value = mock_product
+
+    config_data = {"importType": "DATA_PRODUCT", "metadata": {}}
+    mock_product.get_metadata_rdsjson_config.return_value = config_data
+
+    out_file = tmp_path / "out_config.json"
+    mock_shell.do_export_rdsjson(str(out_file))
+
+    mock_product.get_metadata_rdsjson_config.assert_called_once()
+    assert out_file.is_file()
+
+    import json
+
+    with out_file.open("r") as f:
+        loaded = json.load(f)
+    assert loaded == config_data

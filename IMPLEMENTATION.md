@@ -18,6 +18,7 @@ src/dartfx/mtnards/
 ├── classification.py    # MtnaRdsClassificationStub / MtnaRdsClassification / MtnaRdsClassificationCode
 ├── process.py           # MtnaRdsProcess — server-side async process tracking
 ├── patching.py          # Patch contracts, payload normalization, and sync helpers
+├── utils.py             # Utility workflows (DDI-C and native JSON metadata imports)
 └── dcat.py              # DcatGenerator — DCAT/RDF metadata generation
 ```
 
@@ -121,6 +122,13 @@ This behavior is currently applied to:
 ### `process.py`
 
 - **`MtnaRdsProcess`** — Tracks server-side async operations (imports, deletions). Provides computed properties for status inspection (`completed_successfully`, `failed`, `inprogress`).
+
+### `utils.py`
+
+Defines high-level utility workflows that coordinate multi-step operations on the server:
+
+- **`import_ddic_metadata(data_product, xml_path)`** — Automates uploading a DDI-C XML document, fetching/creating the file import configuration, triggering the import, and waiting/polling for the server-side process to complete.
+- **`import_metadata_rdsjson_workflow(data_product, json_path)`** — Automates reading a local native RDS JSON metadata file, POSTing the configuration directly to the server, and polling/waiting for the server-side process to complete.
 
 ### `dcat.py`
 
