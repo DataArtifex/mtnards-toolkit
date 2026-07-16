@@ -367,7 +367,7 @@ def test_do_import_ddic_not_in_product_context(mock_shell, capsys):
     mock_shell.product_id = None
     mock_shell.do_import_ddic("some/file.xml")
     captured = capsys.readouterr()
-    assert "only available within a data product context" in captured.out
+    assert "only available within a data product" in captured.out
 
 
 @patch("dartfx.mtnards.utils.import_ddic_metadata")
@@ -397,7 +397,7 @@ def test_do_import_rdsjson_not_in_product_context(mock_shell, capsys):
     mock_shell.product_id = None
     mock_shell.do_import_rdsjson("some/file.json")
     captured = capsys.readouterr()
-    assert "only available within a data product context" in captured.out
+    assert "only available within a data product" in captured.out
 
 
 @patch("dartfx.mtnards.utils.import_metadata_rdsjson_workflow")
@@ -427,7 +427,7 @@ def test_do_export_rdsjson_not_in_product_context(mock_shell, capsys):
     mock_shell.product_id = None
     mock_shell.do_export_rdsjson("output.json")
     captured = capsys.readouterr()
-    assert "is only available within a data product" in captured.out
+    assert "only available within a data product" in captured.out
 
 
 def test_do_export_rdsjson_success(mock_shell, tmp_path):
